@@ -4,681 +4,927 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>潔西卡大藥局 Jessica Pharmacy</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+TC:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+TC:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #1a0f08;
-  --bg2: #231208;
-  --bg3: #2e1a0d;
-  --cream: #F2EAD8;
-  --cream2: #E8DCC8;
-  --accent: #C4622D;
-  --accent2: #D4824D;
-  --gold: #C89A5A;
-  --text: #F0E6D8;
-  --muted: #9A7A5A;
-  --border: rgba(196,98,45,0.2);
+:root{
+  --bg:#F9F2E7;
+  --bg2:#F2E8D5;
+  --bg3:#E8D9C0;
+  --white:#FFFFFF;
+  --accent:#B5521E;
+  --accent2:#D4733A;
+  --gold:#C8893A;
+  --gold2:#E8B860;
+  --teal:#0F7A6A;
+  --green:#1A7A3A;
+  --purple:#6A3A8A;
+  --dark:#1E0E06;
+  --dark2:#2C1A0E;
+  --text:#2C1A0E;
+  --text2:#5A3A22;
+  --muted:#9A7A5A;
+  --border:rgba(181,82,30,0.18);
+  --shadow:rgba(181,82,30,0.12);
+  --gold-shadow:rgba(200,137,58,0.25);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--bg);font-family:'Noto Serif TC',serif;color:var(--text);max-width:480px;margin:0 auto;overflow-x:hidden;}
+body{
+  background:var(--bg);
+  font-family:'Noto Serif TC',serif;
+  color:var(--text);
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  position:relative;
+}
 
-/* ── STICKY NAV ── */
-.nav{position:sticky;top:0;z-index:100;background:rgba(26,15,8,0.95);backdrop-filter:blur(12px);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
-.nav-logo{display:flex;align-items:center;gap:8px;}
-.nav-logo svg{width:28px;height:28px;}
-.nav-brand{font-family:'Playfair Display',serif;font-size:14px;letter-spacing:0.2em;color:var(--accent);}
-.nav-brand span{display:block;font-size:9px;letter-spacing:0.3em;color:var(--muted);font-family:'Noto Serif TC',serif;font-weight:300;}
+/* ── TEXTURE LAYER ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  max-width:480px;left:50%;transform:translateX(-50%);
+  background-image:
+    radial-gradient(circle at 20% 10%,rgba(200,137,58,0.12) 0%,transparent 40%),
+    radial-gradient(circle at 80% 25%,rgba(181,82,30,0.08) 0%,transparent 35%),
+    radial-gradient(circle at 10% 60%,rgba(15,122,106,0.06) 0%,transparent 30%),
+    radial-gradient(circle at 90% 75%,rgba(106,58,138,0.06) 0%,transparent 30%),
+    radial-gradient(circle at 50% 50%,rgba(200,137,58,0.04) 0%,transparent 60%);
+  pointer-events:none;z-index:0;
+}
+
+/* ── NAV ── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(249,242,231,0.96);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+  box-shadow:0 2px 24px rgba(181,82,30,0.08);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-brand-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:700;
+  letter-spacing:0.15em;color:var(--accent);
+  line-height:1.1;
+}
+.nav-brand-sub{font-size:9px;letter-spacing:0.35em;color:var(--muted);font-weight:400;}
 .nav-btns{display:flex;gap:8px;align-items:center;}
-.nav-tel{width:36px;height:36px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:15px;}
-.nav-line{background:var(--accent);color:white;font-size:11px;letter-spacing:0.1em;padding:8px 16px;border-radius:20px;text-decoration:none;font-weight:600;}
+.nav-tel{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(181,82,30,0.08);
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;font-size:16px;
+  transition:all 0.2s;
+}
+.nav-tel:active{background:var(--accent);color:white;}
+.nav-line-btn{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;font-size:12px;letter-spacing:0.12em;
+  padding:9px 20px;border-radius:24px;
+  text-decoration:none;font-weight:700;
+  box-shadow:0 4px 16px var(--shadow);
+  font-family:'Noto Serif TC',serif;
+}
 
 /* ── HERO ── */
-.hero{background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);padding:48px 24px 40px;text-align:center;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:300px;height:300px;background:radial-gradient(circle,rgba(196,98,45,0.12) 0%,transparent 70%);pointer-events:none;}
-.hero-location{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);border-radius:30px;padding:6px 16px;font-size:10px;letter-spacing:0.25em;color:var(--muted);margin-bottom:32px;}
-.hero-logo{margin:0 auto 24px;animation:floatLogo 4s ease-in-out infinite;}
-@keyframes floatLogo{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-.hero-h1{font-size:30px;font-weight:700;line-height:1.3;margin-bottom:6px;color:var(--text);}
-.hero-h1 em{font-style:normal;color:var(--accent);}
-.hero-tagline{font-size:11px;letter-spacing:0.3em;color:var(--muted);margin-bottom:20px;text-transform:uppercase;}
-.hero-story{font-size:13px;line-height:1.9;color:rgba(240,230,216,0.7);margin-bottom:32px;}
-.hero-story strong{color:var(--accent);font-style:normal;}
-.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-.btn-primary{background:var(--accent);color:white;border:none;padding:14px 24px;border-radius:30px;font-size:13px;font-family:'Noto Serif TC',serif;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:600;transition:all 0.2s;}
-.btn-primary:active{transform:scale(0.97);background:#b5561f;}
-.btn-outline{background:transparent;color:var(--text);border:1px solid rgba(240,230,216,0.3);padding:14px 24px;border-radius:30px;font-size:13px;font-family:'Noto Serif TC',serif;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;}
-.btn-outline:active{transform:scale(0.97);}
-.hero-stats{display:flex;justify-content:center;gap:40px;margin-top:40px;padding-top:32px;border-top:1px solid var(--border);}
-.stat-num{font-family:'Playfair Display',serif;font-size:36px;color:var(--accent);display:block;line-height:1;}
-.stat-label{font-size:10px;letter-spacing:0.2em;color:var(--muted);margin-top:4px;display:block;}
-
-/* ── SECTION LABEL ── */
-.sec-label{padding:36px 24px 0;}
-.sec-eyebrow{font-size:10px;letter-spacing:0.35em;color:var(--accent);text-transform:uppercase;display:flex;align-items:center;gap:8px;}
-.sec-eyebrow::after{content:'';flex:1;height:1px;background:var(--border);}
-.sec-h2{font-size:26px;font-weight:700;margin-top:8px;line-height:1.3;}
-.sec-h2 em{font-style:normal;color:var(--accent);}
-.sec-sub{font-size:13px;color:rgba(240,230,216,0.6);margin-top:8px;line-height:1.7;}
+.hero{
+  position:relative;z-index:1;
+  background:linear-gradient(160deg,var(--dark) 0%,var(--dark2) 50%,#3D2010 100%);
+  padding:56px 28px 48px;
+  text-align:center;
+  overflow:hidden;
+  border-radius:0 0 40px 40px;
+  box-shadow:0 20px 60px rgba(30,14,6,0.3);
+}
+.hero-shimmer{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%,rgba(200,137,58,0.35) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 60%,rgba(181,82,30,0.2) 0%,transparent 50%),
+    radial-gradient(ellipse 40% 30% at 0% 80%,rgba(15,122,106,0.15) 0%,transparent 50%);
+  pointer-events:none;
+}
+.hero-pill{
+  position:relative;z-index:1;
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid rgba(200,137,58,0.4);
+  background:rgba(200,137,58,0.1);
+  border-radius:30px;padding:7px 18px;
+  font-size:10px;letter-spacing:0.3em;
+  color:rgba(232,184,96,0.9);
+  margin-bottom:32px;
+}
+.hero-dot{width:5px;height:5px;border-radius:50%;background:var(--gold2);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.hero-logosvg{
+  position:relative;z-index:1;
+  margin:0 auto 28px;
+  animation:float 5s ease-in-out infinite;
+  filter:drop-shadow(0 8px 24px rgba(200,137,58,0.4));
+}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.hero-h1{
+  position:relative;z-index:1;
+  font-family:'Cormorant Garamond',serif;
+  font-size:38px;font-weight:700;
+  line-height:1.25;margin-bottom:8px;
+  color:#FFF5E8;
+}
+.hero-h1 em{
+  font-style:italic;
+  background:linear-gradient(135deg,var(--gold2),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-tagline{
+  position:relative;z-index:1;
+  font-size:9px;letter-spacing:0.5em;
+  color:rgba(200,150,100,0.7);
+  margin-bottom:24px;text-transform:uppercase;
+}
+.hero-desc{
+  position:relative;z-index:1;
+  font-size:14px;line-height:2;
+  color:rgba(255,245,232,0.65);
+  margin-bottom:36px;
+}
+.hero-desc strong{color:var(--gold2);font-weight:600;}
+.hero-ctas{
+  position:relative;z-index:1;
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+}
+.btn-fire{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;border:none;
+  padding:15px 28px;border-radius:32px;
+  font-size:14px;font-family:'Noto Serif TC',serif;
+  cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;font-weight:700;
+  box-shadow:0 8px 32px rgba(181,82,30,0.45);
+  letter-spacing:0.03em;
+}
+.btn-fire:active{transform:scale(0.97);}
+.btn-glass{
+  background:rgba(255,255,255,0.1);
+  color:rgba(255,245,232,0.9);
+  border:1px solid rgba(255,255,255,0.2);
+  padding:15px 28px;border-radius:32px;
+  font-size:14px;font-family:'Noto Serif TC',serif;
+  text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;
+  backdrop-filter:blur(8px);
+}
+.btn-glass:active{background:rgba(255,255,255,0.2);}
+.hero-stats{
+  position:relative;z-index:1;
+  display:flex;justify-content:center;
+  margin-top:44px;padding-top:32px;
+  border-top:1px solid rgba(200,137,58,0.2);
+}
+.hstat{flex:1;position:relative;}
+.hstat+.hstat::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);height:36px;width:1px;background:rgba(200,137,58,0.25);}
+.hstat-n{
+  font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:700;
+  background:linear-gradient(135deg,var(--gold2),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;display:block;line-height:1;
+}
+.hstat-l{font-size:10px;letter-spacing:0.2em;color:rgba(200,150,100,0.7);margin-top:6px;display:block;}
 
 /* ── PHARMACIST CARD ── */
-.pharm-card{margin:20px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:24px;position:relative;overflow:hidden;}
-.pharm-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(196,98,45,0.15) 0%,transparent 70%);}
-.pharm-name{font-size:22px;font-weight:700;color:var(--text);}
-.pharm-title{font-size:10px;letter-spacing:0.3em;color:var(--muted);margin-top:4px;}
-.pharm-quote{margin:16px 0;padding-left:14px;border-left:2px solid var(--accent);font-size:13px;color:rgba(240,230,216,0.75);line-height:1.8;font-style:italic;}
-.pharm-stats{display:flex;gap:24px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);}
-.pharm-stat-num{font-family:'Playfair Display',serif;font-size:20px;color:var(--accent);}
-.pharm-stat-label{font-size:10px;color:var(--muted);letter-spacing:0.1em;margin-top:2px;}
+.pharm-wrap{padding:0 16px;position:relative;z-index:1;}
+.pharm-card{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:28px;
+  padding:28px;
+  position:relative;overflow:hidden;
+  box-shadow:0 8px 40px var(--shadow);
+}
+.pharm-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  background:linear-gradient(90deg,var(--accent),var(--gold),var(--teal),var(--purple));
+  border-radius:28px 28px 0 0;
+}
+.pharm-card::after{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:180px;height:180px;
+  background:radial-gradient(circle,rgba(200,137,58,0.07) 0%,transparent 70%);
+}
+.pharm-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:700;color:var(--dark);
+}
+.pharm-en{font-size:10px;letter-spacing:0.3em;color:var(--muted);margin-top:4px;}
+.pharm-rule{height:1px;background:linear-gradient(90deg,var(--accent),var(--gold),transparent);margin:18px 0;}
+.pharm-quote{
+  font-size:13px;color:var(--text2);line-height:2;
+  font-style:italic;padding-left:16px;
+  border-left:3px solid var(--accent);
+}
+.pharm-badges{display:flex;gap:10px;margin-top:20px;}
+.pbadge{
+  flex:1;
+  background:linear-gradient(135deg,rgba(181,82,30,0.05),rgba(200,137,58,0.08));
+  border:1px solid rgba(181,82,30,0.15);
+  border-radius:14px;padding:14px 8px;text-align:center;
+}
+.pbadge-n{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:700;color:var(--accent);
+  display:block;line-height:1;
+}
+.pbadge-l{font-size:10px;color:var(--muted);letter-spacing:0.1em;margin-top:4px;display:block;}
+
+/* ── SECTION ── */
+.sec{padding:36px 24px 0;position:relative;z-index:1;}
+.sec-eye{
+  font-size:10px;letter-spacing:0.4em;color:var(--accent);
+  text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
+}
+.sec-eye::before{content:'';width:20px;height:2px;background:var(--accent);flex-shrink:0;}
+.sec-eye::after{content:'';flex:1;height:1px;background:var(--border);}
+.sec-h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px;font-weight:700;
+  line-height:1.25;margin-bottom:8px;color:var(--dark);
+}
+.sec-h2 em{font-style:italic;color:var(--accent);}
+.sec-sub{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:20px;}
 
 /* ── STORY ── */
-.story-section{padding:0 24px 8px;}
-.story-tags{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;}
-.story-tag{font-size:11px;padding:5px 14px;border:1px solid var(--border);border-radius:20px;color:var(--muted);letter-spacing:0.05em;}
-.story-body{font-size:14px;line-height:2;color:rgba(240,230,216,0.75);}
-.story-body p{margin-bottom:16px;}
-.story-body strong{color:var(--accent);font-weight:600;}
-.story-cta{margin-top:24px;}
+.story-wrap{padding:0 24px;position:relative;z-index:1;}
+.story-tags{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 22px;}
+.stag{
+  font-size:11px;padding:6px 16px;border-radius:20px;
+  color:var(--accent);
+  border:1px solid rgba(181,82,30,0.25);
+  background:rgba(181,82,30,0.06);
+  letter-spacing:0.05em;
+}
+.story-p{font-size:14px;line-height:2.1;color:var(--text2);margin-bottom:18px;}
+.story-p strong{color:var(--accent);font-weight:700;}
+.story-box{
+  background:linear-gradient(135deg,rgba(181,82,30,0.06),rgba(15,122,106,0.04));
+  border:1px solid rgba(181,82,30,0.18);
+  border-radius:20px;padding:20px 22px;margin:22px 0;
+  position:relative;
+}
+.story-box::before{content:'💡';position:absolute;top:-13px;left:20px;font-size:22px;}
+.story-box p{font-size:13px;line-height:1.9;color:var(--text2);}
+.story-box strong{color:var(--accent);font-weight:700;}
 
-/* ── SERVICES ── */
-.services{padding:0 16px;}
-.service-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;margin-bottom:12px;overflow:hidden;}
-.service-header{padding:24px 24px 20px;background:var(--bg2);}
-.service-icon{width:52px;height:52px;border-radius:14px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px;}
-.service-eyebrow{font-size:9px;letter-spacing:0.35em;color:var(--accent);text-transform:uppercase;margin-bottom:8px;}
-.service-name{font-size:22px;font-weight:700;line-height:1.3;}
-.service-name em{font-style:normal;color:var(--accent);}
-.service-desc{font-size:13px;color:rgba(240,230,216,0.6);margin-top:8px;line-height:1.7;}
-.service-body{padding:20px 24px;}
-.service-list{list-style:none;}
-.service-list li{font-size:13px;color:rgba(240,230,216,0.75);padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:flex-start;gap:8px;line-height:1.6;}
-.service-list li::before{content:'•';color:var(--accent);flex-shrink:0;margin-top:1px;}
-.service-list li:last-child{border-bottom:none;}
-.service-cta{margin-top:16px;}
-.btn-service{width:100%;background:transparent;border:1px solid var(--accent);color:var(--accent);padding:13px;border-radius:12px;font-size:13px;font-family:'Noto Serif TC',serif;cursor:pointer;text-decoration:none;display:block;text-align:center;letter-spacing:0.1em;transition:all 0.2s;}
-.btn-service:active{background:var(--accent);color:white;}
+/* ── SERVICE CARDS ── */
+.svcs-wrap{padding:0 16px;position:relative;z-index:1;}
+.svc-card{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:28px;margin-bottom:16px;
+  overflow:hidden;
+  box-shadow:0 6px 32px var(--shadow);
+  position:relative;
+}
+.svc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+.svc-card.neuro::before{background:linear-gradient(90deg,#1A9E5A,#0F9E8A);}
+.svc-card.hear::before{background:linear-gradient(90deg,#6A3A8A,#9A4AB0);}
+.svc-head{padding:28px 26px 22px;position:relative;}
+.svc-ico{
+  width:64px;height:64px;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;margin-bottom:18px;
+}
+.svc-card.neuro .svc-ico{background:linear-gradient(135deg,rgba(26,158,90,0.12),rgba(15,158,138,0.12));}
+.svc-card.hear .svc-ico{background:linear-gradient(135deg,rgba(106,58,138,0.12),rgba(154,74,176,0.12));}
+.svc-eye{font-size:9px;letter-spacing:0.45em;text-transform:uppercase;margin-bottom:10px;}
+.svc-card.neuro .svc-eye{color:#1A9E5A;}
+.svc-card.hear .svc-eye{color:#6A3A8A;}
+.svc-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px;font-weight:700;
+  line-height:1.25;margin-bottom:10px;color:var(--dark);
+}
+.svc-card.neuro .svc-name em{font-style:italic;color:#1A9E5A;}
+.svc-card.hear .svc-name em{font-style:italic;color:#6A3A8A;}
+.svc-desc{font-size:13px;color:var(--muted);line-height:1.8;}
+.svc-body{padding:4px 26px 26px;}
+.svc-divider{height:1px;background:rgba(181,82,30,0.1);margin-bottom:18px;}
+.svc-list{list-style:none;margin-bottom:20px;}
+.svc-list li{
+  font-size:13px;color:var(--text2);
+  padding:9px 0;border-bottom:1px solid rgba(181,82,30,0.07);
+  display:flex;align-items:flex-start;gap:10px;line-height:1.7;
+}
+.svc-list li:last-child{border:none;}
+.svc-list li::before{font-size:10px;margin-top:4px;flex-shrink:0;}
+.svc-card.neuro .svc-list li::before{content:'✦';color:#1A9E5A;}
+.svc-card.hear .svc-list li::before{content:'✦';color:#6A3A8A;}
+.btn-svc{
+  width:100%;padding:14px;border-radius:16px;
+  font-size:13px;font-family:'Noto Serif TC',serif;
+  cursor:pointer;text-decoration:none;display:block;
+  text-align:center;letter-spacing:0.1em;font-weight:700;
+  border:none;transition:all 0.2s;
+}
+.svc-card.neuro .btn-svc{background:linear-gradient(135deg,rgba(26,158,90,0.1),rgba(15,158,138,0.1));border:1.5px solid rgba(26,158,90,0.35);color:#1A7A3A;}
+.svc-card.hear .btn-svc{background:linear-gradient(135deg,rgba(106,58,138,0.1),rgba(154,74,176,0.1));border:1.5px solid rgba(106,58,138,0.35);color:#6A3A8A;}
+.svc-card.neuro .btn-svc:active{background:rgba(26,158,90,0.18);}
+.svc-card.hear .btn-svc:active{background:rgba(106,58,138,0.18);}
 
 /* ── TESTIMONIALS ── */
-.testimonials{padding:0 16px;}
-.testimonial-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:22px;margin-bottom:12px;}
-.stars{color:var(--accent);font-size:14px;letter-spacing:2px;margin-bottom:14px;}
-.testimonial-text{font-size:13px;color:rgba(240,230,216,0.75);line-height:1.9;font-style:italic;margin-bottom:16px;}
-.testimonial-author{display:flex;align-items:center;gap:12px;}
-.author-avatar{width:38px;height:38px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
-.author-name{font-size:14px;font-weight:600;color:var(--text);}
-.author-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.testis-wrap{padding:0 16px;position:relative;z-index:1;}
+.testi-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:22px;padding:24px;margin-bottom:12px;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 24px var(--shadow);
+}
+.testi-quote-mark{
+  position:absolute;right:18px;top:10px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:96px;color:rgba(181,82,30,0.07);
+  line-height:1;font-style:italic;
+}
+.testi-stars{color:var(--gold);font-size:15px;letter-spacing:3px;margin-bottom:14px;}
+.testi-text{font-size:13px;color:var(--text2);line-height:2;font-style:italic;margin-bottom:18px;}
+.testi-auth{display:flex;align-items:center;gap:12px;}
+.testi-av{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:700;color:white;flex-shrink:0;
+  box-shadow:0 4px 14px var(--shadow);
+  font-family:'Cormorant Garamond',serif;
+}
+.testi-name{font-size:14px;font-weight:700;color:var(--dark);}
+.testi-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* ── CTA BANNER ── */
+.cta-banner{
+  margin:20px 16px 0;
+  background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 50%,var(--gold) 100%);
+  border-radius:28px;padding:32px 28px;text-align:center;
+  position:relative;overflow:hidden;z-index:1;
+  box-shadow:0 12px 48px rgba(181,82,30,0.35);
+}
+.cta-banner::before{
+  content:'';position:absolute;
+  top:-50px;right:-50px;
+  width:160px;height:160px;
+  background:rgba(255,255,255,0.12);border-radius:50%;
+}
+.cta-banner::after{
+  content:'';position:absolute;
+  bottom:-30px;left:-30px;
+  width:100px;height:100px;
+  background:rgba(255,255,255,0.08);border-radius:50%;
+}
+.cta-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;font-weight:700;color:white;
+  margin-bottom:10px;position:relative;z-index:1;
+}
+.cta-sub{font-size:13px;color:rgba(255,255,255,0.88);margin-bottom:24px;line-height:1.8;position:relative;z-index:1;}
+.btn-white{
+  background:white;color:var(--accent);border:none;
+  padding:15px 32px;border-radius:32px;
+  font-size:14px;font-family:'Noto Serif TC',serif;
+  cursor:pointer;text-decoration:none;
+  display:inline-flex;align-items:center;gap:8px;font-weight:700;
+  box-shadow:0 6px 24px rgba(0,0,0,0.2);
+  position:relative;z-index:1;letter-spacing:0.03em;
+}
+.btn-white:active{transform:scale(0.97);}
 
 /* ── INFO CARDS ── */
-.info-grid{padding:0 16px;display:flex;flex-direction:column;gap:10px;}
-.info-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:20px;text-decoration:none;display:flex;align-items:center;gap:16px;transition:transform 0.2s;}
-.info-card:active{transform:scale(0.98);}
-.info-icon{width:44px;height:44px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-.info-content{flex:1;}
-.info-title{font-size:14px;font-weight:600;color:var(--text);}
-.info-sub{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;}
-.info-arrow{color:var(--muted);font-size:18px;}
+.info-wrap{padding:0 16px;position:relative;z-index:1;}
+.icard{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:20px;padding:18px 20px;margin-bottom:10px;
+  text-decoration:none;display:flex;align-items:center;gap:16px;
+  box-shadow:0 4px 18px var(--shadow);
+  transition:all 0.2s;position:relative;overflow:hidden;
+}
+.icard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:4px 0 0 4px;}
+.icard.map::before{background:linear-gradient(180deg,var(--accent),var(--gold));}
+.icard.yt::before{background:linear-gradient(180deg,#FF0000,#FF8080);}
+.icard.lgrp::before{background:linear-gradient(180deg,#06C755,#50FA80);}
+.icard:active{transform:scale(0.98);}
+.icard-ico{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.icard.map .icard-ico{background:linear-gradient(135deg,rgba(181,82,30,0.1),rgba(200,137,58,0.1));}
+.icard.yt .icard-ico{background:rgba(255,0,0,0.08);}
+.icard.lgrp .icard-ico{background:rgba(6,199,85,0.08);}
+.icard-title{font-size:14px;font-weight:700;color:var(--dark);}
+.icard-sub{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;}
+.icard-arrow{color:var(--muted);font-size:22px;margin-left:auto;font-weight:300;}
 
 /* ── HOURS ── */
-.hours-card{background:var(--bg3);border:1px solid var(--border);border-radius:20px;margin:0 16px;padding:20px;}
-.hours-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px;}
-.hours-row:last-child{border-bottom:none;}
-.hours-day{color:var(--muted);}
-.hours-time{color:var(--text);font-weight:600;}
-.hours-closed{color:#8B6050;}
-.open-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(50,180,80,0.15);border:1px solid rgba(50,200,80,0.25);color:#7DD898;font-size:10px;padding:4px 12px;border-radius:20px;letter-spacing:0.1em;margin-top:14px;}
-.open-dot{width:6px;height:6px;border-radius:50%;background:#7DD898;animation:pulse 1.5s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.hours-card{
+  margin:0 16px;
+  background:var(--white);border:1px solid var(--border);
+  border-radius:22px;padding:24px;
+  box-shadow:0 4px 24px var(--shadow);
+  position:relative;overflow:hidden;z-index:1;
+}
+.hours-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--green));}
+.hours-hdr{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.hours-ico{
+  width:44px;height:44px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(15,122,106,0.1),rgba(26,122,58,0.1));
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+}
+.hours-ttl{font-size:15px;font-weight:700;color:var(--dark);}
+.hours-sub-txt{font-size:10px;letter-spacing:0.25em;color:var(--muted);}
+.hrow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(181,82,30,0.08);}
+.hrow:last-of-type{border:none;}
+.hday{font-size:13px;color:var(--muted);}
+.htime{font-size:14px;font-weight:700;color:var(--dark);}
+.hclosed{font-size:13px;color:rgba(120,60,60,0.7);}
+.open-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(26,122,58,0.08);
+  border:1px solid rgba(26,122,58,0.2);
+  color:var(--green);font-size:11px;
+  padding:7px 18px;border-radius:20px;
+  margin-top:16px;letter-spacing:0.1em;font-weight:600;
+}
+.odot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 
 /* ── SOCIAL ── */
-.social-section{padding:0 16px;}
-.social-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-.social-btn{background:var(--bg3);border:1px solid var(--border);border-radius:16px;padding:16px 8px;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:7px;transition:transform 0.2s;}
-.social-btn:active{transform:scale(0.95);}
-.social-btn svg{width:28px;height:28px;}
-.social-name{font-size:10px;letter-spacing:0.1em;color:var(--muted);}
-
-/* ── CONTACT ── */
-.contact-section{padding:0 24px 16px;}
-.contact-body{font-size:13px;color:rgba(240,230,216,0.6);line-height:1.7;margin:8px 0 24px;}
+.soc-wrap{padding:0 16px;position:relative;z-index:1;}
+.soc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.soc-btn{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:18px;padding:18px 8px;
+  text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:8px;
+  box-shadow:0 3px 14px var(--shadow);
+  transition:all 0.15s;
+}
+.soc-btn:active{transform:scale(0.94);box-shadow:none;}
+.soc-btn svg{width:32px;height:32px;}
+.soc-name{font-size:10px;letter-spacing:0.1em;color:var(--muted);font-weight:600;}
 
 /* ── FOOTER ── */
-.footer{padding:32px 24px 48px;text-align:center;border-top:1px solid var(--border);margin-top:8px;}
-.footer-brand{font-family:'Playfair Display',serif;font-size:15px;letter-spacing:0.2em;color:var(--accent);}
-.footer-sub{font-size:10px;letter-spacing:0.3em;color:var(--muted);margin-top:4px;}
-.footer-copy{font-size:11px;color:var(--muted);margin-top:16px;opacity:0.6;}
+.footer{
+  margin-top:20px;padding:48px 28px 56px;text-align:center;
+  background:linear-gradient(180deg,var(--bg3),var(--dark2));
+  border-radius:40px 40px 0 0;
+  position:relative;z-index:1;
+  box-shadow:0 -8px 40px rgba(181,82,30,0.1);
+}
+.footer-logo{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;letter-spacing:0.25em;
+  background:linear-gradient(135deg,var(--accent2),var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;font-weight:700;
+}
+.footer-sub{font-size:10px;letter-spacing:0.4em;color:rgba(200,150,100,0.6);margin-top:6px;}
+.footer-rule{height:1px;background:linear-gradient(90deg,transparent,rgba(200,137,58,0.3),transparent);margin:24px 0;}
+.footer-copy{font-size:11px;color:rgba(200,150,100,0.5);line-height:1.9;}
 
 /* ── FLOATS ── */
-.float-btns{position:fixed;bottom:24px;right:16px;display:flex;flex-direction:column;gap:10px;z-index:200;}
-.float-tel{width:50px;height:50px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:22px;text-decoration:none;box-shadow:0 4px 16px rgba(196,98,45,0.4);transition:transform 0.2s;}
-.float-line{width:50px;height:50px;border-radius:50%;background:#06C755;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 16px rgba(6,199,85,0.3);transition:transform 0.2s;}
-.float-tel:active,.float-line:active{transform:scale(0.92);}
+.floats{position:fixed;bottom:24px;right:16px;display:flex;flex-direction:column;gap:12px;z-index:200;}
+.f-tel{
+  width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;text-decoration:none;
+  box-shadow:0 8px 28px rgba(181,82,30,0.45);
+}
+.f-line{
+  width:54px;height:54px;border-radius:50%;
+  background:linear-gradient(135deg,#06C755,#50FA80);
+  display:flex;align-items:center;justify-content:center;
+  text-decoration:none;
+  box-shadow:0 8px 28px rgba(6,199,85,0.35);
+}
+.f-tel:active,.f-line:active{transform:scale(0.9);}
 
-/* ── ADMIN PANEL ── */
+/* ── ADMIN ── */
 .admin-fab{position:fixed;bottom:24px;left:16px;z-index:200;}
-.admin-fab-btn{width:46px;height:46px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
-.admin-panel{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:var(--bg2);border-top:1px solid var(--border);border-radius:24px 24px 0 0;padding:0 20px 40px;z-index:300;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.32,0,0.67,0);max-height:85vh;overflow-y:auto;}
+.admin-fab-btn{
+  width:48px;height:48px;border-radius:50%;
+  background:var(--white);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;cursor:pointer;
+  box-shadow:0 4px 16px var(--shadow);
+}
+.overlay{position:fixed;inset:0;background:rgba(30,14,6,0.5);z-index:250;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.overlay.active{opacity:1;pointer-events:all;}
+.admin-panel{
+  position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;
+  background:var(--bg);border-top:1px solid var(--border);
+  border-radius:28px 28px 0 0;padding:0 20px 44px;
+  z-index:300;transform:translateY(100%);
+  transition:transform 0.35s cubic-bezier(0.32,0,0.67,0);
+  max-height:88vh;overflow-y:auto;
+}
+.admin-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--gold),var(--teal));}
 .admin-panel.open{transform:translateY(0);}
-.admin-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:14px auto 20px;}
-.admin-title{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;}
-.admin-subtitle{font-size:11px;color:var(--muted);letter-spacing:0.1em;margin-bottom:24px;}
-.admin-tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;}
-.admin-tab{padding:7px 16px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap;background:var(--bg3);border:1px solid var(--border);color:var(--muted);font-family:'Noto Serif TC',serif;transition:all 0.2s;}
-.admin-tab.active{background:var(--accent);border-color:var(--accent);color:white;}
+.admin-handle{width:44px;height:5px;background:var(--border);border-radius:3px;margin:16px auto 22px;}
+.admin-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--dark);margin-bottom:4px;}
+.admin-sub-txt{font-size:11px;color:var(--muted);letter-spacing:0.15em;margin-bottom:24px;}
+.admin-tabs{display:flex;gap:8px;margin-bottom:22px;overflow-x:auto;padding-bottom:4px;}
+.admin-tab{padding:8px 18px;border-radius:20px;font-size:12px;cursor:pointer;white-space:nowrap;background:rgba(181,82,30,0.06);border:1px solid var(--border);color:var(--muted);font-family:'Noto Serif TC',serif;}
+.admin-tab.active{background:var(--accent);border-color:var(--accent);color:white;font-weight:700;}
 .admin-pane{display:none;}
 .admin-pane.active{display:block;}
-.admin-field{margin-bottom:16px;}
-.admin-label{font-size:11px;letter-spacing:0.15em;color:var(--muted);margin-bottom:6px;display:block;}
-.admin-input,.admin-textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:13px;color:var(--text);font-family:'Noto Serif TC',serif;outline:none;}
+.admin-label{font-size:11px;letter-spacing:0.2em;color:var(--muted);margin-bottom:7px;display:block;}
+.admin-input,.admin-textarea{
+  width:100%;background:var(--white);
+  border:1px solid var(--border);border-radius:12px;
+  padding:12px 16px;font-size:13px;color:var(--text);
+  font-family:'Noto Serif TC',serif;outline:none;margin-bottom:14px;
+}
 .admin-input:focus,.admin-textarea:focus{border-color:var(--accent);}
-.admin-textarea{min-height:90px;resize:vertical;line-height:1.7;}
-.admin-save{width:100%;background:var(--accent);color:white;border:none;padding:14px;border-radius:12px;font-size:14px;font-family:'Noto Serif TC',serif;cursor:pointer;font-weight:600;margin-top:8px;letter-spacing:0.05em;}
-.admin-save:active{background:#b5561f;}
-.admin-section-title{font-size:13px;font-weight:600;color:var(--text);margin:16px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
-.testimonial-admin-item{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
-.testimonial-admin-item .admin-input{margin-bottom:8px;}
-.add-btn{width:100%;background:transparent;border:1px dashed var(--border);color:var(--muted);padding:12px;border-radius:10px;font-size:13px;cursor:pointer;font-family:'Noto Serif TC',serif;margin-top:4px;}
-.add-btn:active{border-color:var(--accent);color:var(--accent);}
-.booking-item{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;}
-.booking-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.booking-name{font-size:14px;font-weight:600;}
-.booking-badge{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(196,98,45,0.2);color:var(--accent);border:1px solid var(--border);}
-.booking-badge.done{background:rgba(50,180,80,0.15);color:#7DD898;border-color:rgba(50,200,80,0.25);}
-.booking-detail{font-size:12px;color:var(--muted);line-height:1.7;}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:250;opacity:0;pointer-events:none;transition:opacity 0.3s;}
-.overlay.active{opacity:1;pointer-events:all;}
-.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--accent);color:white;padding:10px 24px;border-radius:30px;font-size:13px;z-index:400;opacity:0;transition:all 0.3s;pointer-events:none;}
+.admin-textarea{min-height:90px;resize:vertical;line-height:1.8;}
+.admin-sec-title{font-size:13px;font-weight:700;color:var(--dark);margin:16px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.admin-save{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;padding:15px;border-radius:14px;font-size:14px;font-family:'Noto Serif TC',serif;cursor:pointer;font-weight:700;box-shadow:0 6px 24px var(--shadow);}
+.testi-item{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;}
+.add-btn{width:100%;background:transparent;border:2px dashed var(--border);color:var(--muted);padding:13px;border-radius:12px;font-size:13px;cursor:pointer;font-family:'Noto Serif TC',serif;margin:8px 0 16px;}
+.booking-item{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;}
+.booking-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.booking-name{font-size:14px;font-weight:700;color:var(--dark);}
+.booking-badge{font-size:10px;padding:4px 12px;border-radius:20px;cursor:pointer;background:rgba(181,82,30,0.08);color:var(--accent);border:1px solid var(--border);}
+.booking-badge.done{background:rgba(26,122,58,0.08);color:var(--green);border-color:rgba(26,122,58,0.2);}
+.booking-detail{font-size:12px;color:var(--muted);line-height:1.8;}
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;padding:11px 28px;border-radius:30px;font-size:13px;font-weight:700;z-index:400;opacity:0;transition:all 0.3s;pointer-events:none;box-shadow:0 6px 24px var(--shadow);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* spacing helpers */
-.sp8{height:8px;}
-.sp16{height:16px;}
-.sp24{height:24px;}
-
-/* scroll reveal */
+.sp{height:16px;position:relative;z-index:1;}
+.sp32{height:32px;position:relative;z-index:1;}
 .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease;}
 .reveal.visible{opacity:1;transform:translateY(0);}
 </style>
 </head>
 <body>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-logo">
-    <svg viewBox="0 0 28 28" fill="none">
-      <ellipse cx="17" cy="13" rx="8" ry="10" fill="#C4622D"/>
-      <circle cx="10" cy="18" r="4" fill="#C4622D"/>
+    <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+      <ellipse cx="21" cy="15" rx="11" ry="13" fill="url(#ng)"/>
+      <circle cx="12" cy="23" r="6" fill="url(#ng)"/>
+      <defs><linearGradient id="ng" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#B5521E"/><stop offset="1" stop-color="#C8893A"/></linearGradient></defs>
     </svg>
-    <div class="nav-brand">JESSICA <span>PHARMACY</span></div>
+    <div>
+      <div class="nav-brand-name">JESSICA</div>
+      <div class="nav-brand-sub">PHARMACY</div>
+    </div>
   </div>
   <div class="nav-btns">
-    <a class="nav-tel" href="tel:+886422340000">📞</a>
-    <a class="nav-line" href="https://lin.ee/6xgkThO" target="_blank">LINE</a>
+    <a class="nav-tel" href="tel:+886958265785">📞</a>
+    <a class="nav-line-btn" href="https://lin.ee/6xgkThO" target="_blank">LINE</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-location">台 中 北 屯 &nbsp;·&nbsp; 潔 西 卡 大 藥 局 &nbsp;·&nbsp; TAICHUNG</div>
-  <svg class="hero-logo" width="64" height="64" viewBox="0 0 64 64" fill="none">
-    <ellipse cx="38" cy="28" rx="18" ry="22" fill="#C4622D"/>
-    <circle cx="22" cy="40" r="9" fill="#C4622D"/>
+  <div class="hero-shimmer"></div>
+  <div class="hero-pill"><div class="hero-dot"></div>台中北屯 · 潔西卡大藥局 · TAICHUNG</div>
+  <svg class="hero-logosvg" width="88" height="88" viewBox="0 0 88 88" fill="none">
+    <ellipse cx="52" cy="35" rx="25" ry="30" fill="url(#hlg)"/>
+    <circle cx="28" cy="55" r="14" fill="url(#hlg)"/>
+    <ellipse cx="52" cy="30" rx="12" ry="8" fill="rgba(255,255,255,0.12)"/>
+    <defs><linearGradient id="hlg" x1="0" y1="0" x2="88" y2="88"><stop stop-color="#D4733A"/><stop offset="0.5" stop-color="#C8893A"/><stop offset="1" stop-color="#E8B860"/></linearGradient></defs>
   </svg>
-  <h1 class="hero-h1" id="hero-heading">不只給藥，<br><em>給你真正的答案</em></h1>
+  <h1 class="hero-h1">不只給藥，<br><em>給你真正的答案</em></h1>
   <div class="hero-tagline">MORE THAN MEDICINE · FROM THE HEART</div>
-  <p class="hero-story" id="hero-story">
-    我自己走過<strong>自律神經失調</strong>的黑暗期。<br>20年後，我把這段經歷變成幫助你的力量。
-  </p>
+  <p class="hero-desc">我自己走過<strong>自律神經失調</strong>的黑暗期。<br>20年後，我把這段經歷變成幫助你的力量。</p>
   <div class="hero-ctas">
-    <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-primary">📋 立即預約諮詢</a>
-    <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-outline">💬 LINE加好友</a>
+    <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-fire">📋 立即預約諮詢</a>
+    <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-glass">💬 LINE加好友</a>
   </div>
   <div class="hero-stats">
-    <div><span class="stat-num" id="stat1">20+</span><span class="stat-label">執業年資</span></div>
-    <div><span class="stat-num" id="stat2">2</span><span class="stat-label">專業儀器</span></div>
+    <div class="hstat"><span class="hstat-n">20+</span><span class="hstat-l">執業年資</span></div>
+    <div class="hstat"><span class="hstat-n">2</span><span class="hstat-l">專業儀器</span></div>
+    <div class="hstat"><span class="hstat-n">∞</span><span class="hstat-l">用心服務</span></div>
   </div>
 </section>
 
 <!-- PHARMACIST -->
-<div class="sp24"></div>
-<div class="pharm-card reveal">
-  <div class="pharm-name" id="pharm-name">林威宏 藥師</div>
-  <div class="pharm-title">PHARMACIST · LIN WEI-HONG · RPh</div>
-  <div class="pharm-quote" id="pharm-quote">「你不是這台機器的被動使用者，你是它的設計者。真正的健康，來自於心態的徹底放鬆與能量的自由流動。」</div>
-  <div class="pharm-stats">
-    <div><div class="pharm-stat-num">20+</div><div class="pharm-stat-label">執業年資</div></div>
-    <div><div class="pharm-stat-num" style="font-size:14px;color:var(--gold)">衛福部</div><div class="pharm-stat-label">核可儀器</div></div>
-    <div><div class="pharm-stat-num" style="font-size:14px;color:var(--gold)">台中</div><div class="pharm-stat-label">北屯在地</div></div>
+<div class="sp32"></div>
+<div class="pharm-wrap reveal">
+  <div class="pharm-card">
+    <div class="pharm-name" id="pharm-name">林威宏 藥師</div>
+    <div class="pharm-en">PHARMACIST · LIN WEI-HONG · RPh</div>
+    <div class="pharm-rule"></div>
+    <div class="pharm-quote" id="pharm-quote">「你不是這台機器的被動使用者，你是它的設計者。真正的健康，來自於心態的徹底放鬆與能量的自由流動。」</div>
+    <div class="pharm-badges">
+      <div class="pbadge"><span class="pbadge-n">20+</span><span class="pbadge-l">執業年資</span></div>
+      <div class="pbadge"><span class="pbadge-n" style="font-size:14px;">衛福部</span><span class="pbadge-l">核可儀器</span></div>
+      <div class="pbadge"><span class="pbadge-n" style="font-size:13px;">台中北屯</span><span class="pbadge-l">在地藥師</span></div>
+    </div>
   </div>
 </div>
 
 <!-- STORY -->
-<div class="sp24"></div>
-<div class="sec-label reveal">
-  <div class="sec-eyebrow">OUR STORY · 關 於 我</div>
+<div class="sec reveal">
+  <div class="sec-eye">OUR STORY · 關 於 我</div>
   <h2 class="sec-h2">我走過那條路，<br><em>所以我懂你</em></h2>
 </div>
-<div class="sp16"></div>
-<div class="story-section reveal">
+<div class="sp"></div>
+<div class="story-wrap reveal">
   <div class="story-tags">
-    <span class="story-tag">執業藥師 20年</span>
-    <span class="story-tag">自律神經親歷者</span>
-    <span class="story-tag">台中北屯在地</span>
+    <span class="stag">執業藥師 20年</span>
+    <span class="stag">自律神經親歷者</span>
+    <span class="stag">台中北屯在地</span>
   </div>
-  <div class="story-body" id="story-body">
-    <p>在藥局，我每天看到無數被<strong>失眠、心悸、慢性疼痛</strong>困擾的人。藥物能暫時壓制警報，但關不掉大腦裡那台不斷製造焦慮的機器。</p>
-    <p>我自己也走過那段黑暗期。心悸到不敢出門、失眠讓我精神渙散。後來我才明白：<strong>痛苦不是身體壞了，而是神經系統長期處於警戒狀態。</strong></p>
-    <p>20年了，我沒有離開藥局。我把這段經歷變成工具，引進<strong>衛福部核可的自律神經儀器</strong>與<strong>AI助聽器</strong>，讓每一位走進來的客人，都能得到超越藥物的幫助。</p>
+  <div id="story-body">
+    <p class="story-p">在藥局，我每天看到無數被<strong>失眠、心悸、慢性疼痛</strong>困擾的人。藥物能暫時壓制警報，但關不掉大腦裡那台不斷製造焦慮的機器。</p>
+    <p class="story-p">我自己也走過那段黑暗期。心悸到不敢出門、失眠讓我精神渙散。後來我才明白：<strong>痛苦不是身體壞了，而是神經系統長期處於警戒狀態。</strong></p>
+    <p class="story-p">20年了，我沒有離開藥局。我把這段經歷變成工具，引進<strong>衛福部核可的自律神經儀器</strong>與<strong>AI助聽器</strong>，讓每一位走進來的客人，都能得到超越藥物的幫助。</p>
   </div>
-  <div class="story-cta">
-    <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-primary">預約免費諮詢 →</a>
-  </div>
+  <div class="story-box"><p>📍 <strong>預約免費諮詢，不需要任何準備</strong><br>走進來就好，我們一起找到你的答案。</p></div>
+  <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-fire" style="display:inline-flex;margin-top:8px;">預約免費諮詢 →</a>
 </div>
 
 <!-- SERVICES -->
-<div class="sp32" style="height:32px;"></div>
-<div class="sec-label reveal">
-  <div class="sec-eyebrow">OUR SERVICES · 服 務 項 目</div>
+<div class="sec reveal">
+  <div class="sec-eye">OUR SERVICES · 服 務 項 目</div>
   <h2 class="sec-h2">專業服務，<em>科學支撐</em></h2>
   <p class="sec-sub">每一項服務背後，都是林藥師20年的臨床經驗與親身實踐。</p>
 </div>
-<div class="sp16"></div>
-<div class="services reveal">
-  <!-- 自律神經 -->
-  <div class="service-card">
-    <div class="service-header">
-      <div class="service-icon">🧠</div>
-      <div class="service-eyebrow">AUTONOMIC NERVOUS SYSTEM</div>
-      <h3 class="service-name">自律神經<em>檢測與調整</em></h3>
-      <p class="service-desc">衛福部核可儀器，3分鐘看清你的神經狀態，找到焦慮與不適的根源。</p>
+<div class="sp"></div>
+<div class="svcs-wrap reveal">
+  <div class="svc-card neuro">
+    <div class="svc-head">
+      <div class="svc-ico">🧠</div>
+      <div class="svc-eye">AUTONOMIC NERVOUS SYSTEM</div>
+      <h3 class="svc-name">自律神經<em>檢測與調整</em></h3>
+      <p class="svc-desc">衛福部核可儀器，3分鐘看清你的神經狀態，找到焦慮與不適的根源。</p>
     </div>
-    <div class="service-body">
-      <ul class="service-list" id="service1-list">
+    <div class="svc-body">
+      <div class="svc-divider"></div>
+      <ul class="svc-list">
         <li>衛福部核可專業儀器，科學數據不猜測</li>
         <li>交感／副交感平衡分析，找出失調原因</li>
         <li>非藥物調整方向建議，搭配呼吸與意識訓練</li>
         <li>適合：失眠、心悸、慢性疼痛、焦慮、胸悶</li>
         <li>林藥師親身經歷，真正懂你的感受</li>
       </ul>
-      <div class="service-cta">
-        <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-service">LINE預約免費檢測 →</a>
-      </div>
+      <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-svc">LINE 預約免費檢測 →</a>
     </div>
   </div>
-
-  <!-- AI助聽器 -->
-  <div class="service-card">
-    <div class="service-header">
-      <div class="service-icon">👂</div>
-      <div class="service-eyebrow">AI HEARING AID</div>
-      <h3 class="service-name">AI智慧<em>助聽器</em></h3>
-      <p class="service-desc">幫助因聽力退化失去聲音的人，重新連結生活與人際。</p>
+  <div class="svc-card hear">
+    <div class="svc-head">
+      <div class="svc-ico">👂</div>
+      <div class="svc-eye">AI HEARING AID</div>
+      <h3 class="svc-name">AI智慧<em>助聽器</em></h3>
+      <p class="svc-desc">幫助因聽力退化失去聲音的人，重新連結生活與人際。</p>
     </div>
-    <div class="service-body">
-      <ul class="service-list" id="service2-list">
+    <div class="svc-body">
+      <div class="svc-divider"></div>
+      <ul class="svc-list">
         <li>AI智慧降噪，自動適應不同環境聲音</li>
         <li>依個人聽力量身調校，精準補償頻率</li>
         <li>免費聽力評估，專業配置不強迫推銷</li>
         <li>適合：中高齡聽力退化、長期耳鳴者</li>
         <li>現場試戴體驗，帶長輩來感受差異</li>
       </ul>
-      <div class="service-cta">
-        <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-service">LINE預約免費試戴 →</a>
-      </div>
+      <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-svc">LINE 預約免費試戴 →</a>
     </div>
   </div>
 </div>
 
 <!-- TESTIMONIALS -->
-<div class="sp32" style="height:32px;"></div>
-<div class="sec-label reveal">
-  <div class="sec-eyebrow">TESTIMONIALS · 顧 客 見 證</div>
+<div class="sec reveal">
+  <div class="sec-eye">TESTIMONIALS · 顧 客 見 證</div>
   <h2 class="sec-h2">他們這樣說</h2>
   <p class="sec-sub">真實的改變，來自願意踏出那一步的人。</p>
 </div>
-<div class="sp16"></div>
-<div class="testimonials reveal" id="testimonials-container">
-  <!-- rendered by JS -->
+<div class="sp"></div>
+<div class="testis-wrap reveal" id="testimonials-container"></div>
+
+<!-- CTA -->
+<div class="cta-banner reveal">
+  <div class="cta-title">🎯 預約免費諮詢</div>
+  <div class="cta-sub">不需要任何準備，走進來就好。<br>林藥師親自為你解答。</div>
+  <a href="https://lin.ee/6xgkThO" target="_blank" class="btn-white">📋 立即預約 →</a>
 </div>
 
 <!-- VIDEOS -->
-<div class="sp32" style="height:32px;"></div>
-<div class="sec-label reveal">
-  <div class="sec-eyebrow">HEALTH VIDEOS · 衛 教 影 片</div>
+<div class="sec reveal">
+  <div class="sec-eye">HEALTH VIDEOS · 衛 教 影 片</div>
   <h2 class="sec-h2">學習更多，<em>照顧自己</em></h2>
 </div>
-<div class="sp16"></div>
-<div class="info-grid reveal">
-  <a href="https://www.youtube.com/channel/UCa8beW7bxq7cBwOtfHyP-Gw" target="_blank" class="info-card">
-    <div class="info-icon">🎬</div>
-    <div class="info-content">
-      <div class="info-title">衛教影片頻道</div>
-      <div class="info-sub">YouTube · 潔西卡大藥局</div>
-    </div>
-    <span class="info-arrow">›</span>
+<div class="sp"></div>
+<div class="info-wrap reveal">
+  <a href="https://www.youtube.com/channel/UCa8beW7bxq7cBwOtfHyP-Gw" target="_blank" class="icard yt">
+    <div class="icard-ico">🎬</div>
+    <div><div class="icard-title">衛教影片頻道</div><div class="icard-sub">YouTube · 潔西卡大藥局</div></div>
+    <span class="icard-arrow">›</span>
   </a>
-  <a href="https://line.me/ti/g2/QYpYFDrYHmtU78RK_5uF1TB7nHGEWlwtvXwntw?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" class="info-card">
-    <div class="info-icon" style="background:#00B900;">💬</div>
-    <div class="info-content">
-      <div class="info-title">影片活動社群</div>
-      <div class="info-sub">LINE 社群 · 加入討論</div>
-    </div>
-    <span class="info-arrow">›</span>
+  <a href="https://line.me/ti/g2/QYpYFDrYHmtU78RK_5uF1TB7nHGEWlwtvXwntw?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank" class="icard lgrp">
+    <div class="icard-ico">💬</div>
+    <div><div class="icard-title">影片活動社群</div><div class="icard-sub">LINE 社群 · 加入討論</div></div>
+    <span class="icard-arrow">›</span>
   </a>
 </div>
 
-<!-- CONTACT & HOURS -->
-<div class="sp32" style="height:32px;"></div>
-<div class="sec-label reveal">
-  <div class="sec-eyebrow">CONTACT · 聯 絡 我 們</div>
+<!-- HOURS -->
+<div class="sec reveal">
+  <div class="sec-eye">INFO · 藥 局 資 訊</div>
   <h2 class="sec-h2">來找我們，<br><em>從這裡開始</em></h2>
 </div>
-<div class="sp16"></div>
-<div class="contact-section reveal">
-  <p class="contact-body">預約免費諮詢，不需要任何準備，走進來就好。</p>
-</div>
+<div class="sp"></div>
 <div class="hours-card reveal">
-  <div class="hours-row"><span class="hours-day">週一 ─ 週五</span><span class="hours-time">11:00 – 18:00</span></div>
-  <div class="hours-row"><span class="hours-day">週六</span><span class="hours-closed">休息</span></div>
-  <div class="hours-row"><span class="hours-day">週日</span><span class="hours-closed">休息</span></div>
-  <div class="open-pill"><div class="open-dot"></div>週一至週五營業中</div>
+  <div class="hours-hdr">
+    <div class="hours-ico">🕐</div>
+    <div><div class="hours-ttl">營業時間</div><div class="hours-sub-txt">BUSINESS HOURS</div></div>
+  </div>
+  <div class="hrow"><span class="hday">週一 ─ 週五</span><span class="htime">11:00 – 18:00</span></div>
+  <div class="hrow"><span class="hday">週六</span><span class="hclosed">休息</span></div>
+  <div class="hrow"><span class="hday">週日</span><span class="hclosed">休息</span></div>
+  <div class="open-badge"><div class="odot"></div>週一至週五營業中</div>
 </div>
-<div class="sp16"></div>
-<div class="info-grid reveal">
-  <a href="https://www.google.com.tw/maps/place/%E6%BD%94%E8%A5%BF%E5%8D%A1%E5%A4%A7%E8%97%A5%E5%B1%80/@24.1764773,120.6859423,21z" target="_blank" class="info-card">
-    <div class="info-icon">📍</div>
-    <div class="info-content">
-      <div class="info-title">台中市北屯區</div>
-      <div class="info-sub">崇德路二段 306 號</div>
-    </div>
-    <span class="info-arrow">›</span>
+<div class="sp"></div>
+<div class="info-wrap reveal">
+  <a href="https://www.google.com.tw/maps/place/%E6%BD%94%E8%A5%BF%E5%8D%A1%E5%A4%A7%E8%97%A5%E5%B1%80/@24.1764773,120.6859423,21z" target="_blank" class="icard map">
+    <div class="icard-ico">📍</div>
+    <div><div class="icard-title">台中市北屯區崇德路二段 306 號</div><div class="icard-sub">點擊開啟 Google Maps 導航</div></div>
+    <span class="icard-arrow">›</span>
   </a>
 </div>
 
 <!-- SOCIAL -->
-<div class="sp24"></div>
-<div class="sec-label reveal">
-  <div class="sec-eyebrow">FOLLOW US · 社 群</div>
+<div class="sec reveal">
+  <div class="sec-eye">FOLLOW US · 追 蹤 我 們</div>
 </div>
-<div class="sp16"></div>
-<div class="social-section reveal">
-  <div class="social-grid">
-    <a class="social-btn" href="https://lin.ee/6xgkThO" target="_blank">
-      <svg viewBox="0 0 28 28"><rect width="28" height="28" rx="7" fill="#06C755"/>
-      <path d="M14 6C9.8 6 6.4 8.9 6.4 12.5c0 3.1 2.1 5.8 5.2 7-.2.8-.8 2.8-.8 3.2-.1.5.2.5.4.4.2-.1 2.6-1.7 3.6-2.4.2 0 .5.1.7.1 4.2 0 7.6-2.9 7.6-6.5S18.2 6 14 6z" fill="white"/></svg>
-      <span class="social-name">LINE 官方</span>
+<div class="sp"></div>
+<div class="soc-wrap reveal">
+  <div class="soc-grid">
+    <a class="soc-btn" href="https://lin.ee/6xgkThO" target="_blank">
+      <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#06C755"/><path d="M16 6.5C11.3 6.5 7.5 9.7 7.5 13.7c0 3.4 2.4 6.4 6 7.6l-.9 3.4c-.1.4.2.5.4.3l4.1-2.7c.3 0 .5.1.8.1 4.7 0 8.5-3.2 8.5-7.2S20.7 6.5 16 6.5z" fill="white"/></svg>
+      <span class="soc-name">LINE 官方</span>
     </a>
-    <a class="social-btn" href="https://line.me/ti/g2/QYpYFDrYHmtU78RK_5uF1TB7nHGEWlwtvXwntw?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank">
-      <svg viewBox="0 0 28 28"><rect width="28" height="28" rx="7" fill="#00A550"/>
-      <path d="M14 6C9.8 6 6.4 8.9 6.4 12.5c0 3.1 2.1 5.8 5.2 7-.2.8-.8 2.8-.8 3.2-.1.5.2.5.4.4.2-.1 2.6-1.7 3.6-2.4.2 0 .5.1.7.1 4.2 0 7.6-2.9 7.6-6.5S18.2 6 14 6z" fill="white"/>
-      <rect x="9" y="11" width="10" height="1.5" rx="0.75" fill="#00A550"/>
-      <rect x="9" y="13.5" width="7" height="1.5" rx="0.75" fill="#00A550"/></svg>
-      <span class="social-name">影片社群</span>
+    <a class="soc-btn" href="https://line.me/ti/g2/QYpYFDrYHmtU78RK_5uF1TB7nHGEWlwtvXwntw?utm_source=invitation&utm_medium=link_copy&utm_campaign=default" target="_blank">
+      <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#00A550"/><path d="M16 6.5C11.3 6.5 7.5 9.7 7.5 13.7c0 3.4 2.4 6.4 6 7.6l-.9 3.4c-.1.4.2.5.4.3l4.1-2.7c.3 0 .5.1.8.1 4.7 0 8.5-3.2 8.5-7.2S20.7 6.5 16 6.5z" fill="white"/><rect x="11" y="12.5" width="10" height="1.8" rx="0.9" fill="#00A550"/><rect x="11" y="15" width="7" height="1.8" rx="0.9" fill="#00A550"/></svg>
+      <span class="soc-name">影片社群</span>
     </a>
-    <a class="social-btn" href="https://www.facebook.com/jessicamamakelly" target="_blank">
-      <svg viewBox="0 0 28 28"><rect width="28" height="28" rx="7" fill="#1877F2"/>
-      <path d="M15.5 24v-8.5h2.4l.4-2.8H15.5v-1.8c0-.8.4-1.5 1.6-1.5H18.5V7s-1.2-.2-2.3-.2c-2.3 0-3.8 1.4-3.8 3.8v2.1H9.8V15.5H12.4V24H15.5z" fill="white"/></svg>
-      <span class="social-name">Facebook</span>
+    <a class="soc-btn" href="https://www.facebook.com/jessicamamakelly" target="_blank">
+      <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#1877F2"/><path d="M18 27v-9.5h2.6l.5-3.2H18v-2c0-.9.4-1.7 1.8-1.7H21.5V8.2S20 8 18.7 8c-2.7 0-4.4 1.6-4.4 4.5v2.8H11.5v3.2H14.3V27H18z" fill="white"/></svg>
+      <span class="soc-name">Facebook</span>
     </a>
-    <a class="social-btn" href="https://www.instagram.com/jessicapharmacy/" target="_blank">
-      <svg viewBox="0 0 28 28"><rect width="28" height="28" rx="7" fill="url(#ig28)"/>
-      <defs><linearGradient id="ig28" x1="0" y1="28" x2="28" y2="0"><stop offset="0%" stop-color="#FFDC80"/><stop offset="50%" stop-color="#E1306C"/><stop offset="100%" stop-color="#833AB4"/></linearGradient></defs>
-      <rect x="7" y="7" width="14" height="14" rx="4" stroke="white" stroke-width="1.5" fill="none"/>
-      <circle cx="14" cy="14" r="3.5" stroke="white" stroke-width="1.5" fill="none"/>
-      <circle cx="18.5" cy="9.5" r="1" fill="white"/></svg>
-      <span class="social-name">Instagram</span>
+    <a class="soc-btn" href="https://www.instagram.com/jessicapharmacy/" target="_blank">
+      <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="url(#ig32)"/><defs><linearGradient id="ig32" x1="0" y1="32" x2="32" y2="0"><stop offset="0%" stop-color="#FFDC80"/><stop offset="40%" stop-color="#E1306C"/><stop offset="100%" stop-color="#833AB4"/></linearGradient></defs><rect x="8" y="8" width="16" height="16" rx="5" stroke="white" stroke-width="1.8" fill="none"/><circle cx="16" cy="16" r="4.5" stroke="white" stroke-width="1.8" fill="none"/><circle cx="21.5" cy="10.5" r="1.3" fill="white"/></svg>
+      <span class="soc-name">Instagram</span>
     </a>
-    <a class="social-btn" href="https://www.youtube.com/channel/UCa8beW7bxq7cBwOtfHyP-Gw" target="_blank">
-      <svg viewBox="0 0 28 28"><rect width="28" height="28" rx="7" fill="#FF0000"/>
-      <path d="M22 10.5a2.3 2.3 0 0 0-1.6-1.6C19 8.5 14 8.5 14 8.5s-5 0-6.4.4A2.3 2.3 0 0 0 6 10.5C5.6 11.9 5.6 14 5.6 14s0 2.1.4 3.5a2.3 2.3 0 0 0 1.6 1.6c1.4.4 6.4.4 6.4.4s5 0 6.4-.4a2.3 2.3 0 0 0 1.6-1.6c.4-1.4.4-3.5.4-3.5s0-2.1-.4-3.5z" fill="white"/>
-      <polygon points="11.8,11 11.8,17 17,14" fill="#FF0000"/></svg>
-      <span class="social-name">YouTube</span>
+    <a class="soc-btn" href="https://www.youtube.com/channel/UCa8beW7bxq7cBwOtfHyP-Gw" target="_blank">
+      <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#FF0000"/><path d="M25.5 11.2a2.8 2.8 0 0 0-2-2C22 8.7 16 8.7 16 8.7s-6 0-7.5.5a2.8 2.8 0 0 0-2 2C6 12.7 6 16 6 16s0 3.3.5 4.8a2.8 2.8 0 0 0 2 2c1.5.5 7.5.5 7.5.5s6 0 7.5-.5a2.8 2.8 0 0 0 2-2c.5-1.5.5-4.8.5-4.8s0-3.3-.5-4.8z" fill="white"/><polygon points="13.5,12.5 13.5,19.5 20,16" fill="#FF0000"/></svg>
+      <span class="soc-name">YouTube</span>
+    </a>
+    <a class="soc-btn" href="tel:+886958265785">
+      <svg viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="url(#pg32)"/><defs><linearGradient id="pg32" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#B5521E"/><stop offset="1" stop-color="#C8893A"/></linearGradient></defs><path d="M22.5 20.5c-.5-.5-3.2-2.2-3.8-2.2s-1.1.5-1.6 1.1-1.1 1.1-1.6.5-2.2-1.6-3.3-2.7-2.2-2.7-2.7-3.3-.5-1.1.5-1.6 1.1-1.1 1.1-1.6-1.6-3.3-2.2-3.8-1.1-.5-1.6 0-3.3 3.3-3.3 4.9 1.6 4.4 3.8 6.6 5 3.8 6.6 3.8 4.4-2.7 4.9-3.3-.5-1.1-1.1-1.6z" fill="white"/></svg>
+      <span class="soc-name">電話諮詢</span>
     </a>
   </div>
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
-  <div class="footer-brand">JESSICA PHARMACY</div>
+  <div class="footer-logo">JESSICA PHARMACY</div>
   <div class="footer-sub">潔 西 卡 大 藥 局</div>
-  <div class="footer-copy">© 2025 潔西卡大藥局 · 台中市北屯區崇德路二段306號</div>
+  <div class="footer-rule"></div>
+  <div class="footer-copy">
+    台中市北屯區崇德路二段 306 號<br>
+    📞 0958-265-785<br>
+    週一至週五 11:00 – 18:00
+  </div>
 </div>
 
-<!-- FLOAT BUTTONS -->
-<div class="float-btns">
-  <a class="float-tel" href="tel:+886422340000">📞</a>
-  <a class="float-line" href="https://lin.ee/6xgkThO" target="_blank">
-    <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 3C8.3 3 4.5 6.3 4.5 10.4c0 3.3 2.2 6.1 5.5 7.3-.2.8-.8 2.8-.9 3.2-.1.5.2.5.4.3.1-.1 2.7-1.8 3.8-2.5.2 0 .4.1.7.1 4.7 0 8.5-3.3 8.5-7.4S17.7 3 13 3z" fill="white"/></svg>
+<!-- FLOATS -->
+<div class="floats">
+  <a class="f-tel" href="tel:+886958265785">📞</a>
+  <a class="f-line" href="https://lin.ee/6xgkThO" target="_blank">
+    <svg width="28" height="28" viewBox="0 0 28 28"><path d="M14 4C9.1 4 5.1 7.5 5.1 11.8c0 3.5 2.4 6.6 6 7.8l-1 3.8c-.1.5.2.5.5.4l4.8-3.2c.3 0 .6.1.9.1 4.9 0 8.9-3.5 8.9-7.8S18.9 4 14 4z" fill="white"/></svg>
   </a>
 </div>
 
-<!-- ADMIN FAB -->
-<div class="admin-fab">
-  <button class="admin-fab-btn" onclick="toggleAdmin()" title="後台管理">⚙️</button>
-</div>
-
-<!-- OVERLAY -->
+<!-- ADMIN -->
+<div class="admin-fab"><button class="admin-fab-btn" onclick="toggleAdmin()">⚙️</button></div>
 <div class="overlay" id="overlay" onclick="toggleAdmin()"></div>
-
-<!-- ADMIN PANEL -->
 <div class="admin-panel" id="adminPanel">
   <div class="admin-handle"></div>
   <div class="admin-title">⚙️ 後台管理</div>
-  <div class="admin-subtitle">JESSICA PHARMACY · ADMIN</div>
-
+  <div class="admin-sub-txt">JESSICA PHARMACY · ADMIN</div>
   <div class="admin-tabs">
-    <button class="admin-tab active" onclick="switchTab('content')">網站內容</button>
-    <button class="admin-tab" onclick="switchTab('testimonials')">顧客見證</button>
-    <button class="admin-tab" onclick="switchTab('bookings')">預約紀錄</button>
+    <button class="admin-tab active" onclick="switchTab(event,'content')">網站內容</button>
+    <button class="admin-tab" onclick="switchTab(event,'testimonials')">顧客見證</button>
+    <button class="admin-tab" onclick="switchTab(event,'bookings')">預約紀錄</button>
   </div>
-
-  <!-- TAB: 內容 -->
   <div class="admin-pane active" id="tab-content">
-    <div class="admin-section-title">首頁標題</div>
-    <div class="admin-field">
-      <label class="admin-label">主標題</label>
-      <input class="admin-input" id="edit-heading" value="不只給藥，給你真正的答案">
-    </div>
-    <div class="admin-field">
-      <label class="admin-label">副標語</label>
-      <textarea class="admin-textarea" id="edit-story" rows="3">我自己走過自律神經失調的黑暗期。20年後，我把這段經歷變成幫助你的力量。</textarea>
-    </div>
-
-    <div class="admin-section-title">藥師資訊</div>
-    <div class="admin-field">
-      <label class="admin-label">藥師名稱</label>
-      <input class="admin-input" id="edit-pharmname" value="林威宏 藥師">
-    </div>
-    <div class="admin-field">
-      <label class="admin-label">藥師名言</label>
-      <textarea class="admin-textarea" id="edit-pharmquote">「你不是這台機器的被動使用者，你是它的設計者。真正的健康，來自於心態的徹底放鬆與能量的自由流動。」</textarea>
-    </div>
-
-    <div class="admin-section-title">關於我</div>
-    <div class="admin-field">
-      <label class="admin-label">故事內容（用空行分段）</label>
-      <textarea class="admin-textarea" id="edit-storybody" rows="8">在藥局，我每天看到無數被失眠、心悸、慢性疼痛困擾的人。藥物能暫時壓制警報，但關不掉大腦裡那台不斷製造焦慮的機器。
+    <div class="admin-sec-title">藥師資訊</div>
+    <label class="admin-label">藥師名稱</label>
+    <input class="admin-input" id="edit-pharmname" value="林威宏 藥師">
+    <label class="admin-label">藥師名言</label>
+    <textarea class="admin-textarea" id="edit-pharmquote">「你不是這台機器的被動使用者，你是它的設計者。真正的健康，來自於心態的徹底放鬆與能量的自由流動。」</textarea>
+    <div class="admin-sec-title">關於我故事</div>
+    <label class="admin-label">內容（空行分段）</label>
+    <textarea class="admin-textarea" id="edit-storybody" rows="8">在藥局，我每天看到無數被失眠、心悸、慢性疼痛困擾的人。藥物能暫時壓制警報，但關不掉大腦裡那台不斷製造焦慮的機器。
 
 我自己也走過那段黑暗期。心悸到不敢出門、失眠讓我精神渙散。後來我才明白：痛苦不是身體壞了，而是神經系統長期處於警戒狀態。
 
 20年了，我沒有離開藥局。我把這段經歷變成工具，引進衛福部核可的自律神經儀器與AI助聽器，讓每一位走進來的客人，都能得到超越藥物的幫助。</textarea>
-    </div>
-    <button class="admin-save" onclick="saveContent()">💾 儲存變更</button>
+    <button class="admin-save" onclick="saveContent()">💾 儲存更新</button>
   </div>
-
-  <!-- TAB: 見證 -->
   <div class="admin-pane" id="tab-testimonials">
     <div id="testimonials-admin"></div>
     <button class="add-btn" onclick="addTestimonial()">＋ 新增見證</button>
     <button class="admin-save" onclick="saveTestimonials()">💾 儲存見證</button>
   </div>
-
-  <!-- TAB: 預約 -->
   <div class="admin-pane" id="tab-bookings">
-    <div class="admin-section-title">新增預約</div>
-    <div class="admin-field">
-      <label class="admin-label">姓名</label>
-      <input class="admin-input" id="booking-name" placeholder="王小姐">
-    </div>
-    <div class="admin-field">
-      <label class="admin-label">日期時間</label>
-      <input class="admin-input" id="booking-date" type="datetime-local">
-    </div>
-    <div class="admin-field">
-      <label class="admin-label">服務項目</label>
-      <input class="admin-input" id="booking-service" placeholder="自律神經檢測 / AI助聽器試戴">
-    </div>
-    <div class="admin-field">
-      <label class="admin-label">備註</label>
-      <input class="admin-input" id="booking-note" placeholder="電話或其他說明">
-    </div>
+    <div class="admin-sec-title">新增預約</div>
+    <label class="admin-label">姓名</label><input class="admin-input" id="b-name" placeholder="王小姐">
+    <label class="admin-label">日期時間</label><input class="admin-input" id="b-date" type="datetime-local">
+    <label class="admin-label">服務項目</label><input class="admin-input" id="b-service" placeholder="自律神經檢測 / AI助聽器試戴">
+    <label class="admin-label">備註</label><input class="admin-input" id="b-note" placeholder="電話或說明">
     <button class="admin-save" onclick="addBooking()">＋ 新增預約</button>
-    <div class="admin-section-title" style="margin-top:24px;">預約列表</div>
+    <div class="admin-sec-title" style="margin-top:24px;">預約列表</div>
     <div id="bookings-list"></div>
   </div>
 </div>
 
 <script>
-// ── DATA ──
-let testimonials = [
+let testimonials=[
   {name:"王小姐",meta:"失眠困擾 · 台中北屯",text:"「失眠快兩年了，試過很多方法都沒用。做了自律神經檢測後，林藥師說我的交感神經一直高度警戒。照著建議調整三週，現在能睡6個小時了！」"},
-  {name:"陳先生",meta:"AI助聽器 · 台中西屯",text:"「帶媽媽來配AI助聽器，林藥師非常有耐心，解釋很清楚沒有硬推銷。媽媽戴上後說聽得比以前清楚，現在跟家人聊天不用一直說「什麼？」了。」"},
+  {name:"陳先生",meta:"AI助聽器 · 台中西屯",text:"「帶媽媽來配AI助聽器，林藥師非常有耐心，解釋很清楚沒有硬推銷。媽媽戴上後說聽得比以前清楚，現在跟家人聊天不用一直說『什麼？』了。」"},
   {name:"李小姐",meta:"心悸改善 · 台中北屯",text:"「心悸問題困擾我很久，醫院說沒問題但就是不舒服。林藥師說他自己也經歷過，那種感同身受真的很不一樣，不是只在開藥的藥師。」"}
 ];
-
-let bookings = [];
-
-// ── RENDER ──
+let bookings=[];
 function renderTestimonials(){
-  const c=document.getElementById('testimonials-container');
-  c.innerHTML=testimonials.map(t=>`
-    <div class="testimonial-card">
-      <div class="stars">★★★★★</div>
-      <p class="testimonial-text">${t.text}</p>
-      <div class="testimonial-author">
-        <div class="author-avatar">${t.name[0]}</div>
-        <div><div class="author-name">${t.name}</div><div class="author-meta">${t.meta}</div></div>
+  document.getElementById('testimonials-container').innerHTML=testimonials.map(t=>`
+    <div class="testi-card">
+      <div class="testi-quote-mark">"</div>
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">${t.text}</p>
+      <div class="testi-auth">
+        <div class="testi-av">${t.name[0]}</div>
+        <div><div class="testi-name">${t.name}</div><div class="testi-meta">${t.meta}</div></div>
       </div>
     </div>`).join('');
 }
-
 function renderTestimonialsAdmin(){
-  const c=document.getElementById('testimonials-admin');
-  c.innerHTML=testimonials.map((t,i)=>`
-    <div class="testimonial-admin-item">
-      <input class="admin-input" placeholder="姓名" value="${t.name}" onchange="testimonials[${i}].name=this.value">
-      <input class="admin-input" placeholder="身份（例：失眠困擾 · 台中北屯）" value="${t.meta}" onchange="testimonials[${i}].meta=this.value">
-      <textarea class="admin-textarea" rows="3" onchange="testimonials[${i}].text=this.value">${t.text}</textarea>
-      <button onclick="deleteTestimonial(${i})" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;margin-top:4px;">✕ 刪除</button>
+  document.getElementById('testimonials-admin').innerHTML=testimonials.map((t,i)=>`
+    <div class="testi-item">
+      <input class="admin-input" placeholder="姓名" value="${t.name}" oninput="testimonials[${i}].name=this.value">
+      <input class="admin-input" placeholder="身份 · 地區" value="${t.meta}" oninput="testimonials[${i}].meta=this.value">
+      <textarea class="admin-textarea" rows="3" oninput="testimonials[${i}].text=this.value">${t.text}</textarea>
+      <button onclick="testimonials.splice(${i},1);renderTestimonialsAdmin();" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;">✕ 刪除</button>
     </div>`).join('');
 }
-
 function renderBookings(){
   const c=document.getElementById('bookings-list');
   if(!bookings.length){c.innerHTML='<p style="color:var(--muted);font-size:13px;padding:12px 0;">尚無預約紀錄</p>';return;}
   c.innerHTML=bookings.map((b,i)=>`
     <div class="booking-item">
-      <div class="booking-header">
-        <div class="booking-name">${b.name}</div>
-        <span class="booking-badge ${b.done?'done':''}" onclick="toggleDone(${i})" style="cursor:pointer">${b.done?'✓ 完成':'待確認'}</span>
-      </div>
-      <div class="booking-detail">
-        📅 ${b.date||'未填'}<br>
-        🏥 ${b.service||'未填'}<br>
-        ${b.note?'📝 '+b.note:''}
-      </div>
+      <div class="booking-hdr"><div class="booking-name">${b.name}</div>
+      <span class="booking-badge ${b.done?'done':''}" onclick="bookings[${i}].done=!bookings[${i}].done;renderBookings();">${b.done?'✓ 完成':'待確認'}</span></div>
+      <div class="booking-detail">📅 ${b.date||'未填'}<br>🏥 ${b.service||'未填'}${b.note?'<br>📝 '+b.note:''}</div>
     </div>`).join('');
 }
-
-// ── ACTIONS ──
 function saveContent(){
-  const h=document.getElementById('edit-heading').value;
-  const s=document.getElementById('edit-story').value;
-  const pn=document.getElementById('edit-pharmname').value;
-  const pq=document.getElementById('edit-pharmquote').value;
-  const sb=document.getElementById('edit-storybody').value;
-
-  document.getElementById('hero-heading').innerHTML=h.replace(/，/,'，<br>').replace(/(\S+)$/,'<em>$1</em>');
-  document.getElementById('hero-story').innerHTML=s;
-  document.getElementById('pharm-name').textContent=pn;
-  document.getElementById('pharm-quote').textContent=pq;
-
-  const paras=sb.split('\n\n').filter(p=>p.trim());
-  document.getElementById('story-body').innerHTML=paras.map(p=>`<p>${p.replace(/(自律神經儀器|AI助聽器|失眠|心悸|慢性疼痛|衛福部核可的自律神經儀器|痛苦不是身體壞了，而是神經系統長期處於警戒狀態。)/g,'<strong>$1</strong>')}</p>`).join('');
-
+  document.getElementById('pharm-name').textContent=document.getElementById('edit-pharmname').value;
+  document.getElementById('pharm-quote').textContent=document.getElementById('edit-pharmquote').value;
+  const paras=document.getElementById('edit-storybody').value.split('\n\n').filter(p=>p.trim());
+  document.getElementById('story-body').innerHTML=paras.map(p=>`<p class="story-p">${p.replace(/(失眠|心悸|慢性疼痛|衛福部核可的自律神經儀器|AI助聽器|痛苦不是身體壞了，而是神經系統長期處於警戒狀態。)/g,'<strong>$1</strong>')}</p>`).join('');
   showToast('✓ 內容已更新');
 }
-
-function addTestimonial(){
-  testimonials.push({name:'新客人',meta:'服務項目 · 地區',text:'「填寫見證內容」'});
-  renderTestimonialsAdmin();
-}
-
-function deleteTestimonial(i){
-  testimonials.splice(i,1);
-  renderTestimonialsAdmin();
-}
-
-function saveTestimonials(){
-  renderTestimonials();
-  showToast('✓ 見證已更新');
-}
-
+function addTestimonial(){testimonials.push({name:'新客人',meta:'服務 · 地區',text:'「填寫見證內容」'});renderTestimonialsAdmin();}
+function saveTestimonials(){renderTestimonials();showToast('✓ 見證已更新');}
 function addBooking(){
-  const name=document.getElementById('booking-name').value.trim();
+  const name=document.getElementById('b-name').value.trim();
   if(!name){showToast('請填寫姓名');return;}
-  bookings.unshift({
-    name,
-    date:document.getElementById('booking-date').value,
-    service:document.getElementById('booking-service').value,
-    note:document.getElementById('booking-note').value,
-    done:false
-  });
-  document.getElementById('booking-name').value='';
-  document.getElementById('booking-date').value='';
-  document.getElementById('booking-service').value='';
-  document.getElementById('booking-note').value='';
-  renderBookings();
-  showToast('✓ 預約已新增');
+  bookings.unshift({name,date:document.getElementById('b-date').value,service:document.getElementById('b-service').value,note:document.getElementById('b-note').value,done:false});
+  ['b-name','b-date','b-service','b-note'].forEach(id=>document.getElementById(id).value='');
+  renderBookings();showToast('✓ 預約已新增');
 }
-
-function toggleDone(i){
-  bookings[i].done=!bookings[i].done;
-  renderBookings();
-}
-
-// ── UI ──
 function toggleAdmin(){
-  const p=document.getElementById('adminPanel');
-  const o=document.getElementById('overlay');
+  const p=document.getElementById('adminPanel'),o=document.getElementById('overlay');
   const open=p.classList.toggle('open');
   o.classList.toggle('active',open);
   if(open){renderTestimonialsAdmin();renderBookings();}
 }
-
-function switchTab(name){
+function switchTab(e,name){
   document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.admin-pane').forEach(p=>p.classList.remove('active'));
-  event.target.classList.add('active');
+  e.target.classList.add('active');
   document.getElementById('tab-'+name).classList.add('active');
 }
-
 function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.add('show');
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2200);
 }
-
-// ── SCROLL REVEAL ──
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
-},{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
-
-// ── INIT ──
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 renderTestimonials();
 </script>
 </body>
