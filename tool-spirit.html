@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心靈工具 | 潔西卡大藥局</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#09090f;--bg2:#12121e;--bg3:#1a1a2e;--bg4:#16213e;
+  --line:#2a2a4a;
+  --white:#f0eeff;--white2:#b8b0d0;--white3:#7a7099;
+  --gold:#e8c84a;--gold-pale:rgba(232,200,74,0.15);
+  --purple:#9b59b6;--purple-pale:rgba(155,89,182,0.15);
+  --teal:#1abc9c;--teal-pale:rgba(26,188,156,0.12);
+  --rose:#e8635a;--rose-pale:rgba(232,99,90,0.15);
+  --star:#f0d060;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--white);font-family:'Noto Sans TC',sans-serif;}
+
+/* 星空背景 */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse at 20% 50%,rgba(155,89,182,0.08) 0%,transparent 50%),
+             radial-gradient(ellipse at 80% 20%,rgba(26,188,156,0.06) 0%,transparent 50%),
+             radial-gradient(ellipse at 50% 100%,rgba(232,200,74,0.05) 0%,transparent 50%);
+  pointer-events:none;
+}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:rgba(9,9,15,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
+.nav-back{font-size:13px;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:5px;}
+.nav-title{font-size:14px;font-weight:700;color:var(--white2);}
+
+/* ── HERO ── */
+.hero{text-align:center;padding:40px 24px 32px;position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--gold-pale);border:1px solid rgba(232,200,74,0.3);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:3px;padding:6px 16px;border-radius:100px;margin-bottom:18px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(24px,5vw,34px);font-weight:900;color:var(--white);margin-bottom:8px;line-height:1.3;}
+.hero h1 span{color:var(--gold);}
+.hero p{font-size:14px;color:var(--white2);line-height:1.8;max-width:420px;margin:0 auto;}
+
+/* ── TABS ── */
+.tab-bar{position:relative;z-index:1;display:flex;border-bottom:1px solid var(--line);background:rgba(9,9,15,0.8);padding:0 16px;overflow-x:auto;scrollbar-width:none;}
+.tab-bar::-webkit-scrollbar{display:none;}
+.tab-btn{
+  padding:13px 16px;font-size:13px;font-weight:700;
+  color:var(--white3);border:none;background:none;cursor:pointer;
+  border-bottom:2px solid transparent;white-space:nowrap;
+  font-family:'Noto Sans TC',sans-serif;transition:all .2s;
+}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* ── PAGE ── */
+.page{display:none;padding:24px 20px;max-width:640px;margin:0 auto;position:relative;z-index:1;}
+.page.active{display:block;}
+
+/* ── TOOL CARD ── */
+.tool-intro{
+  border-radius:12px;padding:24px;margin-bottom:22px;
+  display:flex;gap:14px;align-items:flex-start;
+}
+.tool-intro.gold{background:var(--gold-pale);border:1px solid rgba(232,200,74,0.25);}
+.tool-intro.purple{background:var(--purple-pale);border:1px solid rgba(155,89,182,0.25);}
+.tool-intro.teal{background:var(--teal-pale);border:1px solid rgba(26,188,156,0.25);}
+.tool-intro.rose{background:var(--rose-pale);border:1px solid rgba(232,99,90,0.25);}
+.tool-icon{font-size:40px;flex-shrink:0;}
+.tool-name{font-family:'Noto Serif TC',serif;font-size:19px;font-weight:900;color:var(--white);margin-bottom:4px;}
+.tool-desc{font-size:13px;color:var(--white2);line-height:1.7;}
+
+/* ── FORM ── */
+.form-section{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:22px;margin-bottom:16px;}
+.flabel{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--white3);margin-bottom:8px;display:block;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px;}
+.fgroup{margin-bottom:14px;}
+.finput,.fselect{
+  width:100%;background:var(--bg3);border:1px solid var(--line);
+  border-radius:8px;padding:11px 14px;color:var(--white);
+  font-family:'Noto Sans TC',sans-serif;font-size:14px;outline:none;
+  transition:border-color .2s;
+}
+.finput:focus,.fselect:focus{border-color:var(--gold);}
+.fselect option{background:#1a1a2e;}
+.fselect.purple:focus{border-color:var(--purple);}
+.fselect.teal:focus{border-color:var(--teal);}
+
+/* ── 主要按鈕 ── */
+.main-btn{
+  width:100%;padding:14px;border-radius:9px;border:none;
+  font-size:15px;font-weight:700;cursor:pointer;
+  font-family:'Noto Sans TC',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all .2s;margin-bottom:10px;
+}
+.btn-gold{background:linear-gradient(135deg,#e8c84a,#d4aa30);color:#1a1200;}
+.btn-gold:hover{box-shadow:0 4px 20px rgba(232,200,74,0.4);}
+.btn-purple{background:linear-gradient(135deg,#9b59b6,#7d3e9e);color:#fff;}
+.btn-purple:hover{box-shadow:0 4px 20px rgba(155,89,182,0.4);}
+.btn-teal{background:linear-gradient(135deg,#1abc9c,#16a085);color:#fff;}
+.btn-teal:hover{box-shadow:0 4px 20px rgba(26,188,156,0.3);}
+.btn-rose{background:linear-gradient(135deg,#e8635a,#c0392b);color:#fff;}
+.btn-rose:hover{box-shadow:0 4px 20px rgba(232,99,90,0.3);}
+.btn-outline{background:transparent;border:1px solid var(--line);color:var(--white2);}
+.btn-outline:hover{border-color:#666;color:var(--white);}
+.main-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ── 外部連結按鈕 ── */
+.ext-btn{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--bg3);border:1px solid var(--line);border-radius:10px;
+  padding:14px 18px;text-decoration:none;color:var(--white);
+  transition:all .2s;margin-bottom:10px;
+}
+.ext-btn:hover{border-color:#666;transform:translateX(2px);}
+.ext-left{display:flex;align-items:center;gap:12px;}
+.ext-icon{font-size:22px;}
+.ext-name{font-size:14px;font-weight:700;}
+.ext-desc{font-size:12px;color:var(--white3);margin-top:1px;}
+.ext-arrow{font-size:18px;color:var(--gold);}
+
+/* ── AI 解讀框 ── */
+.ai-box{
+  background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+  padding:20px;margin-top:16px;
+}
+.ai-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.ai-lbl{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--white3);}
+.ai-actions{display:flex;gap:7px;}
+.abtn{
+  padding:6px 13px;border-radius:6px;font-size:12px;font-weight:700;
+  cursor:pointer;font-family:'Noto Sans TC',sans-serif;
+  background:var(--bg3);border:1px solid var(--line);color:var(--white3);
+  transition:all .15s;
+}
+.abtn:hover{border-color:#666;color:var(--white);}
+.abtn.gold{background:var(--gold-pale);border-color:rgba(232,200,74,0.4);color:var(--gold);}
+.abtn.gold:hover{background:var(--gold);color:#1a1200;}
+.ai-text{font-size:14px;color:var(--white);line-height:1.9;white-space:pre-wrap;}
+.ai-text.loading{color:var(--white3);font-style:italic;}
+.ai-text em{color:var(--gold);font-style:normal;font-weight:700;}
+.ai-text strong{color:var(--white);}
+
+/* ── 星座選擇 ── */
+.zodiac-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.zcard{
+  background:var(--bg3);border:1px solid var(--line);border-radius:8px;
+  padding:10px 6px;text-align:center;cursor:pointer;transition:all .15s;
+}
+.zcard:hover,.zcard.sel{background:var(--gold-pale);border-color:rgba(232,200,74,0.4);}
+.zcard-emoji{font-size:20px;margin-bottom:3px;}
+.zcard-name{font-size:11px;color:var(--white2);}
+.zcard.sel .zcard-name{color:var(--gold);}
+
+/* ── 分隔線 ── */
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--white3);font-size:12px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--line);}
+
+/* ── API 提示 ── */
+.api-notice{
+  background:rgba(232,200,74,0.08);border:1px solid rgba(232,200,74,0.2);
+  border-radius:8px;padding:12px 14px;margin:12px 0;
+  font-size:13px;color:rgba(232,200,74,0.9);line-height:1.7;display:none;
+}
+
+/* ── 說明區塊 ── */
+.explain-box{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;}
+.explain-title{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--white3);margin-bottom:8px;}
+.explain-text{font-size:13px;color:var(--white2);line-height:1.8;}
+.explain-text a{color:var(--gold);text-decoration:none;}
+
+/* 載入點 */
+.dots{display:inline-flex;gap:4px;align-items:center;}
+.dots span{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 1.2s infinite;}
+.dots span:nth-child(2){animation-delay:.2s;}
+.dots span:nth-child(3){animation-delay:.4s;}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#2a2a2a;color:var(--white);padding:10px 20px;border-radius:8px;font-size:13px;font-weight:700;z-index:999;transition:transform .3s;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="tools.html" class="nav-back">‹ 回工具列表</a>
+  <div class="nav-title">🔮 心靈工具</div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">✦ SPIRITUAL TOOLS · 心靈探索</div>
+  <h1>了解你的<span>命運密碼</span></h1>
+  <p>用古老的東方智慧，搭配 AI 解讀，<br>探索你生命中的能量與方向</p>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('ziwei')">🔮 紫微斗數</button>
+  <button class="tab-btn" onclick="showTab('bazi')">📅 八字命理</button>
+  <button class="tab-btn" onclick="showTab('qimen')">🌀 奇門遁甲</button>
+  <button class="tab-btn" onclick="showTab('zodiac')">⭐ 星座運勢</button>
+</div>
+
+<!-- ════════════════════════════════
+     紫微斗數
+════════════════════════════════ -->
+<div id="page-ziwei" class="page active">
+
+  <div class="tool-intro gold">
+    <div class="tool-icon">🔮</div>
+    <div>
+      <div class="tool-name">紫微斗數</div>
+      <div class="tool-desc">以出生年月日時排定命盤，分析十二宮位，揭示個性特質、感情運、事業財運與健康狀況。</div>
+    </div>
+  </div>
+
+  <!-- 外部工具連結 -->
+  <div class="explain-box">
+    <div class="explain-title">✨ 免費線上排盤工具</div>
+    <div class="explain-text">以下是推薦的免費紫微排盤網站，點擊前往輸入你的生日即可查看完整命盤。</div>
+  </div>
+
+  <a href="https://web.botstw.com/subject/2001465769/160" target="_blank" class="ext-btn">
+    <div class="ext-left">
+      <div class="ext-icon">🌐</div>
+      <div>
+        <div class="ext-name">大師網 紫微斗數排盤</div>
+        <div class="ext-desc">輸入生日・免費排盤・完整十二宮位分析</div>
+      </div>
+    </div>
+    <div class="ext-arrow">→</div>
+  </a>
+
+  <a href="https://fate.windada.com/cgi-bin/fate" target="_blank" class="ext-btn">
+    <div class="ext-left">
+      <div class="ext-icon">⭐</div>
+      <div>
+        <div class="ext-name">免費算命網 紫微排盤</div>
+        <div class="ext-desc">中文介面・詳細解說・命宮主星分析</div>
+      </div>
+    </div>
+    <div class="ext-arrow">→</div>
+  </a>
+
+  <div class="divider">AI 幫你解讀命盤</div>
+
+  <!-- AI 解讀 -->
+  <div class="form-section">
+    <div class="fgroup">
+      <label class="flabel">你的命宮主星是？</label>
+      <select class="fselect" id="ziwei-star">
+        <option value="">-- 選擇主星 --</option>
+        <option value="紫微">紫微（帝王之星）</option>
+        <option value="天機">天機（智慧之星）</option>
+        <option value="太陽">太陽（光明之星）</option>
+        <option value="武曲">武曲（財富之星）</option>
+        <option value="天同">天同（福德之星）</option>
+        <option value="廉貞">廉貞（官祿之星）</option>
+        <option value="天府">天府（南斗主星）</option>
+        <option value="太陰">太陰（月亮之星）</option>
+        <option value="貪狼">貪狼（桃花之星）</option>
+        <option value="巨門">巨門（暗曜之星）</option>
+        <option value="天相">天相（印星）</option>
+        <option value="天梁">天梁（壽星）</option>
+        <option value="七殺">七殺（將星）</option>
+        <option value="破軍">破軍（開拓之星）</option>
+      </select>
+    </div>
+    <div class="frow">
+      <div>
+        <label class="flabel">目前運勢關注</label>
+        <select class="fselect" id="ziwei-focus">
+          <option value="整體運勢">整體運勢</option>
+          <option value="感情婚姻">感情婚姻</option>
+          <option value="事業財運">事業財運</option>
+          <option value="健康身體">健康身體</option>
+          <option value="家庭親情">家庭親情</option>
+        </select>
+      </div>
+      <div>
+        <label class="flabel">你的性別</label>
+        <select class="fselect" id="ziwei-gender">
+          <option value="女性">女性</option>
+          <option value="男性">男性</option>
+        </select>
+      </div>
+    </div>
+    <div class="fgroup">
+      <label class="flabel">你最想了解的問題（選填）</label>
+      <input class="finput" id="ziwei-q" type="text" placeholder="例：今年換工作時機好嗎？">
+    </div>
+    <button class="main-btn btn-gold" id="ziwei-btn" onclick="aiRead('ziwei')">
+      <span>🔮 AI 解讀我的紫微命盤</span>
+    </button>
+    <div class="api-notice" id="ziwei-notice">
+      需要 Anthropic API Key 才能使用 AI 解讀<br>
+      <a href="tools.html" style="color:var(--gold);">→ 前往工具頁設定</a>
+    </div>
+  </div>
+
+  <div id="ziwei-output" style="display:none;">
+    <div class="ai-box">
+      <div class="ai-hd">
+        <span class="ai-lbl">AI READING</span>
+        <div class="ai-actions">
+          <button class="abtn" onclick="copyAI('ziwei')">複製</button>
+          <button class="abtn gold" onclick="aiRead('ziwei')">重新解讀</button>
+        </div>
+      </div>
+      <div class="ai-text" id="ziwei-text"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     八字命理
+════════════════════════════════ -->
+<div id="page-bazi" class="page">
+
+  <div class="tool-intro purple">
+    <div class="tool-icon">📅</div>
+    <div>
+      <div class="tool-name">八字命理</div>
+      <div class="tool-desc">以出生年月日時的天干地支，分析五行格局，了解你的個性、命格強弱、五行缺補與大運流年。</div>
+    </div>
+  </div>
+
+  <div class="explain-box">
+    <div class="explain-title">✨ 免費線上八字排盤工具</div>
+    <div class="explain-text">輸入生日時辰，自動生成你的八字命盤。</div>
+  </div>
+
+  <a href="https://www.eightwords.net/free-bazi-chart/" target="_blank" class="ext-btn" style="border-color:rgba(155,89,182,0.3);">
+    <div class="ext-left">
+      <div class="ext-icon">🌐</div>
+      <div>
+        <div class="ext-name">免費八字命盤排盤</div>
+        <div class="ext-desc">輸入生辰・自動生成八字・五行格局分析</div>
+      </div>
+    </div>
+    <div class="ext-arrow" style="color:var(--purple);">→</div>
+  </a>
+
+  <a href="https://fate.windada.com/cgi-bin/bazi" target="_blank" class="ext-btn" style="border-color:rgba(155,89,182,0.3);">
+    <div class="ext-left">
+      <div class="ext-icon">☯️</div>
+      <div>
+        <div class="ext-name">算命網 八字詳批</div>
+        <div class="ext-desc">中文詳解・大運流年・五行缺補分析</div>
+      </div>
+    </div>
+    <div class="ext-arrow" style="color:var(--purple);">→</div>
+  </a>
+
+  <div class="divider">AI 幫你解讀八字</div>
+
+  <div class="form-section">
+    <div class="frow3">
+      <div>
+        <label class="flabel">出生年</label>
+        <input class="finput" id="bazi-year" type="number" placeholder="1990" min="1900" max="2010">
+      </div>
+      <div>
+        <label class="flabel">出生月</label>
+        <select class="fselect purple" id="bazi-month">
+          <option value="">月</option>
+          <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+          <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+          <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
+          <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
+        </select>
+      </div>
+      <div>
+        <label class="flabel">出生日</label>
+        <select class="fselect purple" id="bazi-day">
+          <option value="">日</option>
+          <script>for(let i=1;i<=31;i++) document.write(`<option value="${i}">${i}日</option>`);</script>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div>
+        <label class="flabel">出生時辰</label>
+        <select class="fselect purple" id="bazi-hour">
+          <option value="子時（23-1點）">子時（23-1點）</option>
+          <option value="丑時（1-3點）">丑時（1-3點）</option>
+          <option value="寅時（3-5點）">寅時（3-5點）</option>
+          <option value="卯時（5-7點）">卯時（5-7點）</option>
+          <option value="辰時（7-9點）">辰時（7-9點）</option>
+          <option value="巳時（9-11點）">巳時（9-11點）</option>
+          <option value="午時（11-13點）">午時（11-13點）</option>
+          <option value="未時（13-15點）">未時（13-15點）</option>
+          <option value="申時（15-17點）">申時（15-17點）</option>
+          <option value="酉時（17-19點）">酉時（17-19點）</option>
+          <option value="戌時（19-21點）">戌時（19-21點）</option>
+          <option value="亥時（21-23點）">亥時（21-23點）</option>
+          <option value="不知道">不知道出生時辰</option>
+        </select>
+      </div>
+      <div>
+        <label class="flabel">關注面向</label>
+        <select class="fselect purple" id="bazi-focus">
+          <option value="整體命格">整體命格</option>
+          <option value="感情緣分">感情緣分</option>
+          <option value="事業財運">事業財運</option>
+          <option value="健康五行">健康五行</option>
+          <option value="今年流年">今年流年</option>
+        </select>
+      </div>
+    </div>
+    <button class="main-btn btn-purple" id="bazi-btn" onclick="aiRead('bazi')">
+      <span>📅 AI 解讀我的八字命格</span>
+    </button>
+    <div class="api-notice" id="bazi-notice">
+      需要 Anthropic API Key・<a href="tools.html" style="color:var(--gold);">前往設定</a>
+    </div>
+  </div>
+
+  <div id="bazi-output" style="display:none;">
+    <div class="ai-box">
+      <div class="ai-hd">
+        <span class="ai-lbl">AI READING</span>
+        <div class="ai-actions">
+          <button class="abtn" onclick="copyAI('bazi')">複製</button>
+          <button class="abtn gold" onclick="aiRead('bazi')">重新解讀</button>
+        </div>
+      </div>
+      <div class="ai-text" id="bazi-text"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     奇門遁甲
+════════════════════════════════ -->
+<div id="page-qimen" class="page">
+
+  <div class="tool-intro teal">
+    <div class="tool-icon">🌀</div>
+    <div>
+      <div class="tool-name">奇門遁甲</div>
+      <div class="tool-desc">融合天文、地理、人事的高級占卜術，用於趨吉避凶、擇時擇向，分析當下時局與行動最佳時機。</div>
+    </div>
+  </div>
+
+  <div class="explain-box">
+    <div class="explain-title">✨ 奇門遁甲是什麼？</div>
+    <div class="explain-text">
+      奇門遁甲是中國古代最高層次的術數，被稱為「帝王之術」。
+      以時間的天干地支配合八門、九星、八神，分析當下的時空能量，
+      適合用於重大決策、時機判斷、趨吉避凶。
+    </div>
+  </div>
+
+  <div class="divider">AI 奇門解局</div>
+
+  <div class="form-section">
+    <div class="frow">
+      <div>
+        <label class="flabel">你的問題類型</label>
+        <select class="fselect teal" id="qimen-type">
+          <option value="事業發展">事業發展</option>
+          <option value="感情婚姻">感情婚姻</option>
+          <option value="投資財運">投資財運</option>
+          <option value="求職轉職">求職轉職</option>
+          <option value="健康身體">健康身體</option>
+          <option value="搬家置產">搬家置產</option>
+          <option value="重要決策">重要決策</option>
+        </select>
+      </div>
+      <div>
+        <label class="flabel">目前的心情狀態</label>
+        <select class="fselect teal" id="qimen-mood">
+          <option value="焦慮，需要方向">焦慮，需要方向</option>
+          <option value="迷茫，不知如何選擇">迷茫，不知如何選擇</option>
+          <option value="猶豫，想確認時機">猶豫，想確認時機</option>
+          <option value="積極，想掌握機會">積極，想掌握機會</option>
+          <option value="困境，想突破現狀">困境，想突破現狀</option>
+        </select>
+      </div>
+    </div>
+    <div class="fgroup">
+      <label class="flabel">你具體想問的事</label>
+      <input class="finput" id="qimen-q" type="text" placeholder="例：這份工作機會要不要接受？">
+    </div>
+    <div class="fgroup">
+      <label class="flabel">今天是幾月幾日（供奇門局起卦參考）</label>
+      <input class="finput" id="qimen-date" type="date">
+    </div>
+    <button class="main-btn btn-teal" id="qimen-btn" onclick="aiRead('qimen')">
+      <span>🌀 AI 奇門解局</span>
+    </button>
+    <div class="api-notice" id="qimen-notice">
+      需要 Anthropic API Key・<a href="tools.html" style="color:var(--gold);">前往設定</a>
+    </div>
+  </div>
+
+  <div id="qimen-output" style="display:none;">
+    <div class="ai-box">
+      <div class="ai-hd">
+        <span class="ai-lbl">AI READING</span>
+        <div class="ai-actions">
+          <button class="abtn" onclick="copyAI('qimen')">複製</button>
+          <button class="abtn gold" onclick="aiRead('qimen')">重新解讀</button>
+        </div>
+      </div>
+      <div class="ai-text" id="qimen-text"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     星座運勢
+════════════════════════════════ -->
+<div id="page-zodiac" class="page">
+
+  <div class="tool-intro rose">
+    <div class="tool-icon">⭐</div>
+    <div>
+      <div class="tool-name">星座運勢</div>
+      <div class="tool-desc">根據你的星座，分析本週或本月的愛情、事業、財運、健康運勢，以及最佳行動建議。</div>
+    </div>
+  </div>
+
+  <!-- 星座選擇 -->
+  <div class="flabel" style="margin-bottom:10px;">✨ 選擇你的星座</div>
+  <div class="zodiac-grid" id="zodiac-grid">
+    <div class="zcard" onclick="selZodiac(this,'牡羊座')"><div class="zcard-emoji">♈</div><div class="zcard-name">牡羊座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'金牛座')"><div class="zcard-emoji">♉</div><div class="zcard-name">金牛座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'雙子座')"><div class="zcard-emoji">♊</div><div class="zcard-name">雙子座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'巨蟹座')"><div class="zcard-emoji">♋</div><div class="zcard-name">巨蟹座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'獅子座')"><div class="zcard-emoji">♌</div><div class="zcard-name">獅子座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'處女座')"><div class="zcard-emoji">♍</div><div class="zcard-name">處女座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'天秤座')"><div class="zcard-emoji">♎</div><div class="zcard-name">天秤座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'天蠍座')"><div class="zcard-emoji">♏</div><div class="zcard-name">天蠍座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'射手座')"><div class="zcard-emoji">♐</div><div class="zcard-name">射手座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'摩羯座')"><div class="zcard-emoji">♑</div><div class="zcard-name">摩羯座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'水瓶座')"><div class="zcard-emoji">♒</div><div class="zcard-name">水瓶座</div></div>
+    <div class="zcard" onclick="selZodiac(this,'雙魚座')"><div class="zcard-emoji">♓</div><div class="zcard-name">雙魚座</div></div>
+  </div>
+
+  <div class="form-section" style="margin-top:12px;">
+    <div class="frow">
+      <div>
+        <label class="flabel">運勢時段</label>
+        <select class="fselect" id="zodiac-period">
+          <option value="本週">本週運勢</option>
+          <option value="本月">本月運勢</option>
+          <option value="近期">近期三個月</option>
+        </select>
+      </div>
+      <div>
+        <label class="flabel">最關注的面向</label>
+        <select class="fselect" id="zodiac-focus">
+          <option value="整體">整體運勢</option>
+          <option value="愛情">愛情感情</option>
+          <option value="事業">事業工作</option>
+          <option value="財運">財運金錢</option>
+          <option value="健康">健康身體</option>
+        </select>
+      </div>
+    </div>
+    <div class="fgroup">
+      <label class="flabel">你目前面對的挑戰（選填）</label>
+      <input class="finput" id="zodiac-q" type="text" placeholder="例：工作壓力很大，想知道何時會轉機？">
+    </div>
+    <button class="main-btn btn-rose" id="zodiac-btn" onclick="aiRead('zodiac')">
+      <span>⭐ AI 解析我的星座運勢</span>
+    </button>
+    <div class="api-notice" id="zodiac-notice">
+      需要 Anthropic API Key・<a href="tools.html" style="color:var(--gold);">前往設定</a>
+    </div>
+  </div>
+
+  <div id="zodiac-output" style="display:none;">
+    <div class="ai-box">
+      <div class="ai-hd">
+        <span class="ai-lbl">AI READING</span>
+        <div class="ai-actions">
+          <button class="abtn" onclick="copyAI('zodiac')">複製</button>
+          <button class="abtn gold" onclick="aiRead('zodiac')">重新解析</button>
+        </div>
+      </div>
+      <div class="ai-text" id="zodiac-text"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── 設定（與其他工具共用 API Key）──────────────────
+const cfg = JSON.parse(localStorage.getItem('td_cfg') || '{}');
+let selZodiacName = '';
+
+// 初始化日期
+document.getElementById('qimen-date').valueAsDate = new Date();
+
+// ── Tab 切換 ──────────────────────────────────────
+function showTab(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+n).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.getAttribute('onclick').includes("'"+n+"'")) b.classList.add('active');
+  });
+}
+
+// ── 星座選擇 ──────────────────────────────────────
+function selZodiac(el, name) {
+  document.querySelectorAll('.zcard').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  selZodiacName = name;
+}
+
+// ── AI 解讀主函數 ─────────────────────────────────
+async function aiRead(tool) {
+  const apiKey = cfg.apiKey;
+  if (!apiKey) {
+    document.getElementById(tool+'-notice').style.display = 'block';
+    return;
+  }
+  document.getElementById(tool+'-notice').style.display = 'none';
+
+  let prompt = '';
+  const today = new Date().toLocaleDateString('zh-TW', {year:'numeric',month:'long',day:'numeric'});
+
+  if (tool === 'ziwei') {
+    const star = document.getElementById('ziwei-star').value;
+    const focus = document.getElementById('ziwei-focus').value;
+    const gender = document.getElementById('ziwei-gender').value;
+    const q = document.getElementById('ziwei-q').value;
+    if (!star) { toast('請先選擇命宮主星'); return; }
+    prompt = `你是一位資深的紫微斗數命理師，以深入淺出的方式為人解盤。
+
+今日：${today}
+
+命盤資訊：
+- 性別：${gender}
+- 命宮主星：${star}
+- 關注面向：${focus}
+${q ? `- 具體問題：${q}` : ''}
+
+請為這位${gender}提供一份溫暖而有深度的紫微斗數解讀，包含：
+
+1. **${star}主命的核心性格特質**（2-3個重點）
+2. **${focus}方面的深度分析**（根據主星特性）
+3. **近期運勢趨勢與建議**
+${q ? `4. **針對「${q}」的具體回應**` : '4. **適合你的行動建議**'}
+5. **一句給你的心靈提醒**
+
+語氣溫暖、具體、有正向引導，不要過於神秘或不吉。以「你」稱呼對方。`;
+
+  } else if (tool === 'bazi') {
+    const year = document.getElementById('bazi-year').value;
+    const month = document.getElementById('bazi-month').value;
+    const day = document.getElementById('bazi-day').value;
+    const hour = document.getElementById('bazi-hour').value;
+    const focus = document.getElementById('bazi-focus').value;
+    if (!year || !month || !day) { toast('請填入出生年月日'); return; }
+
+    // 計算生肖和天干
+    const animals = ['鼠','牛','虎','兔','龍','蛇','馬','羊','猴','雞','狗','豬'];
+    const zodiac = animals[(parseInt(year) - 4) % 12];
+    const stems = ['庚','辛','壬','癸','甲','乙','丙','丁','戊','己'];
+    const stem = stems[(parseInt(year) - 4) % 10];
+
+    prompt = `你是一位精通八字命理的命師，能以現代化方式詮釋古老智慧。
+
+今日：${today}
+
+命主資料：
+- 出生：${year}年 ${month}月 ${day}日 ${hour}
+- 生肖：${zodiac}
+- 年柱天干：${stem}
+- 關注：${focus}
+
+請提供一份八字命理解讀，包含：
+
+1. **命格特質解析**（根據生年天干地支分析性格）
+2. **五行屬性與強弱**（哪個五行旺，哪個需要補充）
+3. **${focus}深度分析**
+4. **今年${new Date().getFullYear()}流年運勢**
+5. **適合你的開運建議**（顏色、方向、數字等）
+
+語氣親切，以「你」稱呼。命理僅供參考，重在積極引導。`;
+
+  } else if (tool === 'qimen') {
+    const type = document.getElementById('qimen-type').value;
+    const mood = document.getElementById('qimen-mood').value;
+    const q = document.getElementById('qimen-q').value;
+    const date = document.getElementById('qimen-date').value || today;
+    prompt = `你是一位精通奇門遁甲的命理顧問，能結合現代生活給出實用建議。
+
+今日：${today}（${date}）
+
+問卦資訊：
+- 問題類型：${type}
+- 當前狀態：${mood}
+${q ? `- 具體問題：${q}` : ''}
+
+請以奇門遁甲的智慧提供解局，包含：
+
+1. **當前時局分析**（此時的能量狀態）
+2. **${type}的奇門解讀**（吉凶格局說明）
+3. **最佳行動時機建議**（何時出手、何時等待）
+4. **趨吉避凶的具體方法**（實際可執行的建議）
+${q ? `5. **針對「${q}」的直接回應**` : '5. **近期注意事項**'}
+6. **一句奇門智慧提示**
+
+語氣務實，給出具體可行的建議，不要太神秘玄奧。`;
+
+  } else if (tool === 'zodiac') {
+    if (!selZodiacName) { toast('請先選擇你的星座'); return; }
+    const period = document.getElementById('zodiac-period').value;
+    const focus = document.getElementById('zodiac-focus').value;
+    const q = document.getElementById('zodiac-q').value;
+    prompt = `你是一位有深度的星座解讀師，結合心理學與占星學給出有共鳴的解讀。
+
+今日：${today}
+
+星座資料：
+- 星座：${selZodiacName}
+- 時段：${period}
+- 關注：${focus}
+${q ? `- 問題：${q}` : ''}
+
+請提供${selZodiacName}的${period}解析，包含：
+
+1. **${selZodiacName}這段時期的整體能量**
+2. **${focus}運勢分析**（具體指數和趨勢）
+3. **本期最佳行動日與注意日**
+4. **給${selZodiacName}的具體建議**（3個實際可做的事）
+${q ? `5. **針對「${q}」的星座智慧**` : '5. **一句給你的星座暗語**'}
+
+語氣充滿希望，有正向引導，讓人看完後有能量。以「你」稱呼，富有溫度。`;
+  }
+
+  // 呼叫 API
+  const btn = document.getElementById(tool+'-btn');
+  btn.disabled = true;
+  const btnTexts = {ziwei:'🔮 AI 解讀我的紫微命盤', bazi:'📅 AI 解讀我的八字命格', qimen:'🌀 AI 奇門解局', zodiac:'⭐ AI 解析我的星座運勢'};
+  btn.innerHTML = '<div class="dots"><span></span><span></span><span></span></div><span>解讀中…</span>';
+
+  document.getElementById(tool+'-output').style.display = 'block';
+  const el = document.getElementById(tool+'-text');
+  el.className = 'ai-text loading';
+  el.textContent = '正在為你推算，請稍候…';
+
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true',
+      },
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:1200,
+        messages:[{role:'user',content:prompt}],
+      }),
+    });
+    const d = await r.json();
+    if (d.error) throw new Error(d.error.message);
+    const text = d.content?.[0]?.text || '';
+    el.className = 'ai-text';
+    // 轉換 markdown **bold** 為 HTML
+    el.innerHTML = text
+      .replace(/\*\*(.*?)\*\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  } catch(e) {
+    el.className = 'ai-text';
+    el.textContent = '❌ 解讀失敗：' + e.message;
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = btnTexts[tool];
+}
+
+// ── 複製 ──────────────────────────────────────────
+function copyAI(tool) {
+  const el = document.getElementById(tool+'-text');
+  navigator.clipboard.writeText(el.innerText).then(() => toast('✅ 已複製！'));
+}
+
+// ── Toast ─────────────────────────────────────────
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── 檢查 API Key ──────────────────────────────────
+if (!cfg.apiKey) {
+  // 顯示提示但不阻止使用
+  setTimeout(() => toast('💡 設定 API Key 可使用 AI 解讀功能'), 1000);
+}
+</script>
+</body>
+</html>
