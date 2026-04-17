@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="小編助理"/>
+<meta name="theme-color" content="#C4874A"/>
+<title>Threads 小編助理</title>
+<style>
+:root {
+  --bg0: #ffffff;
+  --bg1: #f5f4f0;
+  --bg2: #eeece7;
+  --text0: #1a1a1a;
+  --text1: #555550;
+  --text2: #99978f;
+  --border0: rgba(0,0,0,0.08);
+  --border1: rgba(0,0,0,0.15);
+  --accent: #C4874A;
+  --accent-dark: #A8703A;
+  --accent-light: #FDF5EE;
+  --r-md: 8px;
+  --r-lg: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg1); color: var(--text0); }
+.app { max-width: 480px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; background: var(--bg1); }
+.page { display: none; flex: 1; padding: 1rem 1rem 80px; overflow-y: auto; }
+.page.active { display: block; }
+/* API Key banner */
+#api-banner { background: #FAEEDA; border-bottom: 1px solid #FAC775; padding: 10px 1rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+#api-banner span { font-size: 13px; color: #633806; flex: 1; min-width: 160px; }
+#api-banner input { flex: 2; min-width: 180px; padding: 6px 10px; border: 0.5px solid #FAC775; border-radius: var(--r-md); font-size: 13px; background: #fff; color: #333; }
+#api-banner button { background: var(--accent); color: #fff; border: none; border-radius: var(--r-md); padding: 6px 14px; font-size: 13px; cursor: pointer; white-space: nowrap; }
+/* Cards */
+.sc { background: var(--bg0); border-radius: var(--r-lg); border: 0.5px solid var(--border0); padding: 1.25rem; margin-bottom: 1rem; }
+.stitle { font-size: 18px; font-weight: 600; color: var(--text0); margin-bottom: .3rem; }
+.sdesc { font-size: 14px; color: var(--text1); margin-bottom: 1rem; line-height: 1.6; }
+/* Buttons */
+.bp { background: var(--accent); color: #fff; border: none; border-radius: 999px; padding: 10px 20px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background .15s; }
+.bp:hover { background: var(--accent-dark); }
+.bp:active { transform: scale(.97); }
+.bs { background: var(--bg1); color: var(--text0); border: 0.5px solid var(--border1); border-radius: 999px; padding: 6px 14px; font-size: 13px; cursor: pointer; transition: background .15s; }
+.bs:hover { background: var(--bg2); }
+.ba { color: var(--accent); border-color: var(--accent); background: var(--accent-light); }
+.bd { color: #A32D2D; border-color: #F09595; background: #FCEBEB; }
+/* Forms */
+select, input[type=text], input[type=password], textarea {
+  width: 100%; padding: 10px 12px; border: 0.5px solid var(--border1);
+  border-radius: var(--r-md); font-size: 15px; background: var(--bg0);
+  color: var(--text0); margin-bottom: .7rem; font-family: inherit;
+  -webkit-appearance: none; appearance: none;
+}
+select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+textarea { resize: vertical; line-height: 1.6; min-height: 90px; }
+label { font-size: 13px; color: var(--text1); display: block; margin-bottom: 4px; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(196,135,74,.15); }
+/* Filter chips */
+.frow { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: .75rem; }
+.fb { padding: 6px 14px; border-radius: 999px; font-size: 13px; cursor: pointer; border: 0.5px solid var(--border0); background: transparent; color: var(--text1); transition: all .15s; }
+.fb.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+/* Draft cards */
+.dc { border: 0.5px solid var(--border0); border-radius: var(--r-md); padding: 1rem; margin-bottom: .7rem; background: var(--bg1); }
+.dc.ed { background: var(--bg0); border-color: var(--accent); }
+.dm { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.cb { font-size: 12px; padding: 2px 9px; border-radius: 999px; font-weight: 500; }
+.stbadge { font-size: 11px; padding: 2px 8px; border-radius: 999px; }
+.dct { font-size: 14px; color: var(--text0); line-height: 1.7; white-space: pre-wrap; margin-bottom: 8px; }
+.das { display: flex; gap: 6px; flex-wrap: wrap; }
+/* Stats */
+.sr { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin-bottom: 1rem; }
+.sb2 { background: var(--bg1); border-radius: var(--r-md); padding: .75rem 1rem; }
+.sn { font-size: 24px; font-weight: 600; color: var(--text0); }
+.sl { font-size: 12px; color: var(--text1); margin-top: 2px; }
+/* Persona card */
+.pc { border: 0.5px solid var(--border0); border-radius: var(--r-md); padding: .85rem 1rem; margin-bottom: .7rem; background: var(--bg1); }
+/* Pill */
+.pill { display: inline-block; background: var(--bg1); border: 0.5px solid var(--border0); border-radius: 999px; padding: 4px 12px; font-size: 13px; color: var(--text1); margin: 3px 3px 0 0; }
+/* Empty state */
+.es { color: var(--text1); font-size: 14px; padding: 1.5rem 0; text-align: center; }
+/* Loading */
+.lt { font-size: 14px; color: var(--text1); padding: .5rem 0; display: none; }
+.dot::after { content: '.'; animation: dots 1.2s infinite; }
+@keyframes dots { 0%,100%{content:'.'} 33%{content:'..'} 66%{content:'...'} }
+/* Toast */
+.toast { border-radius: var(--r-md); padding: 10px 14px; font-size: 14px; margin-bottom: .75rem; display: none; }
+/* Modal */
+.mw { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
+.mw.open { display: flex; }
+.md { background: var(--bg0); border-radius: var(--r-lg); padding: 1.5rem; width: 100%; max-width: 360px; }
+.mt { font-size: 17px; font-weight: 600; margin-bottom: 1rem; }
+.mar { display: flex; justify-content: flex-end; gap: 8px; margin-top: .75rem; }
+/* Inspo grid */
+.ig { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+.ic { background: var(--bg0); border: 0.5px solid var(--border0); border-radius: var(--r-md); overflow: hidden; cursor: pointer; transition: border-color .15s; }
+.ic:hover { border-color: var(--accent); }
+.ic.lv { display: flex; gap: 10px; align-items: flex-start; padding: .75rem; margin-bottom: 8px; }
+.iph { aspect-ratio: 1/1; background: var(--bg1); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 5px; }
+.iph img { width: 100%; height: 100%; object-fit: cover; }
+.ib { padding: 8px 10px 10px; }
+.ib.lv { flex: 1; padding: 0; }
+.isrc { font-size: 12px; color: var(--text1); margin-bottom: 3px; }
+.inote { font-size: 13px; color: var(--text0); line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+.tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; margin: 3px 2px 0 0; font-weight: 500; }
+/* Detail modal */
+.dw { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; align-items: flex-end; justify-content: center; }
+.dw.open { display: flex; }
+.dm2 { background: var(--bg0); border-radius: var(--r-lg) var(--r-lg) 0 0; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; }
+.dmi { width: 100%; max-height: 220px; object-fit: cover; }
+.dmb { padding: 1rem 1.25rem 2rem; }
+.air { background: var(--bg1); border-radius: var(--r-md); padding: .85rem; font-size: 14px; line-height: 1.7; color: var(--text0); white-space: pre-wrap; margin-top: 10px; }
+/* Upload zone */
+.uz { border: 1.5px dashed var(--border1); border-radius: var(--r-md); padding: 1.25rem 1rem; text-align: center; cursor: pointer; margin-bottom: .75rem; color: var(--text1); font-size: 14px; }
+.uz input { display: none; }
+/* View toggle */
+.vt { display: flex; gap: 4px; }
+.vb { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: var(--r-md); border: 0.5px solid var(--border0); cursor: pointer; background: transparent; color: var(--text1); }
+.vb.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+/* Bottom nav */
+.nav { display: flex; background: var(--bg0); border-top: 0.5px solid var(--border0); position: fixed; bottom: 0; left: 0; right: 0; max-width: 480px; margin: 0 auto; z-index: 50; padding-bottom: env(safe-area-inset-bottom); }
+.nb { flex: 1; padding: 10px 4px 8px; display: flex; flex-direction: column; align-items: center; gap: 3px; border: none; background: transparent; cursor: pointer; color: var(--text1); font-size: 10px; transition: color .15s; }
+.nb.active { color: var(--accent); }
+.nb svg { width: 22px; height: 22px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- API Key Banner -->
+<div id="api-banner">
+  <span>請輸入你的 Anthropic API Key 才能使用 AI 功能</span>
+  <input type="password" id="api-key-input" placeholder="sk-ant-api03-..."/>
+  <button onclick="saveKey()">儲存</button>
+</div>
+
+<!-- 設定 -->
+<div class="page active" id="pg-settings">
+  <div class="sc">
+    <div class="stitle">帳號管理</div>
+    <div class="sdesc">管理你的 Threads 帳號，選擇目前操作的帳號。</div>
+    <label>目前帳號</label>
+    <select id="acct-sel"><option value="">— 請選擇帳號 —</option></select>
+    <button class="bp" onclick="openM('m-acct')">新增帳號</button>
+  </div>
+  <div class="sc">
+    <div class="stitle">小編 Persona</div>
+    <div class="sdesc">設定小編風格，指派給帳號後 AI 會用這個口氣寫文。</div>
+    <div id="persona-list"><div class="es">尚無 Persona</div></div>
+    <button class="bp" style="margin-top:.75rem" onclick="openM('m-persona')">新增 Persona</button>
+  </div>
+  <div class="sc">
+    <div class="stitle">主題來源</div>
+    <div class="sdesc">設定帳號的追蹤關鍵字、標籤或來源。</div>
+    <div id="source-list"><div class="es">尚無來源</div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:.75rem">
+      <button class="bp" onclick="openM('m-source')">新增來源</button>
+      <button class="bs" onclick="addDefSrc()">建立預設來源</button>
+    </div>
+  </div>
+</div>
+
+<!-- 產生貼文 -->
+<div class="page" id="pg-gen">
+  <div class="sc">
+    <div class="stitle">產生貼文</div>
+    <div class="sdesc">選好帳號，輸入主題，AI 小編寫好直接存進草稿庫。</div>
+    <label>帳號</label><select id="gen-acct"><option>— 請先新增帳號 —</option></select>
+    <label>主題 / 關鍵字</label><input type="text" id="gen-topic" placeholder="例：AI 趨勢、週一正能量..."/>
+    <label>分類標籤</label>
+    <select id="gen-cat"><option>品牌故事</option><option>生活靈感</option><option>科技趨勢</option><option>互動話題</option><option>活動推廣</option><option>其他</option></select>
+    <label>產生數量</label>
+    <select id="gen-cnt"><option value="1">1 則</option><option value="3" selected>3 則</option><option value="5">5 則</option></select>
+    <button class="bp" onclick="genPosts()">產生並存入草稿庫</button>
+    <div class="lt dot" id="gen-load" style="margin-top:.5rem">AI 小編正在思考中</div>
+    <div class="toast" id="gen-toast" style="background:#E1F5EE;color:#085041;margin-top:.5rem"></div>
+  </div>
+  <div class="sc" id="prev-sec" style="display:none">
+    <div class="stitle">剛產生的草稿</div>
+    <div id="prev-list"></div>
+    <button class="bs" style="margin-top:.25rem" onclick="goPage('drafts')">前往草稿庫查看全部</button>
+  </div>
+</div>
+
+<!-- 草稿庫 -->
+<div class="page" id="pg-drafts">
+  <div class="sc">
+    <div class="stitle">草稿庫</div>
+    <div class="sdesc">儲存、分類、編輯所有 Threads 貼文草稿。</div>
+    <div class="sr">
+      <div class="sb2"><div class="sn" id="s-all">0</div><div class="sl">全部</div></div>
+      <div class="sb2"><div class="sn" id="s-dft">0</div><div class="sl">草稿</div></div>
+      <div class="sb2"><div class="sn" id="s-rdy">0</div><div class="sl">待發布</div></div>
+    </div>
+    <div class="frow" id="sf-row">
+      <button class="fb active" onclick="setSF('all',this)">全部</button>
+      <button class="fb" onclick="setSF('草稿',this)">草稿</button>
+      <button class="fb" onclick="setSF('待發布',this)">待發布</button>
+      <button class="fb" onclick="setSF('已發布',this)">已發布</button>
+    </div>
+    <div class="frow" id="cf-row"></div>
+    <button class="bp" onclick="toggleADF()" style="margin-bottom:.75rem">手動新增草稿</button>
+    <div id="adf" style="display:none;border:0.5px solid var(--border0);border-radius:var(--r-md);padding:1rem;margin-bottom:.75rem;background:var(--bg1)">
+      <label>內容</label><textarea id="ad-c" style="min-height:85px" placeholder="貼文內容..."></textarea>
+      <label>帳號</label><input type="text" id="ad-a" placeholder="@account"/>
+      <label>分類</label><select id="ad-cat"><option>品牌故事</option><option>生活靈感</option><option>科技趨勢</option><option>互動話題</option><option>活動推廣</option><option>其他</option></select>
+      <label>狀態</label><select id="ad-st"><option>草稿</option><option>待發布</option><option>已發布</option></select>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="bp" onclick="addDraftM()">儲存</button>
+        <button class="bs" onclick="toggleADF()">取消</button>
+      </div>
+    </div>
+    <div id="drafts-list"></div>
+  </div>
+</div>
+
+<!-- 靈感版 -->
+<div class="page" id="pg-inspo">
+  <div class="sc">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:8px">
+      <div>
+        <div class="stitle">靈感版</div>
+        <div style="font-size:14px;color:var(--text1);margin-top:2px;line-height:1.5">收藏截圖與參考文字，一鍵 AI 仿寫。</div>
+      </div>
+      <div class="vt">
+        <button class="vb active" id="vb-g" onclick="setView('grid')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+        </button>
+        <button class="vb" id="vb-l" onclick="setView('list')">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="2" y1="4" x2="14" y2="4"/><line x1="2" y1="8" x2="14" y2="8"/><line x1="2" y1="12" x2="14" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="frow" id="itag-row"><button class="fb active" onclick="setITag('all',this)">全部</button></div>
+    <button class="bp" onclick="toggleIF()" style="margin-bottom:.75rem">新增靈感</button>
+    <div id="inspo-form" style="display:none;border:0.5px solid var(--border0);border-radius:var(--r-md);padding:1rem;margin-bottom:.75rem;background:var(--bg1)">
+      <div class="uz" id="uz" onclick="document.getElementById('fi').click()">
+        <input type="file" id="fi" accept="image/*" onchange="handleImg(event)"/>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:block;margin:0 auto 6px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        點此上傳截圖（選填）
+      </div>
+      <img id="ip" style="display:none;width:100%;border-radius:var(--r-md);margin-bottom:.75rem;max-height:180px;object-fit:cover"/>
+      <label>來源 / 帳號</label><input type="text" id="if-src" placeholder="@someone、某某品牌..."/>
+      <label>筆記 / 貼文內容</label><textarea id="if-note" style="min-height:75px" placeholder="貼上文字或記下想法..."></textarea>
+      <label>風格標籤</label>
+      <div class="frow" id="if-tags"></div>
+      <input type="text" id="if-ctag" placeholder="或輸入自訂標籤..." style="margin-bottom:.5rem"/>
+      <div style="display:flex;gap:8px">
+        <button class="bp" onclick="saveInspo()">儲存靈感</button>
+        <button class="bs" onclick="toggleIF()">取消</button>
+      </div>
+    </div>
+    <div id="inspo-list"></div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="nav">
+  <button class="nb active" id="nb-settings" onclick="goPage('settings')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    設定
+  </button>
+  <button class="nb" id="nb-gen" onclick="goPage('gen')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    產生貼文
+  </button>
+  <button class="nb" id="nb-drafts" onclick="goPage('drafts')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    草稿庫
+  </button>
+  <button class="nb" id="nb-inspo" onclick="goPage('inspo')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    靈感版
+  </button>
+</div>
+
+<!-- Detail Modal (Inspo) -->
+<div class="dw" id="detail-wrap">
+  <div class="dm2">
+    <img class="dmi" id="d-img" style="display:none"/>
+    <div class="dmb">
+      <div style="font-size:13px;color:var(--text1);margin-bottom:4px" id="d-src"></div>
+      <div id="d-tags" style="margin-bottom:8px"></div>
+      <div style="font-size:15px;color:var(--text0);line-height:1.7;white-space:pre-wrap;margin-bottom:12px" id="d-note"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="bs ba" onclick="aiRewrite()">AI 仿寫貼文</button>
+        <button class="bs" onclick="closeD()">關閉</button>
+        <button class="bs bd" onclick="delInspo()">刪除</button>
+      </div>
+      <div class="lt dot" id="ai-load" style="margin-top:.5rem">AI 正在仿寫中</div>
+      <div class="air" id="ai-res" style="display:none"></div>
+      <div id="ai-acts" style="display:none;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button class="bs" onclick="cpAI()">複製仿寫</button>
+        <button class="bs ba" onclick="aiToDraft()">存入草稿庫</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+<div class="mw" id="m-acct"><div class="md"><div class="mt">新增帳號</div><label>帳號名稱</label><input type="text" id="new-acct" placeholder="@your_handle"/><div class="mar"><button class="bs" onclick="closeM('m-acct')">取消</button><button class="bp" onclick="addAcct()">新增</button></div></div></div>
+<div class="mw" id="m-persona"><div class="md"><div class="mt">新增 Persona</div><label>名稱</label><input type="text" id="new-pn" placeholder="例：活潑少女、科技達人"/><label>風格描述</label><textarea id="new-pd" style="min-height:75px" placeholder="語氣、風格、常用詞..."></textarea><label>指派帳號</label><select id="new-pa"><option value="">— 不指派 —</option></select><div class="mar"><button class="bs" onclick="closeM('m-persona')">取消</button><button class="bp" onclick="addPersona()">新增</button></div></div></div>
+<div class="mw" id="m-source"><div class="md"><div class="mt">新增來源</div><label>類型</label><select id="new-st"><option>關鍵字</option><option>主題標籤</option><option>追蹤帳號</option><option>RSS</option></select><label>內容</label><input type="text" id="new-sc" placeholder="關鍵字、標籤或網址..."/><div class="mar"><button class="bs" onclick="closeM('m-source')">取消</button><button class="bp" onclick="addSrc()">新增</button></div></div></div>
+
+<script>
+const CC={'品牌故事':{bg:'#EEEDFE',c:'#3C3489'},'生活靈感':{bg:'#E1F5EE',c:'#085041'},'科技趨勢':{bg:'#E6F1FB',c:'#0C447C'},'互動話題':{bg:'#FBEAF0',c:'#72243E'},'活動推廣':{bg:'#FAEEDA',c:'#633806'},'其他':{bg:'#F1EFE8',c:'#444441'}};
+const SS={'草稿':{bg:'#F1EFE8',c:'#444441'},'待發布':{bg:'#FAEEDA',c:'#633806'},'已發布':{bg:'#E1F5EE',c:'#085041'}};
+const TC={'幽默輕鬆':{bg:'#FBEAF0',c:'#72243E'},'勵志正能量':{bg:'#E1F5EE',c:'#085041'},'知識乾貨':{bg:'#E6F1FB',c:'#0C447C'},'品牌行銷':{bg:'#FAEEDA',c:'#633806'},'互動問答':{bg:'#EEEDFE',c:'#3C3489'},'生活感':{bg:'#FAECE7',c:'#712B13'},'視覺系':{bg:'#FBEAF0',c:'#993556'},'數據圖文':{bg:'#F1EFE8',c:'#444441'}};
+function tcs(t){return TC[t]||{bg:'#F1EFE8',c:'#444441'}}
+function cs(c){return CC[c]||CC['其他']}
+
+let accounts=[],personas=[],sources=[],drafts=[],inspos=[],nextDid=1,nextIid=1;
+let dSF='all',dCF='all',dEdit=null,iTag='all',iView='grid',selTags=[],imgData=null,detailId=null;
+let apiKey=localStorage.getItem('threads_apikey')||'';
+
+// Init
+if(apiKey){document.getElementById('api-key-input').value=apiKey;document.getElementById('api-banner').style.display='none'}
+// Load saved data
+try{const s=localStorage.getItem('threads_data');if(s){const d=JSON.parse(s);accounts=d.accounts||[];personas=d.personas||[];sources=d.sources||[];drafts=d.drafts||[];inspos=d.inspos||[];nextDid=d.nextDid||1;nextIid=d.nextIid||1;renderAS();syncGA();renderPersonas();renderSrcs();}}catch(e){}
+
+function save(){try{localStorage.setItem('threads_data',JSON.stringify({accounts,personas,sources,drafts,inspos,nextDid,nextIid}))}catch(e){}}
+function saveKey(){apiKey=document.getElementById('api-key-input').value.trim();if(apiKey){localStorage.setItem('threads_apikey',apiKey);document.getElementById('api-banner').style.display='none';alert('API Key 已儲存！')}else alert('請輸入有效的 API Key')}
+
+function goPage(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pg-'+n).classList.add('active');
+  document.getElementById('nb-'+n).classList.add('active');
+  if(n==='gen')syncGA();
+  if(n==='drafts')renderDrafts();
+  if(n==='inspo')renderInspos();
+  window.scrollTo(0,0);
+}
+
+function openM(id){if(id==='m-persona')syncPA();document.getElementById(id).classList.add('open')}
+function closeM(id){document.getElementById(id).classList.remove('open')}
+
+function addAcct(){const v=document.getElementById('new-acct').value.trim();if(!v)return;const n=v.startsWith('@')?v:'@'+v;accounts.push({name:n});document.getElementById('new-acct').value='';closeM('m-acct');renderAS();syncGA();save()}
+function renderAS(){const s=document.getElementById('acct-sel');s.innerHTML='<option value="">— 請選擇帳號 —</option>';accounts.forEach((a,i)=>{const o=document.createElement('option');o.value=i;o.textContent=a.name;s.appendChild(o)})}
+function syncGA(){const s=document.getElementById('gen-acct');s.innerHTML=accounts.length?'':'<option>— 請先新增帳號 —</option>';accounts.forEach((a,i)=>{const o=document.createElement('option');o.value=i;o.textContent=a.name;s.appendChild(o)})}
+function syncPA(){const s=document.getElementById('new-pa');s.innerHTML='<option value="">— 不指派 —</option>';accounts.forEach((a,i)=>{const o=document.createElement('option');o.value=i;o.textContent=a.name;s.appendChild(o)})}
+function addPersona(){const n=document.getElementById('new-pn').value.trim();if(!n)return;const d=document.getElementById('new-pd').value.trim();const a=document.getElementById('new-pa').value;personas.push({name:n,desc:d,acct:a!==''?parseInt(a):null});document.getElementById('new-pn').value='';document.getElementById('new-pd').value='';closeM('m-persona');renderPersonas();save()}
+function renderPersonas(){const el=document.getElementById('persona-list');if(!personas.length){el.innerHTML='<div class="es">尚無 Persona</div>';return}el.innerHTML=personas.map(p=>`<div class="pc"><div style="font-weight:600;font-size:15px">${p.name}</div><div style="font-size:13px;color:var(--text1);margin-top:3px;line-height:1.5">${p.desc||'無描述'}</div>${p.acct!==null&&accounts[p.acct]?`<span style="font-size:12px;color:#8B5E34;background:#F5EDE3;padding:2px 8px;border-radius:6px;display:inline-block;margin-top:5px">${accounts[p.acct].name}</span>`:''}</div>`).join('')}
+function addSrc(){const t=document.getElementById('new-st').value,c=document.getElementById('new-sc').value.trim();if(!c)return;sources.push({type:t,content:c});document.getElementById('new-sc').value='';closeM('m-source');renderSrcs();save()}
+function addDefSrc(){sources.push({type:'關鍵字',content:'台灣科技趨勢'},{type:'主題標籤',content:'#每日一文'},{type:'主題標籤',content:'#生活靈感'},{type:'關鍵字',content:'AI 應用'});renderSrcs();save()}
+function renderSrcs(){const el=document.getElementById('source-list');if(!sources.length){el.innerHTML='<div class="es">尚無來源</div>';return}el.innerHTML=sources.map(s=>`<span class="pill"><span style="color:var(--accent);font-weight:600">${s.type}</span> ${s.content}</span>`).join('')}
+
+async function genPosts(){
+  if(!apiKey){alert('請先在頂部輸入你的 Anthropic API Key');return}
+  const ai=document.getElementById('gen-acct').value;
+  const topic=document.getElementById('gen-topic').value.trim();
+  const cat=document.getElementById('gen-cat').value;
+  const cnt=parseInt(document.getElementById('gen-cnt').value);
+  if(!topic){alert('請輸入主題');return}
+  const acct=ai!==''&&accounts[ai]?accounts[ai].name:'未指定';
+  const p=personas.find(x=>x.acct===(ai!==''?parseInt(ai):null));
+  const pd=p?`你是「${p.name}」，${p.desc}。`:'你是一位專業的繁體中文社群小編。';
+  const ld=document.getElementById('gen-load'),t=document.getElementById('gen-toast');
+  ld.style.display='block';t.style.display='none';document.getElementById('prev-sec').style.display='none';
+  const prompt=`${pd}請用繁體中文為 Threads 寫 ${cnt} 則貼文，主題是「${topic}」。口語化、吸引人，適合台灣用戶，可加 2-3 個 hashtag。帳號：${acct}。直接輸出 ${cnt} 則，每則以「---」分隔，不要編號。`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1200,messages:[{role:'user',content:prompt}]})});
+    const data=await r.json();
+    if(data.error){alert('API 錯誤：'+data.error.message);return}
+    const text=data.content?.map(c=>c.text||'').join('')||'';
+    const parts=text.split('---').map(s=>s.trim()).filter(Boolean);
+    const today=new Date().toISOString().slice(0,10);
+    const nd=parts.map(content=>({id:nextDid++,content,account:acct,cat,status:'草稿',date:today}));
+    drafts=[...nd,...drafts];save();
+    t.textContent=`已將 ${nd.length} 則貼文存入草稿庫 ✓`;t.style.display='block';
+    renderPrev(nd);document.getElementById('prev-sec').style.display='block';
+  }catch(e){alert('產生失敗：'+e.message)}
+  finally{ld.style.display='none'}
+}
+function renderPrev(items){
+  document.getElementById('prev-list').innerHTML=items.map(d=>{const c=cs(d.cat);return`<div class="dc"><div class="dm"><span style="font-size:13px;color:var(--text1)">${d.account}</span><span class="cb" style="background:${c.bg};color:${c.c}">${d.cat}</span></div><div class="dct">${d.content}</div><div class="das"><button class="bs" onclick="cpTxt(this,\`${esc(d.content)}\`)">複製</button><button class="bs" style="color:#633806;border-color:#FAC775;background:#FAEEDA" onclick="markDS(${d.id},'待發布');renderDrafts()">待發布</button></div></div>`}).join('')}
+
+function setSF(f,btn){dSF=f;document.querySelectorAll('#sf-row .fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderDrafts()}
+function setDCF(c,btn){dCF=c;document.querySelectorAll('#cf-row .fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderDrafts()}
+function toggleADF(){const f=document.getElementById('adf');f.style.display=f.style.display==='none'?'block':'none'}
+function addDraftM(){const c=document.getElementById('ad-c').value.trim();if(!c)return;drafts.unshift({id:nextDid++,content:c,account:document.getElementById('ad-a').value.trim()||'未指定',cat:document.getElementById('ad-cat').value,status:document.getElementById('ad-st').value,date:new Date().toISOString().slice(0,10)});document.getElementById('ad-c').value='';document.getElementById('adf').style.display='none';save();renderDrafts()}
+function markDS(id,status){const d=drafts.find(x=>x.id===id);if(d){d.status=status;save()}}
+function startDE(id){dEdit=id;renderDrafts()}
+function cancelDE(){dEdit=null;renderDrafts()}
+function saveDE(id){const d=drafts.find(x=>x.id===id);if(!d)return;d.content=document.getElementById('ec-'+id).value;d.cat=document.getElementById('ecat-'+id).value;d.status=document.getElementById('est-'+id).value;dEdit=null;save();renderDrafts()}
+function delDraft(id){if(!confirm('確定刪除這則草稿？'))return;drafts=drafts.filter(d=>d.id!==id);if(dEdit===id)dEdit=null;save();renderDrafts()}
+
+function renderDrafts(){
+  const allCats=[...new Set(drafts.map(d=>d.cat))];
+  document.getElementById('cf-row').innerHTML=`<button class="fb${dCF==='all'?' active':''}" onclick="setDCF('all',this)">所有分類</button>`+allCats.map(c=>{const s=cs(c);const a=dCF===c;return`<button class="fb${a?' active':''}" onclick="setDCF('${c}',this)" style="${a?`background:${s.bg};color:${s.c};border-color:${s.bg}`:''}">${c}</button>`}).join('');
+  document.getElementById('s-all').textContent=drafts.length;
+  document.getElementById('s-dft').textContent=drafts.filter(d=>d.status==='草稿').length;
+  document.getElementById('s-rdy').textContent=drafts.filter(d=>d.status==='待發布').length;
+  let vis=drafts;
+  if(dSF!=='all')vis=vis.filter(d=>d.status===dSF);
+  if(dCF!=='all')vis=vis.filter(d=>d.cat===dCF);
+  const el=document.getElementById('drafts-list');
+  if(!vis.length){el.innerHTML='<div class="es">這個分類暫無草稿</div>';return}
+  el.innerHTML=vis.map(d=>{
+    const c=cs(d.cat),s=SS[d.status]||SS['草稿'];
+    if(dEdit===d.id)return`<div class="dc ed"><textarea id="ec-${d.id}" style="width:100%;min-height:100px;padding:8px;border:0.5px solid var(--border1);border-radius:var(--r-md);font-size:14px;line-height:1.7;font-family:inherit;background:var(--bg0);color:var(--text0);resize:vertical;margin-bottom:8px">${d.content}</textarea><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><select id="ecat-${d.id}" style="width:120px;margin:0;padding:7px 10px;font-size:13px">${Object.keys(CC).map(k=>`<option${k===d.cat?' selected':''}>${k}</option>`).join('')}</select><select id="est-${d.id}" style="width:110px;margin:0;padding:7px 10px;font-size:13px"><option${d.status==='草稿'?' selected':''}>草稿</option><option${d.status==='待發布'?' selected':''}>待發布</option><option${d.status==='已發布'?' selected':''}>已發布</option></select><button class="bp" style="padding:7px 14px;font-size:13px" onclick="saveDE(${d.id})">儲存</button><button class="bs" onclick="cancelDE()">取消</button></div></div>`;
+    return`<div class="dc"><div class="dm"><span style="font-size:13px;color:var(--text1)">${d.account}</span><span class="cb" style="background:${c.bg};color:${c.c}">${d.cat}</span><span class="stbadge" style="background:${s.bg};color:${s.c}">${d.status}</span><span style="font-size:11px;color:var(--text2);margin-left:auto">${d.date}</span></div><div class="dct">${d.content}</div><div class="das"><button class="bs" onclick="startDE(${d.id})">編輯</button><button class="bs" onclick="cpTxt(this,\`${esc(d.content)}\`)">複製</button>${d.status!=='待發布'?`<button class="bs" style="color:#633806;border-color:#FAC775;background:#FAEEDA" onclick="markDS(${d.id},'待發布');renderDrafts()">待發布</button>`:''}${d.status!=='已發布'?`<button class="bs" style="color:#085041;border-color:#9FE1CB;background:#E1F5EE" onclick="markDS(${d.id},'已發布');renderDrafts()">已發布</button>`:''}<button class="bs bd" onclick="delDraft(${d.id})">刪除</button></div></div>`;
+  }).join('')}
+
+function setView(v){iView=v;document.getElementById('vb-g').classList.toggle('active',v==='grid');document.getElementById('vb-l').classList.toggle('active',v==='list');renderInspos()}
+function setITag(t,btn){iTag=t;document.querySelectorAll('#itag-row .fb').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderInspos()}
+function toggleIF(){const f=document.getElementById('inspo-form'),show=f.style.display==='none';f.style.display=show?'block':'none';if(show){selTags=[];document.getElementById('if-tags').innerHTML=Object.keys(TC).map(t=>`<button class="fb" style="font-size:12px;padding:4px 10px" onclick="toggleIT(this,'${t}')">${t}</button>`).join('')}}
+function toggleIT(btn,tag){const i=selTags.indexOf(tag);if(i>=0){selTags.splice(i,1);btn.classList.remove('active');btn.style.cssText='font-size:12px;padding:4px 10px'}else{selTags.push(tag);const s=tcs(tag);btn.style.background=s.bg;btn.style.color=s.c;btn.style.borderColor=s.bg;btn.classList.add('active')}}
+function handleImg(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{imgData=ev.target.result;const p=document.getElementById('ip');p.src=imgData;p.style.display='block';document.getElementById('uz').style.display='none'};r.readAsDataURL(file)}
+function saveInspo(){const note=document.getElementById('if-note').value.trim();const src=document.getElementById('if-src').value.trim();const ct=document.getElementById('if-ctag').value.trim();if(!note&&!imgData){alert('請輸入文字或上傳截圖');return}const tags=[...selTags,...(ct?[ct]:[])];inspos.unshift({id:nextIid++,img:imgData,src:src||'未知來源',note,tags,date:new Date().toISOString().slice(0,10)});imgData=null;document.getElementById('if-note').value='';document.getElementById('if-src').value='';document.getElementById('if-ctag').value='';document.getElementById('ip').style.display='none';document.getElementById('uz').style.display='block';document.getElementById('inspo-form').style.display='none';save();renderInspos()}
+function renderInspos(){
+  const allT=[...new Set(inspos.flatMap(i=>i.tags))];
+  document.getElementById('itag-row').innerHTML=`<button class="fb${iTag==='all'?' active':''}" onclick="setITag('all',this)">全部</button>`+allT.map(t=>{const s=tcs(t);const a=iTag===t;return`<button class="fb${a?' active':''}" onclick="setITag('${t}',this)" style="${a?`background:${s.bg};color:${s.c};border-color:${s.bg}`:''}">${t}</button>`}).join('');
+  let vis=inspos;if(iTag!=='all')vis=vis.filter(i=>i.tags.includes(iTag));
+  const el=document.getElementById('inspo-list');
+  if(!vis.length){el.innerHTML='<div class="es">這個分類暫無靈感，快去收藏</div>';return}
+  const tHtml=i=>(i.tags||[]).map(t=>{const s=tcs(t);return`<span class="tag" style="background:${s.bg};color:${s.c}">${t}</span>`}).join('');
+  const ph=`<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+  if(iView==='grid'){
+    el.innerHTML=`<div class="ig">${vis.map(i=>`<div class="ic" onclick="openD(${i.id})">${i.img?`<div class="iph"><img src="${i.img}"/></div>`:`<div class="iph">${ph}<span style="font-size:11px;color:var(--text2);padding:0 8px;text-align:center">${i.src}</span></div>`}<div class="ib"><div class="isrc">${i.src}</div><div class="inote">${i.note||''}</div><div>${tHtml(i)}</div></div></div>`).join('')}</div>`;
+  }else{
+    el.innerHTML=vis.map(i=>`<div class="ic lv" onclick="openD(${i.id})">${i.img?`<img src="${i.img}" style="width:64px;height:64px;object-fit:cover;border-radius:6px;flex-shrink:0"/>`:`<div style="width:64px;height:64px;background:var(--bg1);border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center">${ph}</div>`}<div class="ib lv"><div class="isrc">${i.src}</div><div class="inote">${i.note||''}</div><div>${tHtml(i)}</div></div></div>`).join('');
+  }
+}
+function openD(id){const i=inspos.find(x=>x.id===id);if(!i)return;detailId=id;const di=document.getElementById('d-img');if(i.img){di.src=i.img;di.style.display='block'}else di.style.display='none';document.getElementById('d-src').textContent=i.src;document.getElementById('d-note').textContent=i.note||'';document.getElementById('d-tags').innerHTML=(i.tags||[]).map(t=>{const s=tcs(t);return`<span class="tag" style="background:${s.bg};color:${s.c}">${t}</span>`}).join('');document.getElementById('ai-res').style.display='none';document.getElementById('ai-acts').style.display='none';document.getElementById('ai-load').style.display='none';document.getElementById('detail-wrap').classList.add('open')}
+function closeD(){document.getElementById('detail-wrap').classList.remove('open');detailId=null}
+function delInspo(){if(!confirm('確定刪除這則靈感？'))return;inspos=inspos.filter(x=>x.id!==detailId);save();closeD();renderInspos()}
+async function aiRewrite(){
+  if(!apiKey){alert('請先設定 API Key');return}
+  const i=inspos.find(x=>x.id===detailId);if(!i)return;
+  const ld=document.getElementById('ai-load'),res=document.getElementById('ai-res'),acts=document.getElementById('ai-acts');
+  ld.style.display='block';res.style.display='none';acts.style.display='none';
+  const prompt=`以下是一則 Threads 參考貼文，請用繁體中文仿照它的風格與語氣，寫一則全新的貼文（不要抄原文，要有新的主題）。風格標籤：${(i.tags||[]).join('、')||'不限'}。\n\n參考：\n${i.note||'（無文字，請根據風格標籤創作）'}\n\n只輸出貼文，不要前言。`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,messages:[{role:'user',content:prompt}]})});
+    const data=await r.json();if(data.error){res.textContent='錯誤：'+data.error.message;res.style.display='block';return}
+    const text=data.content?.map(c=>c.text||'').join('')||'';
+    res.textContent=text;res.style.display='block';acts.style.display='flex';
+  }catch(e){res.textContent='仿寫失敗：'+e.message;res.style.display='block'}
+  finally{ld.style.display='none'}
+}
+function cpAI(){navigator.clipboard.writeText(document.getElementById('ai-res').textContent).then(()=>{const b=document.querySelector('#ai-acts .bs');const orig=b.textContent;b.textContent='已複製 ✓';setTimeout(()=>b.textContent=orig,1500)})}
+function aiToDraft(){const text=document.getElementById('ai-res').textContent;drafts.unshift({id:nextDid++,content:text,account:'未指定',cat:'其他',status:'草稿',date:new Date().toISOString().slice(0,10)});save();const b=document.querySelectorAll('#ai-acts .bs')[1];b.textContent='已存入 ✓';setTimeout(()=>b.textContent='存入草稿庫',1500)}
+function cpTxt(btn,text){navigator.clipboard.writeText(text).then(()=>{const o=btn.textContent;btn.textContent='已複製 ✓';setTimeout(()=>btn.textContent=o,1500)})}
+function esc(s){return(s||'').replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$')}
+
+document.querySelectorAll('.mw').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+document.getElementById('detail-wrap').addEventListener('click',e=>{if(e.target===document.getElementById('detail-wrap'))closeD()});
+</script>
+</body>
+</html>
