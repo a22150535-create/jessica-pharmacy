@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QH活芯軟膠囊｜潔西卡大藥局 林威宏藥師</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --cream:#faf6f0;--cream2:#f5ede0;--orange:#e8631a;--orange-light:#f0885a;
+  --orange-pale:#fde8d8;--brown:#3d2010;--brown-mid:#7a4825;--brown-light:#b07850;
+  --text:#2e1a08;--text-mid:#6b3d20;--text-light:#a06840;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+section{padding:70px 24px;}
+.container{max-width:720px;margin:0 auto;}
+.tag{display:inline-block;font-size:11px;letter-spacing:4px;color:var(--orange);
+     border-bottom:1.5px solid var(--orange);padding-bottom:3px;margin-bottom:20px;text-transform:uppercase;}
+h2{font-family:'Noto Serif TC',serif;font-size:clamp(24px,4.5vw,38px);font-weight:900;
+   color:var(--brown);line-height:1.4;margin-bottom:12px;}
+h2 .em{color:var(--orange);}
+.sub{font-size:15px;color:var(--text-mid);line-height:1.9;margin-bottom:36px;}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:9999;
+    background:rgba(250,246,240,0.97);backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(232,99,26,0.15);
+    padding:0 20px;height:56px;
+    display:flex;align-items:center;justify-content:space-between;
+    box-shadow:0 2px 12px rgba(61,32,16,0.06);}
+.nav-logo{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:900;
+          color:var(--brown);text-decoration:none;letter-spacing:1px;}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{padding:7px 11px;font-size:12px;color:var(--text-mid);text-decoration:none;border-radius:4px;}
+.nav-links a.active{color:var(--orange);font-weight:700;background:var(--orange-pale);}
+.nav-links a:hover:not(.active){background:var(--cream2);}
+.nav-line{margin-left:6px;padding:8px 14px;background:#06C755;color:#fff;
+          font-size:12px;font-weight:700;text-decoration:none;border-radius:4px;letter-spacing:1px;}
+/* HERO */
+.page-hero{background:var(--cream2);padding:120px 24px 60px;text-align:center;}
+.page-hero-badge{display:inline-flex;align-items:center;gap:8px;
+  background:rgba(232,99,26,0.1);border:1px solid rgba(232,99,26,0.25);
+  color:var(--orange);font-size:12px;letter-spacing:3px;padding:7px 20px;
+  margin-bottom:28px;border-radius:100px;}
+.page-hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(32px,6vw,56px);
+  font-weight:900;color:var(--brown);line-height:1.3;margin-bottom:16px;}
+.page-hero h1 .em{color:var(--orange);}
+.page-hero p{font-size:15px;color:var(--text-mid);line-height:1.9;max-width:540px;margin:0 auto 36px;}
+/* PRODUCT HERO */
+.product-main{background:#fff;}
+.product-icon-big{font-size:80px;text-align:center;padding:40px 0 20px;}
+.price-box{background:var(--orange);color:#fff;border-radius:6px;padding:24px 28px;text-align:center;margin:24px 0;}
+.price-original{font-size:13px;opacity:0.75;text-decoration:line-through;margin-bottom:4px;}
+.price-now{font-family:'Noto Serif TC',serif;font-size:36px;font-weight:900;margin-bottom:4px;}
+.price-note{font-size:12px;opacity:0.85;}
+/* TAGS */
+.tag-list{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0;}
+.tag-pill{background:var(--orange-pale);border:1px solid rgba(232,99,26,0.2);
+          color:var(--orange);font-size:12px;padding:5px 14px;border-radius:100px;font-weight:500;}
+/* INFO CARDS */
+.info-grid{display:flex;flex-direction:column;gap:14px;}
+.info-card{background:var(--cream);border-radius:4px;padding:22px 24px;
+           border-left:3px solid var(--orange);display:flex;gap:16px;align-items:flex-start;}
+.info-icon{font-size:28px;flex-shrink:0;}
+.info-title{font-size:16px;font-weight:700;color:var(--brown);margin-bottom:5px;}
+.info-desc{font-size:13px;color:var(--text-light);line-height:1.75;}
+/* WHO */
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.who-item{background:var(--cream);border-radius:4px;padding:16px 18px;
+          font-size:14px;color:var(--text-mid);line-height:1.6;
+          border-left:2px solid var(--orange);}
+.who-item .who-icon{font-size:20px;display:block;margin-bottom:6px;}
+/* CTA STICKY */
+.sticky{position:fixed;bottom:0;left:0;right:0;background:rgba(250,246,240,0.97);
+        border-top:1px solid rgba(232,99,26,0.2);padding:12px 24px;
+        display:flex;align-items:center;justify-content:space-between;
+        z-index:999;backdrop-filter:blur(10px);box-shadow:0 -2px 16px rgba(61,32,16,0.08);}
+.sticky-info{font-size:13px;color:var(--text-mid);}
+.sticky-info strong{color:var(--brown);font-size:16px;display:block;}
+.sticky-btns{display:flex;gap:8px;}
+.btn-orange{background:var(--orange);color:#fff;font-size:13px;font-weight:700;
+            letter-spacing:2px;padding:11px 20px;border-radius:2px;text-decoration:none;
+            box-shadow:0 2px 10px rgba(232,99,26,0.3);}
+.btn-line{background:#06C755;color:#fff;font-size:13px;font-weight:700;
+          letter-spacing:2px;padding:11px 20px;border-radius:2px;text-decoration:none;
+          box-shadow:0 2px 10px rgba(6,199,85,0.3);}
+/* FAQ */
+.faq-item{background:#fff;border-radius:4px;overflow:hidden;border:1px solid rgba(61,32,16,0.08);margin-bottom:10px;}
+.faq-q{padding:18px 20px;font-size:15px;font-weight:600;color:var(--brown);
+       cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.faq-arr{color:var(--orange);font-size:18px;flex-shrink:0;transition:transform 0.2s;}
+.faq-item.open .faq-arr{transform:rotate(180deg);}
+.faq-a{display:none;padding:0 20px 18px;font-size:14px;color:var(--text-mid);line-height:1.8;}
+.faq-item.open .faq-a{display:block;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">潔西卡大藥局</a>
+  <div class="nav-links">
+    <a href="index.html">首頁</a>
+    <a href="products.html" class="active">保健品</a>
+    <a href="course.html">課程</a>
+    <a href="story.html">故事</a>
+    <a href="knowledge.html">知識庫</a>
+    <a href="https://lin.ee/rpc44QB" target="_blank" class="nav-line">LINE</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-hero-badge">✦ 藥師嚴選 · PHARMACIST RECOMMENDED</div>
+  <h1>QH活芯軟膠囊<br><span class="em">心臟的第一道防線</span></h1>
+  <p>還原型輔酶Q10（QH），自律神經失調者最常缺乏的關鍵營養素<br>林藥師親身使用、嚴格把關，只推薦自己認可的</p>
+</div>
+
+<!-- 主要商品 -->
+<section class="product-main">
+  <div class="container">
+    <div class="product-icon-big">💊</div>
+
+    <div class="tag">SUPPLEMENT · HEART & ENERGY</div>
+    <h2>QH活芯<span class="em">軟膠囊</span></h2>
+    <p class="sub">還原型輔酶Q10（Ubiquinol/QH）是人體粒線體產生能量的關鍵輔酶。自律神經長期過勞、年齡增長，體內QH濃度會快速下降，導致心臟無力、疲勞加劇。</p>
+
+    <div class="tag-list">
+      <span class="tag-pill">💓 心臟保護</span>
+      <span class="tag-pill">⚡ 提升能量</span>
+      <span class="tag-pill">🛡 強力抗氧化</span>
+      <span class="tag-pill">🧬 活化粒線體</span>
+      <span class="tag-pill">藥師親身使用</span>
+      <span class="tag-pill">還原型QH（吸收率更高）</span>
+    </div>
+
+    <div class="price-box">
+      <div class="price-original">一般市售同類型 NT$1,500~2,500</div>
+      <div class="price-now">LINE 專屬優惠價</div>
+      <div class="price-note">加 LINE 告訴林藥師你的狀況，取得最適合你的方案與最優惠價格</div>
+    </div>
+
+    <a href="https://lin.ee/rpc44QB" target="_blank"
+      style="display:flex;align-items:center;justify-content:center;gap:10px;
+             background:#06C755;color:#fff;padding:16px;border-radius:4px;
+             font-size:16px;font-weight:700;letter-spacing:2px;text-decoration:none;
+             box-shadow:0 4px 16px rgba(6,199,85,0.3);margin-bottom:12px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+      LINE 諮詢購買
+    </a>
+    <p style="font-size:12px;color:var(--text-light);text-align:center;">加 LINE 後告訴林藥師你的狀況，他會確認最適合你的用量</p>
+  </div>
+</section>
+
+<!-- 為什麼需要QH -->
+<section style="background:var(--cream2);">
+  <div class="container">
+    <div class="tag">WHY QH</div>
+    <h2>為什麼自律神經失調者<br><span class="em">特別需要QH？</span></h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">⚡</div>
+        <div>
+          <div class="info-title">粒線體的直接燃料</div>
+          <div class="info-desc">QH是細胞粒線體製造ATP能量的必需輔酶。自律神經失調時，交感神經長期亢奮，消耗大量QH，導致「怎麼睡都累」的根本原因之一。</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">💓</div>
+        <div>
+          <div class="info-title">心臟是最需要QH的器官</div>
+          <div class="info-desc">心臟每分鐘跳動超過60次，是人體耗能最高的器官。心肌細胞中QH濃度是其他細胞的10倍，一旦不足，心跳加速、胸悶心悸隨之而來。</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🛡</div>
+        <div>
+          <div class="info-title">還原型QH vs 氧化型CoQ10</div>
+          <div class="info-desc">一般CoQ10需在體內轉換成QH才能發揮作用，轉換效率隨年齡下降。QH（還原型）直接進入細胞，吸收率提升8倍以上，效果更快更確實。</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🧬</div>
+        <div>
+          <div class="info-title">林藥師的親身使用心得</div>
+          <div class="info-desc">「我自己確診自律神經失調後，QH是我每天必吃的品項。補充3個月後，早上起床的疲憊感明顯改善，心跳也穩定許多。這是我親身體驗過才推薦的。」— 林威宏藥師</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 適合哪些人 -->
+<section style="background:#fff;">
+  <div class="container">
+    <div class="tag">WHO NEEDS IT</div>
+    <h2>你適合<span class="em">補充QH</span>嗎？</h2>
+    <p class="sub">以下症狀有2個以上，QH可能是你需要的關鍵補充</p>
+    <div class="who-grid">
+      <div class="who-item"><span class="who-icon">💓</span>心跳莫名加速、心悸</div>
+      <div class="who-item"><span class="who-icon">😴</span>怎麼睡都還是累</div>
+      <div class="who-item"><span class="who-icon">🧠</span>腦霧、記憶力下降</div>
+      <div class="who-item"><span class="who-icon">🫁</span>運動後恢復慢</div>
+      <div class="who-item"><span class="who-icon">40+</span>40歲以上，QH合成下降</div>
+      <div class="who-item"><span class="who-icon">💊</span>長期服用Statin類藥物</div>
+    </div>
+    <div style="margin-top:20px;background:var(--orange-pale);border-radius:4px;padding:16px 20px;
+                font-size:14px;color:var(--text-mid);border-left:3px solid var(--orange);">
+      ⚠️ 正在服用抗凝血藥物（如Warfarin）者，補充前請先諮詢林藥師
+    </div>
+  </div>
+</section>
+
+<!-- 服用方式 -->
+<section style="background:var(--cream2);">
+  <div class="container">
+    <div class="tag">HOW TO TAKE</div>
+    <h2>如何正確<span class="em">服用QH</span>？</h2>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="background:#fff;border-radius:4px;padding:18px 20px;display:flex;gap:14px;align-items:center;">
+        <div style="width:36px;height:36px;background:var(--orange);color:#fff;border-radius:50%;
+                    display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">1</div>
+        <div><strong style="color:var(--brown);">隨餐服用</strong> — QH是脂溶性，搭配含油脂的餐點吸收率最高</div>
+      </div>
+      <div style="background:#fff;border-radius:4px;padding:18px 20px;display:flex;gap:14px;align-items:center;">
+        <div style="width:36px;height:36px;background:var(--orange);color:#fff;border-radius:50%;
+                    display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">2</div>
+        <div><strong style="color:var(--brown);">建議劑量</strong> — 一般保養每日100mg；HRV數值偏低者可依林藥師建議調整</div>
+      </div>
+      <div style="background:#fff;border-radius:4px;padding:18px 20px;display:flex;gap:14px;align-items:center;">
+        <div style="width:36px;height:36px;background:var(--orange);color:#fff;border-radius:50%;
+                    display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">3</div>
+        <div><strong style="color:var(--brown);">持續補充</strong> — 建議連續補充3個月以上，才能有效提升體內QH濃度</div>
+      </div>
+      <div style="background:#fff;border-radius:4px;padding:18px 20px;display:flex;gap:14px;align-items:center;">
+        <div style="width:36px;height:36px;background:var(--orange);color:#fff;border-radius:50%;
+                    display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">4</div>
+        <div><strong style="color:var(--brown);">搭配HRV檢測</strong> — 補充前後做HRV檢測，用數據看效果最準確</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:#fff;">
+  <div class="container">
+    <div class="tag">FAQ</div>
+    <h2>常見<span class="em">問題</span></h2>
+    <div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          QH和一般CoQ10有什麼不同？<span class="faq-arr">▾</span>
+        </div>
+        <div class="faq-a">CoQ10在體內需先轉換成還原型QH才有效，40歲後轉換能力大幅下降。QH是已還原的活性型，直接被細胞利用，吸收效率高出8倍以上，效果更快更明顯。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          幾天可以感受到效果？<span class="faq-arr">▾</span>
+        </div>
+        <div class="faq-a">個人差異很大，但大多數人在持續補充2-4週後開始感受到精力改善。建議搭配HRV檢測，3個月後可用數據確認成效。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          可以和其他保健品一起吃嗎？<span class="faq-arr">▾</span>
+        </div>
+        <div class="faq-a">一般來說可以。但若同時服用抗凝血藥物（如Warfarin），QH可能影響藥效，請先LINE林藥師確認安全性。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          在哪裡購買？可以宅配嗎？<span class="faq-arr">▾</span>
+        </div>
+        <div class="faq-a">加LINE告訴林藥師你的狀況，確認適合你的用量後即可購買。可到潔西卡大藥局取貨（台中北屯），或詢問寄送方式。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--orange);text-align:center;padding:70px 24px;">
+  <div class="container">
+    <h2 style="color:#fff;font-size:clamp(26px,5vw,40px);margin-bottom:12px;">
+      不確定你需要QH嗎？
+    </h2>
+    <p style="color:rgba(255,255,255,0.85);font-size:15px;margin-bottom:32px;">
+      先來做一次免費HRV檢測，林藥師看完你的數據<br>再告訴你真正需要補什麼
+    </p>
+    <a href="https://lin.ee/rpc44QB" target="_blank"
+      style="display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--orange);
+             padding:16px 40px;border-radius:2px;font-size:16px;font-weight:900;
+             text-decoration:none;letter-spacing:2px;
+             box-shadow:0 4px 16px rgba(0,0,0,0.15);">
+      加 LINE 免費諮詢
+    </a>
+    <p style="margin-top:16px;color:rgba(255,255,255,0.75);font-size:13px;">
+      📍 台中市北屯區崇德路二段306號・潔西卡大藥局
+    </p>
+  </div>
+</section>
+
+<div style="height:70px;"></div>
+
+<div class="sticky">
+  <div class="sticky-info">
+    <strong>QH活芯軟膠囊</strong>LINE 諮詢取得專屬優惠
+  </div>
+  <div class="sticky-btns">
+    <a href="index.html#booking" class="btn-orange">預約健測</a>
+    <a href="https://lin.ee/rpc44QB" target="_blank" class="btn-line">LINE 購買</a>
+  </div>
+</div>
+</body>
+</html>

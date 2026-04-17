@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>魔術方塊教學 🧊 | 潔西卡大藥局</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07071a;--card:#0d0d22;--border:#1a1a38;--acc:#4455ee;
+  --r:#FF3300;--l:#FF8800;--u:#e8e8e8;--d:#FFCC00;--f:#FF3300;--b:#4488ff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:#dde;font-family:'Noto Sans TC',sans-serif;min-height:100vh;overflow-x:hidden;}
+.rainbow{height:4px;background:linear-gradient(90deg,#FF3300,#FF8800,#FFCC00,#00BB44,#1166DD,#882299);}
+.back-bar{background:#faf6f0;border-bottom:1px solid rgba(232,99,26,0.15);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
+.back-bar a{color:#e8631a;font-size:13px;font-weight:700;text-decoration:none;}
+.back-bar span{font-size:12px;color:#a06840;}
+.header{text-align:center;padding:22px 16px 10px;}
+.header .emoji{font-size:2rem;margin-bottom:6px;}
+.header h1{font-size:clamp(1.6rem,5vw,2.6rem);font-weight:900;letter-spacing:-1px;margin:0 0 5px;background:linear-gradient(90deg,#FF3300,#FF8800,#FFCC00,#00BB44,#1166DD);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.header .sub{color:#222244;font-size:0.75rem;}
+.tabs{display:flex;justify-content:center;gap:6px;padding:8px 16px 16px;flex-wrap:wrap;}
+.tab-btn{padding:7px 16px;border-radius:100px;cursor:pointer;font-size:0.84rem;border:2px solid var(--border);background:transparent;color:#2a2a66;font-family:'Noto Sans TC',sans-serif;transition:all .15s;font-weight:400;}
+.tab-btn.active{border-color:var(--acc);background:#4455ee22;color:#8899ff;font-weight:700;}
+.main{max-width:720px;margin:0 auto;padding:0 14px 80px;}
+/* 3D Cube */
+.cube-wrap{background:#08081c;border-radius:16px;overflow:hidden;height:250px;border:1px solid var(--border);box-shadow:0 12px 50px #00000099;margin-bottom:7px;position:relative;}
+#cube-canvas{width:100%;height:100%;display:block;cursor:grab;}
+#cube-canvas:active{cursor:grabbing;}
+.reset-btn{width:100%;padding:7px;border-radius:9px;background:transparent;border:1px solid var(--border);color:#222244;cursor:pointer;font-size:0.78rem;font-family:'Noto Sans TC',sans-serif;margin-bottom:12px;transition:all .15s;}
+.reset-btn:hover{border-color:#4455ee44;color:#6677ff;}
+/* Cards */
+.card{background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border);margin-bottom:14px;}
+.card-title{margin:0 0 12px;font-size:0.96rem;font-weight:800;color:#dde;border-left:3px solid;padding-left:10px;}
+/* Alg Display */
+.alg-display{display:flex;flex-wrap:wrap;gap:3px;line-height:2.2;margin:8px 0;}
+.alg-token{padding:3px 10px;border-radius:7px;font-weight:800;font-family:'JetBrains Mono',monospace;font-size:0.88rem;letter-spacing:0.5px;cursor:default;user-select:none;}
+/* Info box */
+.info-box{background:#111130;border:1px solid #1c1c4a;border-radius:8px;padding:10px 14px;margin:10px 0;font-size:0.82rem;line-height:1.65;color:#3a3a66;}
+.info-box::before{content:'💡 ';color:#FFCC00;}
+/* Grid */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.mini-card{background:#11112a;border-radius:10px;padding:13px 10px;text-align:center;border:1px solid var(--border);}
+.mini-card .icon{font-size:1.4rem;margin-bottom:5px;}
+.mini-card .name{color:#bbd;font-size:0.77rem;font-weight:700;margin-bottom:3px;}
+.mini-card .desc{color:#2a2a4a;font-size:0.71rem;line-height:1.5;white-space:pre-line;}
+/* Buttons */
+.btn-primary{padding:7px 16px;border-radius:8px;cursor:pointer;font-weight:700;font-size:0.82rem;background:linear-gradient(135deg,#FF3300,#FF8800);border:none;color:#fff;box-shadow:0 4px 18px #FF330030;font-family:'Noto Sans TC',sans-serif;}
+.btn-secondary{padding:7px 14px;border-radius:8px;cursor:pointer;font-weight:500;font-size:0.81rem;background:transparent;border:1px solid var(--border);color:#444;font-family:'Noto Sans TC',sans-serif;}
+.btn-copy{padding:7px 14px;border-radius:8px;cursor:pointer;font-weight:500;font-size:0.81rem;background:transparent;border:1px solid var(--border);color:#444;font-family:'Noto Sans TC',sans-serif;}
+.btn-copy.copied{border-color:#00BB44;color:#00BB44;background:#00BB4415;}
+.btn-sm{padding:4px 11px;border-radius:7px;cursor:pointer;font-size:0.75rem;font-weight:700;font-family:'Noto Sans TC',sans-serif;}
+.btn-sm.primary{background:linear-gradient(135deg,#FF3300,#FF8800);border:none;color:#fff;box-shadow:0 3px 14px #FF330030;}
+.btn-sm.secondary{background:transparent;border:1px solid var(--border);color:#444;}
+.btn-row{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;}
+/* Steps nav */
+.step-dots{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;justify-content:center;}
+.step-dot{width:34px;height:34px;border-radius:50%;cursor:pointer;font-weight:800;font-size:0.8rem;border:2px solid var(--border);background:transparent;color:#222244;transition:all .15s;font-family:'Noto Sans TC',sans-serif;}
+.step-dot.active{border-color:#FFCC00;background:#FFCC0020;color:#FFCC00;}
+.step-dot.done{border-color:#00BB4433;background:#00BB4414;color:#00BB44;}
+.step-nav{display:flex;gap:8px;margin-top:12px;}
+.step-prev{flex:1;padding:11px;border-radius:11px;cursor:pointer;background:transparent;border:1px solid var(--border);color:#555;font-family:'Noto Sans TC',sans-serif;}
+.step-prev:disabled{border-color:#0f0f1e;color:#141428;cursor:default;}
+.step-next{flex:1;padding:11px;border-radius:11px;cursor:pointer;font-weight:800;background:linear-gradient(135deg,#FF3300,#FF8800);border:none;color:#fff;box-shadow:0 4px 20px #FF330030;font-family:'Noto Sans TC',sans-serif;}
+.step-next:disabled{background:transparent;border:1px solid #0f0f1e;color:#141428;cursor:default;box-shadow:none;}
+/* Alg card */
+.alg-card{background:var(--card);border-radius:12px;padding:15px 17px;border:1px solid var(--border);margin-bottom:10px;}
+.alg-name{font-weight:800;color:#ccddee;font-size:0.93rem;margin-bottom:6px;}
+.alg-desc{color:#3a3a66;font-size:0.8rem;margin-bottom:8px;line-height:1.6;}
+/* Sub tabs */
+.sub-tabs{display:flex;gap:5px;margin-bottom:16px;flex-wrap:wrap;}
+.sub-btn{padding:7px 15px;border-radius:100px;cursor:pointer;font-size:0.82rem;border:2px solid var(--border);background:transparent;color:#2a2a66;font-weight:400;font-family:'Noto Sans TC',sans-serif;transition:all .15s;}
+.sub-btn.active{border-color:var(--acc);background:#4455ee22;color:#8899ff;font-weight:700;}
+/* Badge */
+.badge{font-size:0.69rem;padding:2px 8px;border-radius:5px;font-weight:700;}
+/* Timer */
+.timer-display{background:var(--card);border-radius:18px;padding:48px 20px;text-align:center;border:1px solid var(--border);margin-bottom:14px;transition:box-shadow .4s;}
+.timer-display.running{box-shadow:0 0 80px #FFCC0012;}
+.timer-num{font-size:clamp(3.5rem,16vw,7rem);font-weight:900;font-family:'JetBrains Mono',monospace;letter-spacing:-4px;line-height:1;color:#fff;transition:color .3s,text-shadow .3s;}
+.timer-num.running{color:#FFCC00;text-shadow:0 0 60px #FFCC0088;}
+.timer-controls{display:flex;gap:10px;justify-content:center;margin-bottom:20px;}
+.timer-start{padding:14px 36px;border-radius:100px;cursor:pointer;font-weight:800;font-size:1.05rem;background:linear-gradient(135deg,#00BB44,#009933);border:none;color:#fff;box-shadow:0 5px 28px #00BB4450;font-family:'Noto Sans TC',sans-serif;}
+.timer-stop{padding:14px 36px;border-radius:100px;cursor:pointer;font-weight:800;font-size:1.05rem;background:linear-gradient(135deg,#FF3300,#cc1100);border:none;color:#fff;box-shadow:0 5px 28px #FF330050;font-family:'Noto Sans TC',sans-serif;}
+.timer-reset{padding:14px 20px;border-radius:100px;cursor:pointer;font-weight:700;background:transparent;border:2px solid var(--border);color:#222244;font-family:'Noto Sans TC',sans-serif;}
+.best-box{background:#FFCC0010;border:1px solid #FFCC0030;border-radius:11px;padding:15px;margin-bottom:14px;text-align:center;color:#FFCC00;}
+.best-num{font-size:1.5rem;font-family:'JetBrains Mono',monospace;font-weight:900;}
+.history-box{background:var(--card);border-radius:13px;padding:18px;border:1px solid var(--border);}
+.history-label{color:#111133;font-size:0.69rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:11px;}
+.history-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #0c0c20;color:#252545;}
+.history-row:last-child{border-bottom:none;}
+.history-row.best{color:#FFCC00;}
+.history-avg{margin-top:13px;padding-top:11px;border-top:1px solid #0c0c20;display:flex;justify-content:space-between;color:#1a1a44;font-size:0.79rem;}
+/* Color dot */
+.color-dot{width:18px;height:18px;border-radius:5px;border:1px solid #2a2a2a;flex-shrink:0;display:inline-block;}
+.color-row{display:flex;align-items:center;gap:8px;background:#11112a;border-radius:10px;padding:10px 14px;border:1px solid var(--border);}
+/* Notation demo grid */
+.demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.demo-item{background:#11112a;border-radius:10px;padding:12px;border:1px solid var(--border);}
+.demo-desc{color:#2a2a4a;font-size:0.72rem;margin:4px 0 8px;}
+/* Congrats */
+.congrats{background:#00BB4410;border:1px solid #00BB4430;border-radius:12px;padding:18px;margin-top:13px;text-align:center;}
+/* Section label */
+.sec-label{color:#1a1a44;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;margin:12px 0 8px;}
+/* Hidden */
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+</style>
+</head>
+<body>
+
+<div class="rainbow"></div>
+
+<!-- 返回導覽 -->
+<div class="back-bar">
+  <a href="tools.html">← 回工具列表</a>
+  <span>潔西卡大藥局</span>
+</div>
+
+<!-- Header -->
+<div class="header">
+  <div class="emoji">🧊</div>
+  <h1>魔術方塊教學</h1>
+  <div class="sub">3D互動式教學 · 拖曳旋轉方塊 · 計時練習</div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('basics')">基礎概念</button>
+  <button class="tab-btn" onclick="switchTab('steps')">入門步驟</button>
+  <button class="tab-btn" onclick="switchTab('cfop')">CFOP進階</button>
+  <button class="tab-btn" onclick="switchTab('timer')">計時練習</button>
+</div>
+
+<div class="main">
+
+  <!-- 3D Cube（非計時頁顯示）-->
+  <div id="cube-section">
+    <div class="cube-wrap">
+      <canvas id="cube-canvas"></canvas>
+    </div>
+    <button class="reset-btn" onclick="resetCube()">↺ 重置方塊</button>
+  </div>
+
+  <!-- ═══ 基礎概念 ═══ -->
+  <div class="tab-content active" id="tab-basics">
+
+    <div class="card">
+      <h3 class="card-title" style="border-color:#FF8800">一、魔方的結構</h3>
+      <p style="color:#3a3a66;font-size:0.83rem;line-height:1.7;margin-bottom:12px;">一顆 3×3 魔方有 <strong style="color:#ccd">26 個</strong>可動方塊，分三種類型：</p>
+      <div class="grid-3">
+        <div class="mini-card"><div class="icon">⬛</div><div class="name">中心塊 ×6</div><div class="desc">永遠不移動\n決定各面顏色</div></div>
+        <div class="mini-card"><div class="icon">▭</div><div class="name">邊塊 ×12</div><div class="desc">2種顏色\n在每條稜邊上</div></div>
+        <div class="mini-card"><div class="icon">◢</div><div class="name">角塊 ×8</div><div class="desc">3種顏色\n在每個角落</div></div>
+      </div>
+      <div class="info-box">中心塊不動，所以<strong style="color:#bbc">每個面的顏色由中心塊決定</strong>。還原 = 把邊塊和角塊送回中心塊指引的位置。</div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title" style="border-color:#00BB44">二、標準顏色配置</h3>
+      <p style="color:#3a3a66;font-size:0.83rem;margin-bottom:10px;">對立面顏色永遠固定：</p>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:10px;">
+        <div class="color-row"><div class="color-dot" style="background:#F5F5F5"></div><span style="color:#aab;font-size:0.83rem;">白</span><span style="color:#222;margin:0 6px">↔</span><div class="color-dot" style="background:#FFCC00"></div><span style="color:#aab;font-size:0.83rem;">黃</span></div>
+        <div class="color-row"><div class="color-dot" style="background:#FF3300"></div><span style="color:#aab;font-size:0.83rem;">紅</span><span style="color:#222;margin:0 6px">↔</span><div class="color-dot" style="background:#FF8800"></div><span style="color:#aab;font-size:0.83rem;">橙</span></div>
+        <div class="color-row"><div class="color-dot" style="background:#1166DD"></div><span style="color:#aab;font-size:0.83rem;">藍</span><span style="color:#222;margin:0 6px">↔</span><div class="color-dot" style="background:#00BB44"></div><span style="color:#aab;font-size:0.83rem;">綠</span></div>
+      </div>
+      <p style="color:#3a3a66;font-size:0.8rem;">本教學：底面=白、頂面=黃、前面=紅。</p>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title" style="border-color:#1166DD">三、旋轉記號 Notation</h3>
+      <p style="color:#3a3a66;font-size:0.83rem;line-height:1.7;margin-bottom:10px;">六字母對應六個面：<strong style="color:#bbc">R</strong>右 <strong style="color:#bbc">L</strong>左 <strong style="color:#bbc">U</strong>上 <strong style="color:#bbc">D</strong>下 <strong style="color:#bbc">F</strong>前 <strong style="color:#bbc">B</strong>後</p>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;">
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div class="alg-display" style="margin:0"><span class="alg-token" id="tok-R"></span></div>
+          <span style="color:#3a3a66;font-size:0.81rem;">單字母 = 順時針90°</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div class="alg-display" style="margin:0"><span class="alg-token" id="tok-Rp"></span></div>
+          <span style="color:#3a3a66;font-size:0.81rem;">加撇 = 逆時針90°（R prime）</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div class="alg-display" style="margin:0"><span class="alg-token" id="tok-R2"></span></div>
+          <span style="color:#3a3a66;font-size:0.81rem;">加2 = 旋轉180°</span>
+        </div>
+      </div>
+      <div class="info-box">「順時針」是從<strong style="color:#bbc">該面正前方</strong>看過去的方向。</div>
+      <div class="sec-label">點▶示範看3D動畫：</div>
+      <div class="demo-grid" id="notation-demos"></div>
+    </div>
+
+    <div class="card">
+      <h3 class="card-title" style="border-color:#882299">四、公式組合範例</h3>
+      <p style="color:#3a3a66;font-size:0.83rem;line-height:1.7;margin-bottom:10px;">最有名的入門公式 <code style="color:#aae;background:#111133;padding:2px 7px;border-radius:5px">R U R' U'</code>（性感動作）：</p>
+      <div id="sexy-display" class="alg-display"></div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="playAlg(&quot;R U R' U'&quot;)">▶ 跟著做</button>
+        <button class="btn-secondary" onclick="resetCube()">↺ 重設</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ 入門步驟 ═══ -->
+  <div class="tab-content" id="tab-steps">
+    <div class="step-dots" id="step-dots"></div>
+    <div class="card" id="step-card"><!-- rendered by JS --></div>
+    <div class="step-nav">
+      <button class="step-prev" id="step-prev-btn" onclick="changeStep(-1)">← 上一步</button>
+      <button class="step-next" id="step-next-btn" onclick="changeStep(1)">下一步 →</button>
+    </div>
+    <div class="congrats" id="step-congrats" style="display:none">
+      <div style="font-size:2rem;margin-bottom:6px">🎉</div>
+      <div style="color:#00BB44;font-weight:800;font-size:1rem;margin-bottom:4px">恭喜！你已學會七步驟還原法！</div>
+      <div style="color:#1a4a1a;font-size:0.81rem">繼續練習，或挑戰 CFOP 進階方法！</div>
+    </div>
+  </div>
+
+  <!-- ═══ CFOP ═══ -->
+  <div class="tab-content" id="tab-cfop">
+    <div class="sub-tabs">
+      <button class="sub-btn active" onclick="switchSub('f2l')">F2L 配對</button>
+      <button class="sub-btn" onclick="switchSub('oll')">OLL 頂面</button>
+      <button class="sub-btn" onclick="switchSub('pll')">PLL 置換</button>
+    </div>
+    <div id="cfop-content"><!-- rendered by JS --></div>
+  </div>
+
+  <!-- ═══ 計時練習 ═══ -->
+  <div class="tab-content" id="tab-timer">
+    <div class="timer-display" id="timer-display">
+      <div class="timer-num" id="timer-num">0.00</div>
+    </div>
+    <div class="timer-controls">
+      <button class="timer-start" id="timer-start-btn" onclick="timerAction()">▶ 開始</button>
+      <button class="timer-reset" onclick="timerReset()">↺</button>
+    </div>
+    <div class="best-box" id="best-box" style="display:none">
+      🏆 最佳成績：<span class="best-num" id="best-num"></span>
+    </div>
+    <div class="history-box" id="history-box" style="display:none">
+      <div class="history-label">歷史記錄</div>
+      <div id="history-list"></div>
+      <div class="history-avg" id="history-avg" style="display:none">
+        <span id="avg-label"></span>
+        <span id="avg-num" style="font-family:'JetBrains Mono',monospace;font-weight:700;"></span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<div class="rainbow"></div>
+<div style="text-align:center;padding:10px;color:#0d0d2a;font-size:0.71rem;">🧊 魔術方塊 3D 互動教學 · 潔西卡大藥局工具箱</div>
+
+<script>
+// ════════════════════════════════════════
+// MOVE TABLE
+// ════════════════════════════════════════
+const MD = {
+  'R':{a:'x',s:-1,l:1},"R'":{a:'x',s:1,l:1},'R2':{a:'x',s:-2,l:1},
+  'L':{a:'x',s:1,l:-1},"L'":{a:'x',s:-1,l:-1},'L2':{a:'x',s:2,l:-1},
+  'U':{a:'y',s:1,l:1},"U'":{a:'y',s:-1,l:1},'U2':{a:'y',s:2,l:1},
+  'D':{a:'y',s:-1,l:-1},"D'":{a:'y',s:1,l:-1},'D2':{a:'y',s:-2,l:-1},
+  'F':{a:'z',s:-1,l:1},"F'":{a:'z',s:1,l:1},'F2':{a:'z',s:-2,l:1},
+  'B':{a:'z',s:1,l:-1},"B'":{a:'z',s:-1,l:-1},'B2':{a:'z',s:2,l:-1},
+  'M':{a:'x',s:1,l:0},"M'":{a:'x',s:-1,l:0},'M2':{a:'x',s:2,l:0},
+  'E':{a:'y',s:-1,l:0},"E'":{a:'y',s:1,l:0},'E2':{a:'y',s:-2,l:0},
+  'S':{a:'z',s:-1,l:0},"S'":{a:'z',s:1,l:0},'S2':{a:'z',s:-2,l:0},
+};
+const WC = {
+  'x':{a:'x',s:-1},"x'":{a:'x',s:1},'x2':{a:'x',s:-2},
+  'y':{a:'y',s:1},"y'":{a:'y',s:-1},'y2':{a:'y',s:2},
+  'z':{a:'z',s:-1},"z'":{a:'z',s:1},'z2':{a:'z',s:-2},
+};
+const WIDE = {
+  'r':"R M'","r'":"R' M",'r2':"R2 M2",
+  'l':"L' M","l'":"L M'",'l2':"L2 M2",
+  'u':"U E'","u'":"U' E",'u2':"U2 E2",
+  'd':"D E","d'":"D' E'",'d2':"D2 E2",
+  'f':"F S","f'":"F' S'",'f2':"F2 S2",
+  'b':"B S'","b'":"B' S",'b2':"B2 S2",
+};
+const SC = {U:0xF5F5F5,D:0xFFCC00,F:0xFF3300,B:0x1166DD,L:0xFF8800,R:0x00BB44};
+const INNER = 0x06060f;
+
+// ════════════════════════════════════════
+// THREE.JS CUBE ENGINE
+// ════════════════════════════════════════
+let scene, camera, renderer, cubeCtrl;
+let rotX=0.44, rotY=0.58, dragging=false, prevX=0, prevY=0;
+
+function makeCubie(x,y,z){
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(new THREE.BoxGeometry(0.91,0.91,0.91), new THREE.MeshLambertMaterial({color:INNER})));
+  const pg = new THREE.PlaneGeometry(0.78,0.78), D=0.458;
+  [{n:[0,1,0],c:y===1?SC.U:null,r:[-Math.PI/2,0,0]},
+   {n:[0,-1,0],c:y===-1?SC.D:null,r:[Math.PI/2,0,0]},
+   {n:[0,0,1],c:z===1?SC.F:null,r:[0,0,0]},
+   {n:[0,0,-1],c:z===-1?SC.B:null,r:[0,Math.PI,0]},
+   {n:[1,0,0],c:x===1?SC.R:null,r:[0,Math.PI/2,0]},
+   {n:[-1,0,0],c:x===-1?SC.L:null,r:[0,-Math.PI/2,0]},
+  ].forEach(({n,c,r})=>{
+    if(c===null) return;
+    const m=new THREE.Mesh(pg, new THREE.MeshLambertMaterial({color:c}));
+    m.position.set(n[0]*D,n[1]*D,n[2]*D);
+    m.rotation.set(...r);
+    g.add(m);
+  });
+  g.position.set(x,y,z);
+  g.userData.lp = new THREE.Vector3(x,y,z);
+  return g;
+}
+
+class CubeCtrl {
+  constructor(scene){ this.scene=scene; this.cubies=[]; this.queue=[]; this.busy=false; this.speed=180; this._build(); }
+  _build(){ this.cubies.forEach(c=>this.scene.remove(c)); this.cubies=[];
+    for(let x=-1;x<=1;x++) for(let y=-1;y<=1;y++) for(let z=-1;z<=1;z++){
+      if(!x&&!y&&!z) continue;
+      const c=makeCubie(x,y,z); this.cubies.push(c); this.scene.add(c);
+    }
+  }
+  reset(){ this.queue=[]; this.busy=false; this._build(); }
+  play(alg){
+    alg.trim().split(/\s+/).forEach(t=>{
+      if(WIDE[t]) WIDE[t].split(' ').forEach(m=>this.queue.push(m));
+      else if(MD[t]||WC[t]) this.queue.push(t);
+    });
+    if(!this.busy) this._next();
+  }
+  _next(){ if(!this.queue.length){this.busy=false;return;} this.busy=true; this._move(this.queue.shift(),()=>this._next()); }
+  _move(mv,cb){
+    const wc=WC[mv],d=MD[mv];
+    if(!wc&&!d){cb();return;}
+    const {a,s}=wc||d, l=d?.l;
+    const ang=(Math.PI/2)*s;
+    const aff=wc?this.cubies:this.cubies.filter(c=>Math.round(a==='x'?c.userData.lp.x:a==='y'?c.userData.lp.y:c.userData.lp.z)===l);
+    const piv=new THREE.Group(); this.scene.add(piv);
+    aff.forEach(c=>{this.scene.remove(c);piv.add(c);});
+    const t0=performance.now();
+    const tick=now=>{
+      const t=Math.min((now-t0)/this.speed,1);
+      const e=t<.5?2*t*t:-1+(4-2*t)*t;
+      piv.rotation[a]=e*ang;
+      if(t<1){requestAnimationFrame(tick);return;}
+      piv.rotation[a]=ang; piv.updateWorldMatrix(true,true);
+      aff.forEach(c=>{
+        c.updateWorldMatrix(true,false);
+        const wm=c.matrixWorld.clone();
+        piv.remove(c); this.scene.add(c);
+        wm.decompose(c.position,c.quaternion,c.scale);
+        const rm=new THREE.Matrix4();
+        if(a==='x') rm.makeRotationX(ang);
+        else if(a==='y') rm.makeRotationY(ang);
+        else rm.makeRotationZ(ang);
+        const np=c.userData.lp.clone().applyMatrix4(rm);
+        c.userData.lp.set(Math.round(np.x),Math.round(np.y),Math.round(np.z));
+      });
+      this.scene.remove(piv); cb();
+    };
+    requestAnimationFrame(tick);
+  }
+}
+
+function initCube(){
+  const canvas=document.getElementById('cube-canvas');
+  const wrap=canvas.parentElement;
+  const w=wrap.clientWidth||340, h=wrap.clientHeight||250;
+  renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setSize(w,h); renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  scene=new THREE.Scene();
+  camera=new THREE.PerspectiveCamera(36,w/h,0.1,100);
+  scene.add(new THREE.AmbientLight(0xffffff,0.72));
+  const dl=new THREE.DirectionalLight(0xffffff,1.1); dl.position.set(6,10,7); scene.add(dl);
+  const dl2=new THREE.DirectionalLight(0x8899ff,0.35); dl2.position.set(-5,-3,-6); scene.add(dl2);
+  cubeCtrl=new CubeCtrl(scene);
+
+  const dn=e=>{dragging=true;prevX=e.touches?.[0]?.clientX??e.clientX;prevY=e.touches?.[0]?.clientY??e.clientY;e.preventDefault();};
+  const up=()=>dragging=false;
+  const mv=e=>{
+    if(!dragging) return;
+    const cx=e.touches?.[0]?.clientX??e.clientX, cy=e.touches?.[0]?.clientY??e.clientY;
+    rotY+=(cx-prevX)*0.013; rotX+=(cy-prevY)*0.013;
+    rotX=Math.max(-1.1,Math.min(1.1,rotX)); prevX=cx; prevY=cy;
+  };
+  canvas.addEventListener('mousedown',dn);
+  canvas.addEventListener('touchstart',dn,{passive:false});
+  window.addEventListener('mouseup',up); window.addEventListener('touchend',up);
+  window.addEventListener('mousemove',mv); window.addEventListener('touchmove',mv,{passive:true});
+
+  const loop=()=>{
+    requestAnimationFrame(loop);
+    const r=8;
+    camera.position.set(r*Math.sin(rotY)*Math.cos(rotX),r*Math.sin(rotX),r*Math.cos(rotY)*Math.cos(rotX));
+    camera.lookAt(0,0,0); renderer.render(scene,camera);
+  };
+  loop();
+}
+
+function resetCube(){ cubeCtrl?.reset(); }
+function playAlg(alg){ cubeCtrl?.reset(); setTimeout(()=>cubeCtrl?.play(alg),160); }
+
+// ════════════════════════════════════════
+// ALG TOKEN COLORS
+// ════════════════════════════════════════
+const MC={R:'#00BB44',L:'#FF8800',U:'#d0d0d0',D:'#FFCC00',F:'#FF3300',B:'#4488ff',M:'#cc88ff',E:'#88ccff',S:'#ffaa44',x:'#ff88ff',y:'#ddaaff',z:'#ffaadd'};
+function renderAlg(container, str){
+  if(!str) return;
+  container.innerHTML='';
+  str.split(' ').forEach(t=>{
+    const base=t.replace(/[2']/g,'');
+    const c=MC[base]||'#777';
+    const isW=(c==='#d0d0d0');
+    const span=document.createElement('span');
+    span.className='alg-token';
+    span.textContent=t;
+    span.style.cssText=`background:${isW?'#252535':`${c}1a`};border:1.5px solid ${isW?'#44445a':`${c}66`};color:${isW?'#ddd':c};`;
+    container.appendChild(span);
+  });
+}
+function algHTML(str){
+  if(!str) return '';
+  return '<div class="alg-display">'+str.split(' ').map(t=>{
+    const base=t.replace(/[2']/g,'');
+    const c=MC[base]||'#777';
+    const isW=(c==='#d0d0d0');
+    return `<span class="alg-token" style="background:${isW?'#252535':`${c}1a`};border:1.5px solid ${isW?'#44445a':`${c}66`};color:${isW?'#ddd':c};">${t}</span>`;
+  }).join('')+'</div>';
+}
+
+// ════════════════════════════════════════
+// TAB SWITCHING
+// ════════════════════════════════════════
+let currentTab='basics';
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    const tabs=['basics','steps','cfop','timer'];
+    b.classList.toggle('active',tabs[i]===tab);
+  });
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('cube-section').style.display=(tab==='timer')?'none':'block';
+  if(tab==='steps') renderStep();
+  if(tab==='cfop') renderCFOP('f2l');
+}
+
+// ════════════════════════════════════════
+// NOTATION DEMOS
+// ════════════════════════════════════════
+const NOTATION_DEMOS=[
+  {move:'R',   desc:'右面順時針90°'},
+  {move:"R'",  desc:'右面逆時針90°'},
+  {move:'U',   desc:'上面順時針90°'},
+  {move:'F',   desc:'前面順時針90°'},
+  {move:"L'",  desc:'左面逆時針90°'},
+  {move:'U2',  desc:'上面旋轉180°'},
+];
+
+function initNotationDemos(){
+  // Single tokens
+  renderAlg(document.getElementById('tok-R'),'R');
+  renderAlg(document.getElementById('tok-Rp'),"R'");
+  renderAlg(document.getElementById('tok-R2'),'R2');
+  // sexy move
+  renderAlg(document.getElementById('sexy-display'),"R U R' U'");
+  // demo grid
+  const grid=document.getElementById('notation-demos');
+  grid.innerHTML=NOTATION_DEMOS.map(({move,desc})=>`
+    <div class="demo-item">
+      ${algHTML(move)}
+      <div class="demo-desc">${desc}</div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn-sm primary" onclick="playAlg('${move.replace(/'/g,"\\'")}')">▶ 跟著做</button>
+        <button class="btn-sm secondary" onclick="resetCube()">↺</button>
+      </div>
+    </div>`).join('');
+}
+
+// ════════════════════════════════════════
+// STEPS
+// ════════════════════════════════════════
+const STEPS=[
+  {n:'白色十字',emoji:'✛',alg:"F R U R' U' F'",tip:'先在底面（白色面）做出十字形，記得邊塊的側面顏色要和旁邊的中心塊對齊。一次做一個邊塊。'},
+  {n:'白色角塊',emoji:'◢',alg:"R U R' U'",tip:"把四個白色角塊放到底面正確位置。找到角塊後，重複 R U R' U' 直到角塊正確落下。"},
+  {n:'中層邊塊',emoji:'▭',alg:"U R U' R' U' F' U F",tip:"右插：U R U' R' U' F' U F。從左插：U' L' U L U F U' F'。找到中層邊塊（沒有黃色的邊塊）後依情況使用。"},
+  {n:'黃色十字',emoji:'✛',alg:"F R U R' U' F'",tip:'先讓頂面出現黃色十字（不管角塊）。從直線開始比從點開始快。重複公式直到十字出現。'},
+  {n:'頂層角塊定位',emoji:'◢',alg:"U R U' L' U R' U' L",tip:"把角塊放到正確的角落位置（方向先不管）。找到一個正確角塊後做公式，重複直到四個角塊都在對的角落。"},
+  {n:'頂層角塊定向',emoji:'↻',alg:"R' D' R D",tip:"對準右前方角塊，重複 R' D' R D 直到該角塊顏色正確，然後只轉U面換下一個角塊，嚴禁轉動其他面！"},
+  {n:'頂層邊塊置換',emoji:'⇄',alg:"R U' R U R U R U' R' U' R2",tip:'最後一步！置換頂層邊塊到正確位置。如果全部邊塊都錯，先做一次公式後再觀察方向。'},
+];
+
+let currentStep=0;
+function renderStepDots(){
+  const el=document.getElementById('step-dots');
+  el.innerHTML=STEPS.map((_,i)=>`<button class="step-dot${i===currentStep?' active':i<currentStep?' done':''}" onclick="goStep(${i})">${i+1}</button>`).join('');
+}
+function renderStep(){
+  renderStepDots();
+  const s=STEPS[currentStep];
+  document.getElementById('step-card').innerHTML=`
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;">
+      <span style="background:#FFCC0015;border:1px solid #FFCC0033;border-radius:6px;padding:2px 10px;color:#FFCC00;font-size:0.71rem;font-weight:700;">步驟 ${currentStep+1} / ${STEPS.length}</span>
+      <span style="font-size:1.2rem">${s.emoji}</span>
+    </div>
+    <h2 style="margin:0 0 12px;font-size:1.35rem;font-weight:900;color:#fff">${s.n}</h2>
+    <div class="info-box">${s.tip}</div>
+    <div class="sec-label">公式</div>
+    ${algHTML(s.alg)}
+    <div class="btn-row">
+      <button class="btn-primary" onclick="playAlg('${s.alg.replace(/'/g,"\\'")}')">▶ 跟著做</button>
+      <button class="btn-secondary" onclick="resetCube()">↺ 重設</button>
+      <button class="btn-copy" id="copy-step-btn" onclick="copyStep()">複製公式</button>
+    </div>`;
+  document.getElementById('step-prev-btn').disabled=(currentStep===0);
+  document.getElementById('step-next-btn').disabled=(currentStep===STEPS.length-1);
+  document.getElementById('step-next-btn').textContent=currentStep===STEPS.length-1?'🎉 完成！':'下一步 →';
+  document.getElementById('step-congrats').style.display=(currentStep===STEPS.length-1)?'block':'none';
+}
+function goStep(i){ currentStep=i; renderStep(); }
+function changeStep(d){ currentStep=Math.max(0,Math.min(STEPS.length-1,currentStep+d)); renderStep(); }
+function copyStep(){
+  navigator.clipboard?.writeText(STEPS[currentStep].alg);
+  const btn=document.getElementById('copy-step-btn');
+  btn.textContent='✓ 已複製'; btn.classList.add('copied');
+  setTimeout(()=>{btn.textContent='複製公式';btn.classList.remove('copied');},1600);
+}
+
+// ════════════════════════════════════════
+// CFOP
+// ════════════════════════════════════════
+const F2L_DATA=[
+  {n:'右插（基本）',   alg:"U R U' R'",          desc:'F2L配對完成，從右前方插槽'},
+  {n:'左插（基本）',   alg:"U' F' U F",           desc:'F2L配對完成，從左前方插槽'},
+  {n:'角塊白色朝上',   alg:"R U2 R' U' R U R'",   desc:'白色面在頂層朝上時使用'},
+  {n:'分離重配',       alg:"R U R' U' R U R'",    desc:'配對已分離但角塊在槽時'},
+  {n:'邊在頂角在槽',   alg:"U R U2 R' U R U' R'", desc:'邊塊在頂層而角塊在槽內'},
+  {n:'兩者都在槽',     alg:"R U' R' U R U' R'",   desc:'角塊邊塊都在槽但方向錯'},
+];
+const OLL_DATA=[
+  {id:'OLL 1',n:'十字（0黃）',  alg:"F R U R' U' F'",                       desc:'頂面完全沒有黃色'},
+  {id:'OLL 2',n:'一字線',       alg:"F R U R' U' F' f R U R' U' f'",         desc:'頂面一條線（前後方向）'},
+  {id:'OLL 3',n:'L形',          alg:"f R U R' U' f'",                         desc:'頂面L形（右後方角落）'},
+  {id:'OLL 4',n:'小魚（Sune）', alg:"R U R' U R U2 R'",                      desc:'最常用的OLL之一'},
+  {id:'OLL 5',n:'反小魚',       alg:"R U2 R' U' R U' R'",                    desc:'Anti-Sune'},
+];
+const PLL_DATA=[
+  {id:'U(a)',n:'U置換（順）',  cat:'邊塊', alg:"R U' R U R U R U' R' U' R2"},
+  {id:'U(b)',n:'U置換（逆）',  cat:'邊塊', alg:"R2 U R U R' U' R' U' R' U R'"},
+  {id:'H',   n:'H置換',        cat:'邊塊', alg:"M2 U M2 U2 M2 U M2"},
+  {id:'Z',   n:'Z置換',        cat:'邊塊', alg:"M2 U M2 U M' U2 M2 U2 M'"},
+  {id:'T',   n:'T置換',        cat:'混合', alg:"R U R' U' R' F R2 U' R' U' R U R' F'"},
+  {id:'Y',   n:'Y置換',        cat:'混合', alg:"F R U' R' U' R U R' F' R U R' U' R' F R F'"},
+  {id:'A(a)',n:'A置換（順）',  cat:'角塊', alg:"x R' U R' D2 R U' R' D2 R2"},
+  {id:'A(b)',n:'A置換（逆）',  cat:'角塊', alg:"x R2 D2 R U R' D2 R U' R"},
+];
+
+let cfopCopied=null;
+function switchSub(sub){
+  document.querySelectorAll('.sub-btn').forEach((b,i)=>{
+    b.classList.toggle('active',['f2l','oll','pll'][i]===sub);
+  });
+  renderCFOP(sub);
+}
+function renderCFOP(sub){
+  let data, info;
+  if(sub==='f2l'){data=F2L_DATA;info='F2L（First Two Layers）同時還原底層角塊和中層邊塊。直覺法比新手法快很多，需要多加練習觀察。';}
+  else if(sub==='oll'){data=OLL_DATA;info='OLL（Orientation of Last Layer）讓頂層所有黃色面朝上。完整有57種情況，這裡先學最基礎的幾個。';}
+  else{data=PLL_DATA;info='PLL（Permutation of Last Layer）頂層已全黃後，置換角塊和邊塊到正確位置。共21種情況。';}
+  const el=document.getElementById('cfop-content');
+  el.innerHTML=`<div class="info-box">${info}</div>`+data.map((item,i)=>{
+    const bid=`cfop-${sub}-${i}`;
+    const badges=(item.id?`<span style="color:#1a1a44;font-size:0.69rem;font-family:'JetBrains Mono',monospace;">${item.id}</span>`:'')+
+                 (item.cat?`<span class="badge" style="background:#4455ee18;border:1px solid #4455ee44;color:#8899ff;">${item.cat}</span>`:'');
+    return `<div class="alg-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:5px;">
+        <span class="alg-name">${item.n}</span>
+        <div style="display:flex;gap:5px;align-items:center;">${badges}</div>
+      </div>
+      ${item.desc?`<div class="alg-desc">${item.desc}</div>`:''}
+      ${algHTML(item.alg)}
+      <div class="btn-row">
+        <button class="btn-sm primary" onclick="playAlg('${item.alg.replace(/'/g,"\\'")}')">▶ 播放</button>
+        <button class="btn-sm secondary" id="${bid}" onclick="copyCFOP('${item.alg.replace(/'/g,"\\'")}','${bid}')">複製</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function copyCFOP(alg,id){
+  navigator.clipboard?.writeText(alg);
+  const btn=document.getElementById(id);
+  const orig=btn.textContent;
+  btn.textContent='✓ 已複製';
+  setTimeout(()=>btn.textContent=orig,1500);
+}
+
+// ════════════════════════════════════════
+// TIMER
+// ════════════════════════════════════════
+let timerMs=0, timerRunning=false, timerInterval=null, timerT0=0;
+let bestTime=null, timeHistory=[];
+
+function fmtTime(ms){
+  const m=Math.floor(ms/60000), s=Math.floor((ms%60000)/1000), c=Math.floor((ms%1000)/10);
+  return m>0?`${m}:${String(s).padStart(2,'0')}.${String(c).padStart(2,'0')}`:`${s}.${String(c).padStart(2,'0')}`;
+}
+function timerAction(){
+  if(!timerRunning){
+    timerT0=Date.now()-timerMs;
+    timerInterval=setInterval(()=>{timerMs=Date.now()-timerT0;updateTimerDisplay();},10);
+    timerRunning=true;
+    const btn=document.getElementById('timer-start-btn');
+    btn.textContent='⏹ 停止'; btn.className='timer-stop';
+    document.getElementById('timer-display').classList.add('running');
+    document.getElementById('timer-num').classList.add('running');
+  } else {
+    clearInterval(timerInterval); timerRunning=false;
+    const t=timerMs;
+    timeHistory.unshift(t); if(timeHistory.length>12) timeHistory.pop();
+    if(bestTime===null||t<bestTime) bestTime=t;
+    updateTimerDisplay(); renderHistory();
+    const btn=document.getElementById('timer-start-btn');
+    btn.textContent='▶ 開始'; btn.className='timer-start';
+    document.getElementById('timer-display').classList.remove('running');
+    document.getElementById('timer-num').classList.remove('running');
+  }
+}
+function timerReset(){
+  clearInterval(timerInterval); timerRunning=false; timerMs=0;
+  const btn=document.getElementById('timer-start-btn');
+  btn.textContent='▶ 開始'; btn.className='timer-start';
+  document.getElementById('timer-num').textContent='0.00';
+  document.getElementById('timer-display').classList.remove('running');
+  document.getElementById('timer-num').classList.remove('running');
+}
+function updateTimerDisplay(){ document.getElementById('timer-num').textContent=fmtTime(timerMs); }
+function renderHistory(){
+  if(bestTime!==null){
+    document.getElementById('best-box').style.display='block';
+    document.getElementById('best-num').textContent=fmtTime(bestTime);
+  }
+  if(!timeHistory.length) return;
+  document.getElementById('history-box').style.display='block';
+  document.getElementById('history-list').innerHTML=timeHistory.map((t,i)=>
+    `<div class="history-row${t===bestTime?' best':''}">
+      <span style="font-size:0.83rem;">#${i+1} ${t===bestTime?'👑':''}</span>
+      <span style="font-family:'JetBrains Mono',monospace;font-weight:700;font-size:1.03rem;">${fmtTime(t)}</span>
+    </div>`).join('');
+  if(timeHistory.length>=3){
+    const n=Math.min(timeHistory.length,5);
+    const avg=timeHistory.slice(0,n).reduce((a,b)=>a+b,0)/n;
+    document.getElementById('history-avg').style.display='flex';
+    document.getElementById('avg-label').textContent=`平均（最近 ${n} 次）`;
+    document.getElementById('avg-num').textContent=fmtTime(avg);
+  }
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  initCube();
+  initNotationDemos();
+  renderStep();
+});
+</script>
+</body>
+</html>

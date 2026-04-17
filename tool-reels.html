@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reels腳本生成｜潔西卡大藥局</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--cream:#faf6f0;--cream2:#f5ede0;--orange:#e8631a;--orange-pale:#fde8d8;
+      --brown:#3d2010;--text-mid:#6b3d20;--text-light:#a06840;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--cream);color:var(--brown);overflow-x:hidden;padding-bottom:80px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(250,246,240,0.97);
+    backdrop-filter:blur(10px);border-bottom:1px solid rgba(232,99,26,0.15);
+    padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.nav-back{font-size:14px;color:var(--text-mid);text-decoration:none;}
+.nav-title{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:700;color:var(--brown);}
+.wrap{padding:80px 24px 24px;max-width:600px;margin:0 auto;}
+.page-icon{font-size:56px;text-align:center;padding:20px 0 12px;}
+.page-title{font-family:'Noto Serif TC',serif;font-size:clamp(22px,5vw,32px);font-weight:900;
+            color:var(--brown);text-align:center;line-height:1.4;margin-bottom:8px;}
+.page-title span{color:var(--orange);}
+.page-desc{font-size:14px;color:var(--text-mid);text-align:center;line-height:1.9;margin-bottom:28px;}
+/* TOPIC CHIPS */
+.topic-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;}
+.chip{padding:8px 14px;border-radius:100px;border:1.5px solid rgba(61,32,16,0.15);
+      background:#fff;font-size:13px;color:var(--text-mid);cursor:pointer;transition:all 0.15s;}
+.chip:hover,.chip.sel{border-color:var(--orange);background:var(--orange-pale);color:var(--orange);font-weight:700;}
+/* INPUT */
+.inp{width:100%;border:1.5px solid rgba(61,32,16,0.12);border-radius:8px;
+     padding:12px 16px;font-size:15px;font-family:'Noto Sans TC',sans-serif;
+     color:var(--brown);background:#fff;outline:none;transition:border-color 0.2s;margin-bottom:12px;}
+.inp:focus{border-color:var(--orange);}
+/* PLATFORM SELECT */
+.platform-row{display:flex;gap:8px;margin-bottom:12px;}
+.plat-btn{flex:1;padding:10px 8px;border:1.5px solid rgba(61,32,16,0.12);border-radius:6px;
+          background:#fff;font-size:13px;color:var(--text-mid);cursor:pointer;text-align:center;
+          transition:all 0.15s;font-family:'Noto Sans TC',sans-serif;}
+.plat-btn.sel{border-color:var(--orange);background:var(--orange);color:#fff;font-weight:700;}
+/* LABEL */
+.lbl{font-size:13px;font-weight:700;color:var(--brown);letter-spacing:1px;margin-bottom:8px;display:block;}
+/* GEN BUTTON */
+.gen-btn{width:100%;background:var(--brown);color:#fff;border:none;border-radius:6px;
+         padding:16px;font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;
+         font-family:'Noto Sans TC',sans-serif;box-shadow:0 3px 12px rgba(61,32,16,0.2);
+         transition:all 0.2s;margin-top:4px;}
+.gen-btn:hover{background:#5a2e15;}
+/* RESULT */
+.result-box{background:#fff;border-radius:8px;border:1px solid rgba(61,32,16,0.08);
+            overflow:hidden;margin-bottom:14px;}
+.result-head{background:var(--brown);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;}
+.result-head-title{color:#fff;font-size:13px;font-weight:700;letter-spacing:1px;}
+.copy-btn{background:var(--orange);color:#fff;border:none;border-radius:4px;padding:6px 14px;
+          font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;}
+.result-content{padding:16px 18px;font-size:14px;color:var(--text-mid);line-height:1.9;white-space:pre-wrap;}
+/* SCRIPT SECTIONS */
+.script-section{margin-bottom:8px;}
+.script-sec-lbl{font-size:11px;font-weight:700;color:var(--orange);letter-spacing:2px;margin-bottom:4px;}
+.script-sec-content{font-size:14px;color:var(--text-mid);line-height:1.9;}
+.timing-badge{display:inline-block;background:rgba(232,99,26,0.1);color:var(--orange);
+              font-size:11px;padding:2px 8px;border-radius:4px;margin-bottom:4px;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="tools.html" class="nav-back">‹ 工具</a>
+  <div class="nav-title">Reels 腳本生成</div>
+</nav>
+
+<div class="wrap">
+  <div class="page-icon">🎬</div>
+  <div class="page-title">爆款腳本<span>一鍵生成</span></div>
+  <p class="page-desc">輸入健康主題，自動生成<br>IG / FB / YT 三平台腳本與文案</p>
+
+  <div id="input-area">
+    <span class="lbl">選擇主題（或自己輸入）</span>
+    <div class="topic-chips">
+      <span class="chip" onclick="setTopic(this,'自律神經失調症狀')">自律神經失調症狀</span>
+      <span class="chip" onclick="setTopic(this,'補品陷阱（人參瑪卡）')">補品陷阱</span>
+      <span class="chip" onclick="setTopic(this,'4秒吐氣法教學')">4秒吐氣法</span>
+      <span class="chip" onclick="setTopic(this,'免費HRV健測介紹')">免費HRV健測</span>
+      <span class="chip" onclick="setTopic(this,'居家自律神經自測')">居家自測</span>
+      <span class="chip" onclick="setTopic(this,'林藥師媽祖故事')">林藥師故事</span>
+    </div>
+    <input class="inp" id="topic-input" type="text" placeholder="輸入影片主題，例：自律神經失調如何改善睡眠">
+    <span class="lbl" style="margin-top:12px;">平台</span>
+    <div class="platform-row">
+      <button class="plat-btn sel" onclick="setPlatform(this,'IG')">📱 IG Reels</button>
+      <button class="plat-btn" onclick="setPlatform(this,'FB')">📘 Facebook</button>
+      <button class="plat-btn" onclick="setPlatform(this,'YT')">▶️ YouTube</button>
+    </div>
+    <span class="lbl">影片時長</span>
+    <div class="platform-row">
+      <button class="plat-btn sel" onclick="setDur(this,'30秒')">30秒</button>
+      <button class="plat-btn" onclick="setDur(this,'45秒')">45秒</button>
+      <button class="plat-btn" onclick="setDur(this,'60秒')">60秒</button>
+    </div>
+    <button class="gen-btn" onclick="generateScript()">🎬 生成腳本</button>
+  </div>
+
+  <div id="result-area" style="display:none;">
+    <!-- 腳本 -->
+    <div class="result-box">
+      <div class="result-head">
+        <div class="result-head-title">影片腳本</div>
+        <button class="copy-btn" onclick="copyText('script-output')">複製</button>
+      </div>
+      <div class="result-content" id="script-output"></div>
+    </div>
+    <!-- 文案 -->
+    <div class="result-box">
+      <div class="result-head">
+        <div class="result-head-title">貼文文案</div>
+        <button class="copy-btn" onclick="copyText('caption-output')">複製</button>
+      </div>
+      <div class="result-content" id="caption-output"></div>
+    </div>
+    <!-- Hashtag -->
+    <div class="result-box">
+      <div class="result-head">
+        <div class="result-head-title">Hashtag</div>
+        <button class="copy-btn" onclick="copyText('hashtag-output')">複製</button>
+      </div>
+      <div class="result-content" id="hashtag-output"></div>
+    </div>
+    <button style="width:100%;background:transparent;color:var(--text-mid);border:1.5px solid rgba(61,32,16,0.15);border-radius:6px;padding:14px;font-size:14px;cursor:pointer;margin-top:4px;font-family:'Noto Sans TC',sans-serif;" onclick="resetGen()">重新生成</button>
+  </div>
+</div>
+
+<script>
+let selPlatform = 'IG', selDur = '30秒';
+
+function setTopic(el, val) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('topic-input').value = val;
+}
+function setPlatform(el, val) {
+  selPlatform = val;
+  document.querySelectorAll('.plat-btn').forEach((b,i) => { if(i<3) b.classList.remove('sel'); });
+  el.classList.add('sel');
+}
+function setDur(el, val) {
+  selDur = val;
+  document.querySelectorAll('.plat-btn').forEach((b,i) => { if(i>=3) b.classList.remove('sel'); });
+  el.classList.add('sel');
+}
+
+const templates = {
+  '自律神經失調症狀': {
+    hook: '醫生說你沒事？😤 但你明明快撐不住！',
+    point1: '心電圖正常・血液正常・胃鏡正常\n但你就是累到撐不住——這不是你在裝',
+    point2: '台灣70%的人不知道自己有自律神經失調\n高血壓・嚴重失眠・極度疲倦・莫名焦慮\n全是自律神經在求救！',
+    cta: '想知道你的自律神經幾分？\n潔西卡大藥局 林威宏藥師 免費幫你測！\n個人主頁連結立即預約',
+    caption_core: '去醫院檢查都正常，但你就是累到撐不住——\n這不是你的問題，是自律神經失調在作怪！\n\n台灣有高達70%的人正深受其苦，卻不知道根本原因在哪。\n\n林藥師免費幫你做HRV自律神經檢測，3分鐘看清楚你的神經狀態。\n\n因為答應了媽祖，所以始終完全免費🙏'
+  },
+  '補品陷阱（人參瑪卡）': {
+    hook: '越補越累？😱 你可能犯了這個大錯！',
+    point1: '失調的身體已經在打一場大仗\n交感神經長期過載、精疲力盡',
+    point2: '此時吃補氣品（人參、瑪卡、刺五加）\n= 提著汽油去救火 🔥\n只會讓你更崩潰！',
+    cta: '停止強迫提神，讓身體真正休息\n來潔西卡大藥局，林藥師免費幫你找根本原因\n個人主頁預約',
+    caption_core: '很多人越補越累，卻不知道為什麼。\n\n失調的身體吃補氣品，就像提著汽油去救火。\n\n❌ 人參   ❌ 瑪卡   ❌ 刺五加\n\n林藥師告訴你：停止強迫提神，先找到根本原因。\n免費HRV檢測，3分鐘告訴你真相。'
+  },
+  '4秒吐氣法教學': {
+    hook: '3秒啟動副交感神經！現在跟我做 🎮',
+    point1: '把所有注意力放在「吐氣」\n用嘴巴慢慢吐氣……4、3、2、1',
+    point2: '感覺心跳慢下來了嗎？\n這就是副交感神經被手動啟動的感覺！\n✅ 緩解心悸 ✅ 改善焦慮 ✅ 幫助入眠',
+    cta: '想知道你的副交感神經健不健康？\n個人主頁免費預約HRV檢測',
+    caption_core: '這是最快讓心跳慢下來的方法：\n把注意力放在吐氣，用嘴巴慢慢吐……\n\n4、3、2、1\n\n感覺到心跳放慢了嗎？這就是副交感神經開關被啟動的感覺！\n\n這個方法可以隨時隨地用，完全不需要任何工具。'
+  }
+};
+
+function generateScript() {
+  const topic = document.getElementById('topic-input').value.trim();
+  if (!topic) { alert('請輸入或選擇影片主題'); return; }
+
+  const tpl = templates[topic] || templates['自律神經失調症狀'];
+  const dur = selDur;
+  const plat = selPlatform;
+
+  let timings;
+  if (dur === '30秒') timings = ['0-3秒','3-12秒','12-22秒','22-30秒'];
+  else if (dur === '45秒') timings = ['0-5秒','5-18秒','18-35秒','35-45秒'];
+  else timings = ['0-5秒','5-22秒','22-48秒','48-60秒'];
+
+  const script = `【${plat} · ${dur} · 知識科普型】\n\n` +
+    `▌ ${timings[0]} HOOK（開場鉤子）\n${tpl.hook}\n\n` +
+    `▌ ${timings[1]} 知識點一\n${tpl.point1}\n\n` +
+    `▌ ${timings[2]} 知識點二\n${tpl.point2}\n\n` +
+    `▌ ${timings[3]} CTA（行動呼籲）\n${tpl.cta}`;
+
+  const caption = tpl.caption_core + '\n\n📍 潔西卡大藥局｜林威宏藥師\n台中市北屯區崇德路二段306號\n📞 0958-265-785\n🔗 個人主頁連結預約';
+
+  const hashtag = '#自律神經失調 #失眠 #心悸 #莫名疲倦 #潔西卡大藥局 #林威宏藥師 #自律神經 #免費健檢 #台中藥局 #藥師說 #健康知識 #心跳加速 #副交感神經 #自律神經檢測';
+
+  document.getElementById('input-area').style.display = 'none';
+  document.getElementById('result-area').style.display = 'block';
+  document.getElementById('script-output').textContent = script;
+  document.getElementById('caption-output').textContent = caption;
+  document.getElementById('hashtag-output').textContent = hashtag;
+}
+
+function copyText(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = '已複製！';
+    setTimeout(() => { btn.textContent = '複製'; }, 2000);
+  });
+}
+
+function resetGen() {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  document.getElementById('topic-input').value = '';
+  document.getElementById('result-area').style.display = 'none';
+  document.getElementById('input-area').style.display = 'block';
+}
+</script>
+</body>
+</html>

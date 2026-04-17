@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自律神經知識庫｜潔西卡大藥局 林威宏藥師</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--cream:#faf6f0;--cream2:#f5ede0;--orange:#e8631a;--orange-light:#f0885a;
+      --orange-pale:#fde8d8;--brown:#3d2010;--brown-mid:#7a4825;--brown-light:#b07850;
+      --text:#2e1a08;--text-mid:#6b3d20;--text-light:#a06840;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+.container{max-width:720px;margin:0 auto;}
+.tag{display:inline-block;font-size:11px;letter-spacing:4px;color:var(--orange);border-bottom:1.5px solid var(--orange);padding-bottom:3px;margin-bottom:20px;text-transform:uppercase;}
+nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(250,246,240,0.97);backdrop-filter:blur(10px);border-bottom:1px solid rgba(232,99,26,0.15);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(61,32,16,0.06);}
+.nav-logo{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:900;color:var(--brown);text-decoration:none;letter-spacing:1px;}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{padding:7px 11px;font-size:12px;color:var(--text-mid);text-decoration:none;border-radius:4px;}
+.nav-links a.active{color:var(--orange);font-weight:700;background:var(--orange-pale);}
+.nav-links a:hover:not(.active){background:var(--cream2);}
+.nav-line{margin-left:6px;padding:8px 14px;background:#06C755;color:#fff;font-size:12px;font-weight:700;text-decoration:none;border-radius:4px;letter-spacing:1px;}
+/* CAT TABS */
+.cat-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+.cat-btn{padding:8px 18px;border-radius:100px;border:1.5px solid rgba(61,32,16,0.12);
+         background:transparent;color:var(--text-mid);font-size:13px;cursor:pointer;
+         font-family:'Noto Sans TC',sans-serif;transition:all 0.15s;}
+.cat-btn.active{background:var(--orange);color:#fff;border-color:var(--orange);font-weight:700;}
+.cat-btn:hover:not(.active){background:var(--cream2);}
+/* ARTICLE CARDS */
+.article-card{background:#fff;border-radius:6px;overflow:hidden;margin-bottom:16px;
+              border:1px solid rgba(61,32,16,0.08);transition:box-shadow 0.2s;cursor:pointer;}
+.article-card:hover{box-shadow:0 4px 20px rgba(61,32,16,0.1);}
+.article-cat-bar{height:4px;}
+.article-body{padding:22px 24px;}
+.article-cat{font-size:11px;color:var(--orange);font-weight:700;letter-spacing:2px;margin-bottom:8px;}
+.article-title{font-family:'Noto Serif TC',serif;font-size:18px;font-weight:900;
+               color:var(--brown);line-height:1.4;margin-bottom:8px;}
+.article-desc{font-size:13px;color:var(--text-light);line-height:1.75;margin-bottom:16px;}
+.article-footer{display:flex;align-items:center;justify-content:space-between;}
+.article-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.art-tag{background:var(--orange-pale);color:var(--orange);font-size:11px;padding:3px 10px;border-radius:100px;}
+.read-more{font-size:13px;font-weight:700;color:var(--orange);text-decoration:none;white-space:nowrap;}
+/* EXPANDED ARTICLE */
+.article-full{display:none;padding:0 24px 24px;}
+.article-full.open{display:block;}
+.article-content{font-size:14px;color:var(--text-mid);line-height:2;border-top:1px solid rgba(61,32,16,0.06);padding-top:20px;}
+.article-content h3{font-family:'Noto Serif TC',serif;font-size:17px;font-weight:700;
+                    color:var(--brown);margin:24px 0 10px;}
+.article-content h3:first-child{margin-top:0;}
+.article-content p{margin-bottom:14px;}
+.article-content strong{color:var(--brown);}
+.article-content .highlight{background:var(--orange-pale);border-left:3px solid var(--orange);
+                             border-radius:0 4px 4px 0;padding:12px 16px;margin:16px 0;font-size:13px;}
+.article-content ul{padding-left:18px;margin-bottom:14px;}
+.article-content ul li{margin-bottom:6px;}
+.article-cta{background:var(--orange);color:#fff;border-radius:4px;padding:14px 20px;
+             text-align:center;margin-top:20px;text-decoration:none;display:block;
+             font-size:14px;font-weight:700;letter-spacing:2px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">潔西卡大藥局</a>
+  <div class="nav-links">
+    <a href="index.html">首頁</a>
+    <a href="products.html">保健品</a>
+    <a href="course.html">課程</a>
+    <a href="story.html">故事</a>
+    <a href="knowledge.html" class="active">知識庫</a>
+    <a href="https://lin.ee/rpc44QB" target="_blank" class="nav-line">LINE</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="background:var(--brown);padding:120px 24px 60px;text-align:center;">
+  <div class="container">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(232,99,26,0.2);
+                border:1px solid rgba(232,99,26,0.3);color:var(--orange-light);font-size:12px;
+                letter-spacing:3px;padding:7px 20px;margin-bottom:28px;border-radius:100px;">✦ KNOWLEDGE BASE</div>
+    <h1 style="font-family:'Noto Serif TC',serif;font-size:clamp(30px,6vw,52px);font-weight:900;
+               color:#fff;line-height:1.3;margin-bottom:16px;">
+      自律神經<span style="color:var(--orange-light);">知識庫</span>
+    </h1>
+    <p style="font-size:15px;color:rgba(255,255,255,0.7);line-height:1.9;max-width:500px;margin:0 auto;">
+      林藥師親身確診、親身康復後的真實知識整理<br>不賣藥、不推銷，只說你真正需要知道的
+    </p>
+  </div>
+</section>
+
+<!-- 知識文章 -->
+<section style="padding:60px 24px;background:var(--cream);">
+  <div class="container">
+    <div class="tag">ALL ARTICLES</div>
+
+    <!-- 分類 Tab -->
+    <div class="cat-tabs">
+      <button class="cat-btn active" onclick="filterArticles('all',this)">全部</button>
+      <button class="cat-btn" onclick="filterArticles('basic',this)">基礎認識</button>
+      <button class="cat-btn" onclick="filterArticles('myth',this)">迷思破解</button>
+      <button class="cat-btn" onclick="filterArticles('method',this)">實用方法</button>
+      <button class="cat-btn" onclick="filterArticles('food',this)">飲食保健</button>
+    </div>
+
+    <!-- 文章1 -->
+    <div class="article-card" data-cat="basic">
+      <div class="article-cat-bar" style="background:var(--orange);"></div>
+      <div class="article-body">
+        <div class="article-cat">基礎認識</div>
+        <div class="article-title">什麼是自律神經失調？為什麼去醫院都說正常？</div>
+        <div class="article-desc">台灣估計超過200萬人有自律神經失調，但大多數人不知道。心電圖正常、血液正常——但你就是哪裡不對勁。</div>
+        <div class="article-footer">
+          <div class="article-tags"><span class="art-tag">自律神經</span><span class="art-tag">基礎</span></div>
+          <span class="read-more" onclick="toggleArticle('art1',this)">展開閱讀 ▾</span>
+        </div>
+      </div>
+      <div class="article-full" id="art1">
+        <div class="article-content">
+          <h3>自律神經是什麼？</h3>
+          <p>自律神經控制你的心跳、消化、呼吸、睡眠、體溫調節、情緒——所有你「不需要思考就自動運作」的身體功能。它分為兩大系統：</p>
+          <ul>
+            <li><strong>交感神經（油門）</strong>：戰鬥、逃跑、應對壓力。讓心跳加速、血壓上升、肌肉緊繃。</li>
+            <li><strong>副交感神經（煞車）</strong>：休息、消化、修復。讓心跳放慢、腸胃蠕動、能量儲存。</li>
+          </ul>
+          <h3>什麼叫「失調」？</h3>
+          <p>正常情況下，交感和副交感輪流主導。壓力來臨時交感啟動，休息時副交感接管。失調，就是這個切換機制出了問題。</p>
+          <p>最常見的狀況是：<strong>交感神經長期過度活躍，副交感神經無法有效啟動。</strong></p>
+          <div class="highlight">簡單說：油門卡死，同時煞車失靈。身體一直在「戰鬥模式」，卻找不到要對抗的敵人。</div>
+          <h3>為什麼醫院檢查說「正常」？</h3>
+          <p>一般健康檢查看的是器官有沒有病變——心臟有沒有結構問題、血液有沒有異常數值。但自律神經失調是<strong>功能性問題</strong>，不是器官壞掉，而是神經系統的調節能力出了問題。</p>
+          <p>HRV（心律變異性）檢測，才能評估你的自律神經功能狀態，在症狀發生之初就發現問題。</p>
+          <a href="https://lin.ee/rpc44QB" target="_blank" class="article-cta">LINE 預約免費HRV檢測</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 文章2 -->
+    <div class="article-card" data-cat="myth">
+      <div class="article-cat-bar" style="background:#7a4825;"></div>
+      <div class="article-body">
+        <div class="article-cat">迷思破解</div>
+        <div class="article-title">為什麼越補越累？人參瑪卡讓你失調更嚴重</div>
+        <div class="article-desc">失調的身體吃補氣品，就像提著汽油去救火。林藥師告訴你為什麼你選的補品反而讓你更崩潰。</div>
+        <div class="article-footer">
+          <div class="article-tags"><span class="art-tag">補品</span><span class="art-tag">迷思</span><span class="art-tag">人參</span></div>
+          <span class="read-more" onclick="toggleArticle('art2',this)">展開閱讀 ▾</span>
+        </div>
+      </div>
+      <div class="article-full" id="art2">
+        <div class="article-content">
+          <h3>失調者的身體是什麼狀態？</h3>
+          <p>自律神經失調的人，交感神經長期過度活躍，身體一直處於「備戰模式」，已經打了一場看不見的消耗戰。能量儲備低落，修復系統關閉。</p>
+          <h3>為什麼補氣品有害？</h3>
+          <p>人參、瑪卡、刺五加、紅景天——這些都是「補氣」的補品，作用是<strong>刺激交感神經、提升腎上腺素、增加能量輸出</strong>。</p>
+          <p>對一個健康的人，這有提神效果。但對自律神經失調者，交感神經已經過載，再補氣等於：</p>
+          <div class="highlight">提著一桶汽油去救火。火不會熄，只會更大。</div>
+          <h3>失調期間應該避免什麼？</h3>
+          <ul>
+            <li>❌ 人參（各種品種）</li>
+            <li>❌ 瑪卡</li>
+            <li>❌ 刺五加</li>
+            <li>❌ 紅景天</li>
+            <li>❌ 咖啡因（大量）</li>
+          </ul>
+          <h3>那我該怎麼辦？</h3>
+          <p>停止強迫提神，開始強迫身體休息。讓副交感神經有機會工作。真正有幫助的是：QH（還原型輔酶Q10）、鎂、維生素D3，以及調整生活節奏。</p>
+          <p>但在補充前，建議先做HRV檢測，林藥師根據你的數據，告訴你真正需要補什麼。</p>
+          <a href="https://lin.ee/rpc44QB" target="_blank" class="article-cta">LINE 諮詢林藥師</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 文章3 -->
+    <div class="article-card" data-cat="method">
+      <div class="article-cat-bar" style="background:#2d6a4f;"></div>
+      <div class="article-body">
+        <div class="article-cat">實用方法</div>
+        <div class="article-title">4秒吐氣法：3秒啟動副交感神經的物理開關</div>
+        <div class="article-desc">不需要任何工具，隨時隨地可做。林藥師教你用呼吸直接控制神經系統，立刻緩解心悸和焦慮。</div>
+        <div class="article-footer">
+          <div class="article-tags"><span class="art-tag">呼吸</span><span class="art-tag">副交感</span><span class="art-tag">立即可用</span></div>
+          <span class="read-more" onclick="toggleArticle('art3',this)">展開閱讀 ▾</span>
+        </div>
+      </div>
+      <div class="article-full" id="art3">
+        <div class="article-content">
+          <h3>為什麼吐氣可以放慢心跳？</h3>
+          <p>心跳速率受迷走神經控制，而迷走神經是副交感神經的主要通路。<strong>吐氣時，迷走神經活性增加，心跳自然放慢</strong>。這是純粹的生理機制，不是心理暗示。</p>
+          <h3>4秒吐氣法怎麼做？</h3>
+          <ul>
+            <li><strong>步驟一</strong>：把所有注意力放在「吐氣」這個動作上</li>
+            <li><strong>步驟二</strong>：用嘴巴緩緩吐氣，計數4秒（4、3、2、1）</li>
+            <li><strong>步驟三</strong>：吸氣不需要刻意控制，讓它自然發生</li>
+            <li><strong>步驟四</strong>：重複3～5次</li>
+          </ul>
+          <div class="highlight">重點：是「吐氣慢」，不是「深呼吸」。過度深呼吸反而會換氣過度，加重心悸。</div>
+          <h3>什麼時候用？</h3>
+          <ul>
+            <li>心悸發作、心跳突然加速</li>
+            <li>焦慮、緊張、壓力瞬間升高</li>
+            <li>睡前無法放鬆、腦子停不下來</li>
+            <li>起床前感覺胸悶緊繃</li>
+          </ul>
+          <a href="https://lin.ee/rpc44QB" target="_blank" class="article-cta">想了解更多・LINE 林藥師</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 文章4 -->
+    <div class="article-card" data-cat="food">
+      <div class="article-cat-bar" style="background:#b5632a;"></div>
+      <div class="article-body">
+        <div class="article-cat">飲食保健</div>
+        <div class="article-title">自律神經失調者的飲食原則：這3個「養生」習慣反而害了你</div>
+        <div class="article-desc">早餐最重要？糙米比白米好？多吃生菜？林藥師告訴你哪些「健康」觀念讓自律神經失調者更糟。</div>
+        <div class="article-footer">
+          <div class="article-tags"><span class="art-tag">飲食</span><span class="art-tag">迷思</span><span class="art-tag">早餐</span></div>
+          <span class="read-more" onclick="toggleArticle('art4',this)">展開閱讀 ▾</span>
+        </div>
+      </div>
+      <div class="article-full" id="art4">
+        <div class="article-content">
+          <h3>迷思一：早餐最重要，要吃得像國王</h3>
+          <p>早晨是人體血糖最高的時候，胰島素敏感性最低。對失調者來說，早上強迫進食反而增加腸胃負擔，觸發交感神經活化。</p>
+          <div class="highlight">正確觀念：不餓就別吃。讓身體在上午維持輕盈狀態，有助於副交感神經的早晨啟動。</div>
+          <h3>迷思二：糙米比白米健康</h3>
+          <p>糙米的粗纖維對一般人有益，但自律神經失調者腸胃往往已處於緊繃狀態。大量粗纖維會加重消化負擔，壓迫腸胃，甚至引發胃食道逆流。</p>
+          <div class="highlight">正確觀念：改吃白米飯，減少生菜和粗纖維攝取量，讓腸胃輕鬆工作。</div>
+          <h3>迷思三：睡前不能吃東西</h3>
+          <p>進食本身會刺激副交感神經（消化是副交感的工作）。睡前少量進食，反而有助於入眠和生長激素分泌。</p>
+          <div class="highlight">正確觀念：吃完想睡是正常的，這是副交感神經在工作的表現。</div>
+          <h3>那我應該吃什麼？</h3>
+          <p>重點是減少讓交感神經興奮的食物（咖啡因、辛辣、精緻糖）。真正需要的營養素（QH、鎂、D3），先來做HRV檢測，讓數據告訴你。</p>
+          <a href="https://lin.ee/rpc44QB" target="_blank" class="article-cta">LINE 預約免費健測 + 飲食諮詢</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 文章5 -->
+    <div class="article-card" data-cat="method">
+      <div class="article-cat-bar" style="background:var(--orange);"></div>
+      <div class="article-body">
+        <div class="article-cat">實用方法</div>
+        <div class="article-title">居家自測：30秒判斷你的自律神經是否失調</div>
+        <div class="article-desc">不需要儀器，兩個簡單測試，讓你在家初步評估自己的自律神經狀態。</div>
+        <div class="article-footer">
+          <div class="article-tags"><span class="art-tag">居家測試</span><span class="art-tag">心跳</span><span class="art-tag">自測</span></div>
+          <span class="read-more" onclick="toggleArticle('art5',this)">展開閱讀 ▾</span>
+        </div>
+      </div>
+      <div class="article-full" id="art5">
+        <div class="article-content">
+          <h3>測試一：呼吸心跳測試（RSA測試）</h3>
+          <p>正常情況下，吸氣時心跳應微微加速，吐氣時心跳應微微放慢。這個現象叫做「呼吸性竇性心律不整」，是<strong>自律神經健康的表現</strong>。</p>
+          <ul>
+            <li>把手放在胸口，感覺心跳</li>
+            <li>深吸氣 → 心跳應該稍微加快</li>
+            <li>慢慢吐氣 → 心跳應該稍微放慢</li>
+          </ul>
+          <div class="highlight">⚠️ 如果無論怎麼呼吸，心跳都維持同樣速率，代表副交感神經反應遲鈍，HRV值可能偏低。</div>
+          <h3>測試二：姿態血壓測試</h3>
+          <ul>
+            <li>蹲下或坐著靜止 30 秒</li>
+            <li>快速站起來</li>
+          </ul>
+          <p><strong>正常</strong>：短暫輕微頭暈，3秒內恢復</p>
+          <p><strong>警訊</strong>：嚴重頭暈超過5秒、視線模糊、心跳突然飆快 → 可能是姿態性低血壓，自律神經調節出問題</p>
+          <h3>這兩個測試有多準確？</h3>
+          <p>居家測試只能提供初步參考，不能替代HRV儀器的精準數值。但如果測試結果異常，強烈建議來做一次完整的HRV + APG雙重檢測。</p>
+          <a href="https://lin.ee/rpc44QB" target="_blank" class="article-cta">LINE 預約免費HRV精準檢測</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 底部CTA -->
+<section style="background:var(--orange);text-align:center;padding:70px 24px;">
+  <div class="container">
+    <h2 style="font-family:'Noto Serif TC',serif;font-size:clamp(26px,5vw,40px);
+               font-weight:900;color:#fff;margin-bottom:12px;">
+      看完知識庫，下一步是什麼？
+    </h2>
+    <p style="color:rgba(255,255,255,0.85);font-size:15px;margin-bottom:32px;line-height:1.9;">
+      用數據確認你的自律神經狀態<br>林藥師免費幫你做 HRV + APG 雙重分析
+    </p>
+    <a href="https://lin.ee/rpc44QB" target="_blank"
+      style="display:inline-block;background:#fff;color:var(--orange);padding:16px 40px;
+             border-radius:2px;font-size:16px;font-weight:900;text-decoration:none;
+             letter-spacing:2px;box-shadow:0 4px 16px rgba(0,0,0,0.15);">
+      LINE 預約免費健測
+    </a>
+    <p style="margin-top:14px;color:rgba(255,255,255,0.7);font-size:13px;">
+      📍 台中市北屯區崇德路二段306號・因為答應了媽祖，所以永遠免費
+    </p>
+  </div>
+</section>
+
+<script>
+function toggleArticle(id, btn) {
+  const el = document.getElementById(id);
+  const isOpen = el.classList.contains('open');
+  // 關閉所有
+  document.querySelectorAll('.article-full').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.read-more').forEach(b => b.textContent = '展開閱讀 ▾');
+  if (!isOpen) {
+    el.classList.add('open');
+    btn.textContent = '收起 ▴';
+    el.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+}
+
+function filterArticles(cat, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.article-card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+      // 關閉展開的文章
+      card.querySelector('.article-full').classList.remove('open');
+    }
+  });
+}
+</script>
+</body>
+</html>

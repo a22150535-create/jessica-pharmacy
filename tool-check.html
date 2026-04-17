@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自律神經症狀自測｜潔西卡大藥局</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--cream:#faf6f0;--cream2:#f5ede0;--orange:#e8631a;--orange-pale:#fde8d8;
+      --brown:#3d2010;--text-mid:#6b3d20;--text-light:#a06840;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--cream);color:var(--brown);overflow-x:hidden;padding-bottom:80px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(250,246,240,0.97);
+    backdrop-filter:blur(10px);border-bottom:1px solid rgba(232,99,26,0.15);
+    padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.nav-back{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text-mid);text-decoration:none;}
+.nav-title{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:700;color:var(--brown);}
+.nav-line{padding:8px 14px;background:#06C755;color:#fff;font-size:12px;font-weight:700;text-decoration:none;border-radius:4px;}
+
+/* PROGRESS */
+.progress-bar{height:4px;background:rgba(232,99,26,0.15);}
+.progress-fill{height:4px;background:var(--orange);transition:width 0.4s ease;}
+
+/* SCREENS */
+.screen{display:none;padding:80px 24px 24px;max-width:600px;margin:0 auto;}
+.screen.active{display:block;}
+
+/* START */
+.start-icon{font-size:64px;text-align:center;padding:32px 0 16px;}
+.start-title{font-family:'Noto Serif TC',serif;font-size:clamp(24px,5vw,36px);font-weight:900;
+             color:var(--brown);line-height:1.4;text-align:center;margin-bottom:12px;}
+.start-title span{color:var(--orange);}
+.start-desc{font-size:14px;color:var(--text-mid);line-height:1.9;text-align:center;margin-bottom:32px;}
+.start-meta{display:flex;justify-content:center;gap:24px;margin-bottom:36px;}
+.meta-item{text-align:center;}
+.meta-num{font-family:'Noto Serif TC',serif;font-size:24px;font-weight:900;color:var(--orange);}
+.meta-lbl{font-size:11px;color:var(--text-light);margin-top:2px;letter-spacing:1px;}
+
+/* QUESTION */
+.q-counter{font-size:12px;color:var(--text-light);letter-spacing:2px;margin-bottom:12px;}
+.q-text{font-family:'Noto Serif TC',serif;font-size:clamp(18px,4vw,24px);font-weight:900;
+        color:var(--brown);line-height:1.5;margin-bottom:28px;}
+.options{display:flex;flex-direction:column;gap:10px;}
+.opt-btn{background:#fff;border:1.5px solid rgba(61,32,16,0.12);border-radius:8px;
+         padding:16px 20px;font-size:15px;font-weight:500;color:var(--brown);
+         cursor:pointer;text-align:left;transition:all 0.15s;
+         font-family:'Noto Sans TC',sans-serif;display:flex;align-items:center;gap:12px;}
+.opt-btn:hover{border-color:var(--orange);background:var(--orange-pale);}
+.opt-btn.selected{border-color:var(--orange);background:var(--orange);color:#fff;}
+.opt-dot{width:20px;height:20px;border-radius:50%;border:2px solid rgba(61,32,16,0.2);
+         flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.opt-btn.selected .opt-dot{border-color:#fff;background:rgba(255,255,255,0.3);}
+.opt-btn.selected .opt-dot::after{content:'✓';color:#fff;font-weight:700;}
+
+/* RESULT */
+.result-header{text-align:center;padding:20px 0 28px;}
+.result-icon{font-size:56px;margin-bottom:12px;}
+.result-level{display:inline-block;padding:8px 24px;border-radius:100px;font-weight:700;
+               font-size:14px;letter-spacing:2px;margin-bottom:12px;}
+.result-title{font-family:'Noto Serif TC',serif;font-size:clamp(22px,5vw,32px);font-weight:900;
+              color:var(--brown);line-height:1.4;margin-bottom:8px;}
+.result-score-box{background:#fff;border-radius:8px;padding:20px;margin-bottom:20px;
+                  border:1px solid rgba(61,32,16,0.08);}
+.score-label{font-size:12px;color:var(--text-light);letter-spacing:2px;margin-bottom:8px;}
+.score-bar-bg{background:rgba(232,99,26,0.12);border-radius:100px;height:12px;overflow:hidden;}
+.score-bar-fill{height:12px;border-radius:100px;background:var(--orange);transition:width 1s ease;}
+.score-num{font-family:'Noto Serif TC',serif;font-size:32px;font-weight:900;color:var(--orange);
+           text-align:right;margin-top:6px;}
+.analysis-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+.ana-card{background:#fff;border-radius:8px;padding:18px 20px;
+          border-left:3px solid var(--orange);}
+.ana-title{font-size:14px;font-weight:700;color:var(--brown);margin-bottom:6px;}
+.ana-text{font-size:13px;color:var(--text-mid);line-height:1.8;}
+.cta-box{background:var(--orange);border-radius:8px;padding:24px;text-align:center;}
+.cta-box h3{font-family:'Noto Serif TC',serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:8px;}
+.cta-box p{font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:16px;line-height:1.7;}
+.cta-line{display:flex;align-items:center;justify-content:center;gap:8px;background:#06C755;
+          color:#fff;padding:14px;border-radius:6px;font-size:15px;font-weight:700;
+          text-decoration:none;letter-spacing:2px;margin-bottom:10px;
+          box-shadow:0 3px 12px rgba(6,199,85,0.3);}
+.cta-phone{display:block;background:rgba(255,255,255,0.15);color:#fff;padding:12px;
+           border-radius:6px;font-size:14px;text-decoration:none;letter-spacing:1px;}
+
+/* NAV BUTTONS */
+.nav-btns{display:flex;gap:10px;margin-top:32px;}
+.btn-next{flex:1;background:var(--orange);color:#fff;border:none;border-radius:6px;
+          padding:16px;font-size:16px;font-weight:700;letter-spacing:2px;cursor:pointer;
+          font-family:'Noto Sans TC',sans-serif;transition:all 0.2s;
+          box-shadow:0 3px 12px rgba(232,99,26,0.3);}
+.btn-next:hover{background:#f0885a;}
+.btn-next:disabled{background:rgba(61,32,16,0.2);box-shadow:none;cursor:not-allowed;}
+.btn-back{background:transparent;color:var(--text-mid);border:1.5px solid rgba(61,32,16,0.15);
+          border-radius:6px;padding:16px 20px;font-size:14px;cursor:pointer;
+          font-family:'Noto Sans TC',sans-serif;}
+.big-btn{display:block;width:100%;background:var(--orange);color:#fff;border:none;border-radius:6px;
+         padding:18px;font-size:16px;font-weight:700;letter-spacing:2px;cursor:pointer;
+         font-family:'Noto Sans TC',sans-serif;margin-top:24px;text-align:center;text-decoration:none;
+         box-shadow:0 4px 16px rgba(232,99,26,0.3);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="tools.html" class="nav-back">‹ 工具</a>
+  <div class="nav-title">自律神經自測</div>
+  <a href="https://lin.ee/rpc44QB" target="_blank" class="nav-line">LINE</a>
+</nav>
+
+<div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+
+<!-- START -->
+<div class="screen active" id="screen-start">
+  <div class="start-icon">🧠</div>
+  <div class="start-title">你的自律神經<br><span>還正常嗎？</span></div>
+  <p class="start-desc">12個問題・30秒完成<br>立即知道你的自律神經失調程度</p>
+  <div class="start-meta">
+    <div class="meta-item"><div class="meta-num">12</div><div class="meta-lbl">道問題</div></div>
+    <div class="meta-item"><div class="meta-num">30秒</div><div class="meta-lbl">完成</div></div>
+    <div class="meta-item"><div class="meta-num">免費</div><div class="meta-lbl">無需登入</div></div>
+  </div>
+  <button class="big-btn" onclick="startQuiz()">開始測驗</button>
+</div>
+
+<!-- QUESTIONS -->
+<div class="screen" id="screen-quiz">
+  <div class="q-counter" id="q-counter">問題 1 / 12</div>
+  <div class="q-text" id="q-text"></div>
+  <div class="options" id="options"></div>
+  <div class="nav-btns">
+    <button class="btn-back" onclick="prevQ()" id="btn-back" style="display:none">← 上一題</button>
+    <button class="btn-next" onclick="nextQ()" id="btn-next" disabled>下一題 →</button>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="screen-result">
+  <div class="result-header">
+    <div class="result-icon" id="r-icon"></div>
+    <div class="result-level" id="r-level"></div>
+    <div class="result-title" id="r-title"></div>
+  </div>
+  <div class="result-score-box">
+    <div class="score-label">失調指數</div>
+    <div class="score-bar-bg"><div class="score-bar-fill" id="r-bar" style="width:0%"></div></div>
+    <div class="score-num" id="r-score"></div>
+  </div>
+  <div class="analysis-cards" id="r-analysis"></div>
+  <div class="cta-box">
+    <h3>想要精準的數據？</h3>
+    <p>免費HRV自律神經平衡分析<br>3分鐘・帶走兩份完整報告・市值NT$3,500</p>
+    <a href="https://lin.ee/rpc44QB" target="_blank" class="cta-line">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+      LINE 預約免費HRV健測
+    </a>
+    <a href="tel:0958265785" class="cta-phone">📞 0958-265-785</a>
+  </div>
+  <button class="big-btn" style="background:transparent;color:var(--orange);border:2px solid var(--orange);box-shadow:none;margin-top:12px;" onclick="resetQuiz()">重新測驗</button>
+</div>
+
+<script>
+const questions = [
+  { text: "你常常感到心跳莫名加速，但又沒有在運動或緊張？", opts: ["從來沒有","偶爾（每月1-2次）","經常（每週都有）","幾乎每天都這樣"], w: [0,1,2,3] },
+  { text: "你的睡眠品質如何？", opts: ["很好，睡飽就有精神","還可以，偶爾睡不好","不太好，常常睡了還是累","很差，失眠或怎麼睡都沒用"], w: [0,1,2,3] },
+  { text: "你有腸胃不舒服、消化不良或腸躁症的問題嗎？", opts: ["沒有","偶爾","經常有，但沒去看醫生","有去看過醫生但查不出原因"], w: [0,1,2,3] },
+  { text: "你會感到莫名的焦慮、緊繃或喘不過氣嗎？", opts: ["很少有這種感覺","壓力大時有","幾乎每天都有","嚴重影響日常生活"], w: [0,1,2,3] },
+  { text: "你的手腳是否容易冰冷，即使天氣不冷？", opts: ["不會","有時候","常常","幾乎全年都這樣"], w: [0,1,2,3] },
+  { text: "你去醫院做了檢查，結果如何？", opts: ["沒去過，身體還好","檢查正常，症狀輕微","檢查都說正常但不舒服","跑了很多科都找不到原因"], w: [0,0,2,3] },
+  { text: "你目前有吃補品（人參、瑪卡、刺五加等）嗎？", opts: ["沒有在吃","偶爾吃","固定在吃","越補越累但還是繼續吃"], w: [0,0,1,3] },
+  { text: "你的頭痛或頭暈問題？", opts: ["幾乎沒有","偶爾有","經常頭痛或頭暈","站起來就頭暈、視線模糊"], w: [0,1,2,3] },
+  { text: "你的情緒狀態如何？", opts: ["穩定，不太受影響","偶爾起伏","容易因小事情緒爆發","長期情緒低落或過度緊張"], w: [0,1,2,3] },
+  { text: "你目前的生活壓力？", opts: ["還好，可以應對","有點壓力但還行","壓力很大，常感到喘不過氣","已經超過負荷，身體開始抗議"], w: [0,1,2,3] },
+  { text: "你的精力和體力如何？", opts: ["充沛，有活力","一般，工作後有點累","常常覺得累，做什麼都提不起勁","怎麼休息都恢復不了"], w: [0,1,2,3] },
+  { text: "你多久沒有做過完整的心血管或自律神經檢測？", opts: ["半年內有做過","1-2年前","3年以上","從來沒做過"], w: [0,1,2,3] }
+];
+
+let current = 0;
+let answers = [];
+let selectedOpt = null;
+
+function startQuiz() {
+  document.getElementById('screen-start').classList.remove('active');
+  document.getElementById('screen-quiz').classList.add('active');
+  renderQ();
+}
+
+function renderQ() {
+  const q = questions[current];
+  document.getElementById('q-counter').textContent = `問題 ${current+1} / ${questions.length}`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('progress').style.width = `${((current)/questions.length)*100}%`;
+
+  const container = document.getElementById('options');
+  container.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn' + (answers[current] === i ? ' selected' : '');
+    btn.innerHTML = `<div class="opt-dot"></div> ${opt}`;
+    btn.onclick = () => selectOpt(i);
+    container.appendChild(btn);
+  });
+
+  selectedOpt = answers[current] !== undefined ? answers[current] : null;
+  document.getElementById('btn-next').disabled = selectedOpt === null;
+  document.getElementById('btn-back').style.display = current > 0 ? 'block' : 'none';
+  document.getElementById('btn-next').textContent = current === questions.length-1 ? '查看結果 →' : '下一題 →';
+}
+
+function selectOpt(i) {
+  selectedOpt = i;
+  answers[current] = i;
+  document.querySelectorAll('.opt-btn').forEach((b,idx) => {
+    b.classList.toggle('selected', idx === i);
+  });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQ() {
+  if (selectedOpt === null) return;
+  if (current < questions.length-1) {
+    current++;
+    renderQ();
+  } else {
+    showResult();
+  }
+}
+
+function prevQ() {
+  if (current > 0) { current--; renderQ(); }
+}
+
+function showResult() {
+  // 計算分數
+  let score = 0;
+  answers.forEach((ans, qi) => { score += questions[qi].w[ans]; });
+  const maxScore = 3 * questions.length; // 36
+  const pct = Math.round(score / maxScore * 100);
+
+  document.getElementById('screen-quiz').classList.remove('active');
+  document.getElementById('screen-result').classList.add('active');
+  document.getElementById('progress').style.width = '100%';
+
+  let icon, level, levelStyle, title, cards;
+
+  if (pct <= 20) {
+    icon='😊'; level='輕微・注意觀察'; levelStyle='background:#dcfce7;color:#16a34a;';
+    title='自律神經狀態尚可';
+    cards=[
+      {t:'整體評估', d:'你的症狀偏輕微，自律神經功能相對穩定。但現代人生活壓力大，建議定期監測。'},
+      {t:'林藥師建議', d:'保持規律作息、適度運動、減少咖啡因攝取，是維持自律神經健康最有效的方法。'},
+      {t:'預防勝於治療', d:'即使症狀輕微，建議每年做一次HRV檢測，用數據追蹤變化。'}
+    ];
+  } else if (pct <= 45) {
+    icon='😐'; level='中度・建議關注'; levelStyle='background:#fef9c3;color:#854d0e;';
+    title='已有部分失調跡象';
+    cards=[
+      {t:'整體評估', d:'你有幾個明顯的自律神經失調症狀，雖然還未嚴重影響生活，但需要認真面對。'},
+      {t:'最需要注意', d:'你的睡眠品質和情緒管理是目前最需要改善的兩個方向，這兩者互相影響。'},
+      {t:'林藥師建議', d:'停止服用刺激性補品（人參、瑪卡），嘗試每晚使用4秒吐氣法幫助副交感神經啟動。建議來做一次HRV確認狀況。'}
+    ];
+  } else if (pct <= 70) {
+    icon='😟'; level='明顯失調・需要處理'; levelStyle='background:#ffedd5;color:#9a3412;';
+    title='自律神經失調已較明顯';
+    cards=[
+      {t:'整體評估', d:'你的多項症狀顯示自律神經已有明顯失調，交感神經長期過度活躍，副交感神經功能受抑制。'},
+      {t:'你可能面臨的問題', d:'長期如此可能導致慢性疲勞、心血管壓力增加、免疫力下降。不建議繼續吃補氣類保健品。'},
+      {t:'林藥師強烈建議', d:'這個分數強烈建議來做一次完整的HRV+APG雙重檢測，讓數據告訴你具體的問題在哪。越早了解，越容易改善。'}
+    ];
+  } else {
+    icon='🚨'; level='嚴重失調・請立即處理'; levelStyle='background:#fee2e2;color:#991b1b;';
+    title='自律神經失調嚴重';
+    cards=[
+      {t:'整體評估', d:'你的症狀顯示自律神經可能有嚴重失調，身體已在多個系統發出求救訊號。這不是「太累了」能解釋的。'},
+      {t:'緊急提醒', d:'如果你仍在服用補氣類保健品（人參、瑪卡等），請立即停止。這類補品會讓已經過載的交感神經更亢奮。'},
+      {t:'林藥師呼籲', d:'請不要再拖延了。林藥師的HRV+APG雙重檢測可以在3分鐘內告訴你精準的神經功能狀態，完全免費，帶走報告。'}
+    ];
+  }
+
+  document.getElementById('r-icon').textContent = icon;
+  document.getElementById('r-level').textContent = level;
+  document.getElementById('r-level').style.cssText += levelStyle;
+  document.getElementById('r-title').textContent = title;
+  document.getElementById('r-score').textContent = `${pct}分`;
+
+  setTimeout(() => {
+    document.getElementById('r-bar').style.width = pct + '%';
+  }, 300);
+
+  const anaContainer = document.getElementById('r-analysis');
+  anaContainer.innerHTML = cards.map(c =>
+    `<div class="ana-card"><div class="ana-title">${c.t}</div><div class="ana-text">${c.d}</div></div>`
+  ).join('');
+}
+
+function resetQuiz() {
+  current = 0; answers = []; selectedOpt = null;
+  document.getElementById('screen-result').classList.remove('active');
+  document.getElementById('screen-start').classList.add('active');
+  document.getElementById('progress').style.width = '0%';
+}
+</script>
+</body>
+</html>

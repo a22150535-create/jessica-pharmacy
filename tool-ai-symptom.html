@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI藥師問診｜潔西卡大藥局</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--cream:#faf6f0;--cream2:#f5ede0;--orange:#e8631a;--orange-pale:#fde8d8;
+      --brown:#3d2010;--text-mid:#6b3d20;--text-light:#a06840;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--cream);color:var(--brown);overflow-x:hidden;padding-bottom:80px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(250,246,240,0.97);
+    backdrop-filter:blur(10px);border-bottom:1px solid rgba(232,99,26,0.15);
+    padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.nav-back{font-size:14px;color:var(--text-mid);text-decoration:none;}
+.nav-title{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:700;color:var(--brown);}
+.nav-line{padding:8px 14px;background:#06C755;color:#fff;font-size:12px;font-weight:700;text-decoration:none;border-radius:4px;}
+.wrap{padding:80px 24px 24px;max-width:600px;margin:0 auto;}
+.page-icon{font-size:56px;text-align:center;padding:20px 0 12px;}
+.page-title{font-family:'Noto Serif TC',serif;font-size:clamp(22px,5vw,32px);font-weight:900;
+            color:var(--brown);text-align:center;line-height:1.4;margin-bottom:8px;}
+.page-title span{color:var(--orange);}
+.page-desc{font-size:14px;color:var(--text-mid);text-align:center;line-height:1.9;margin-bottom:28px;}
+/* SYMPTOM TAGS */
+.sym-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.sym-tag{padding:8px 16px;border-radius:100px;border:1.5px solid rgba(61,32,16,0.15);
+         background:#fff;font-size:13px;color:var(--text-mid);cursor:pointer;transition:all 0.15s;}
+.sym-tag:hover,.sym-tag.sel{border-color:var(--orange);background:var(--orange-pale);color:var(--orange);font-weight:700;}
+/* TEXTAREA */
+textarea{width:100%;border:1.5px solid rgba(61,32,16,0.12);border-radius:8px;
+         padding:14px 16px;font-size:15px;font-family:'Noto Sans TC',sans-serif;
+         color:var(--brown);background:#fff;outline:none;resize:vertical;
+         min-height:100px;transition:border-color 0.2s;margin-bottom:16px;}
+textarea:focus{border-color:var(--orange);}
+/* RESULT CHAT */
+.chat-wrap{background:#fff;border-radius:8px;border:1px solid rgba(61,32,16,0.08);overflow:hidden;margin-bottom:16px;}
+.chat-header{background:var(--brown);padding:14px 18px;display:flex;align-items:center;gap:10px;}
+.chat-avatar{width:36px;height:36px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.chat-name{color:#fff;font-weight:700;font-size:14px;}
+.chat-body{padding:16px;}
+.chat-bubble{background:var(--cream);border-radius:0 12px 12px 12px;padding:14px 16px;
+             font-size:14px;color:var(--text-mid);line-height:1.9;margin-bottom:12px;}
+.chat-bubble h4{color:var(--brown);font-size:15px;font-weight:700;margin-bottom:8px;}
+.chat-bubble ul{padding-left:16px;margin:8px 0;}
+.chat-bubble li{margin-bottom:6px;}
+.chat-cta{background:var(--orange);border-radius:12px 12px 12px 0;padding:14px 16px;
+          font-size:14px;color:#fff;line-height:1.7;}
+.typing{display:flex;gap:4px;padding:14px 16px;}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(61,32,16,0.2);
+     animation:typing 1.2s infinite;}
+.dot:nth-child(2){animation-delay:0.2s;}
+.dot:nth-child(3){animation-delay:0.4s;}
+@keyframes typing{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+/* BUTTONS */
+.btn-submit{width:100%;background:var(--orange);color:#fff;border:none;border-radius:6px;
+            padding:16px;font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;
+            font-family:'Noto Sans TC',sans-serif;box-shadow:0 3px 12px rgba(232,99,26,0.3);
+            transition:all 0.2s;}
+.btn-submit:hover{background:#f0885a;}
+.btn-line{display:flex;align-items:center;justify-content:center;gap:8px;
+          background:#06C755;color:#fff;padding:14px;border-radius:6px;
+          font-size:14px;font-weight:700;text-decoration:none;
+          box-shadow:0 3px 12px rgba(6,199,85,0.3);letter-spacing:2px;}
+.disclaimer{font-size:11px;color:var(--text-light);text-align:center;line-height:1.7;margin-top:12px;}
+.section-sep{height:1px;background:rgba(61,32,16,0.08);margin:16px 0;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="tools.html" class="nav-back">‹ 工具</a>
+  <div class="nav-title">AI藥師問診</div>
+  <a href="https://lin.ee/rpc44QB" target="_blank" class="nav-line">LINE</a>
+</nav>
+
+<div class="wrap">
+  <div class="page-icon">💊</div>
+  <div class="page-title">症狀詢問<br><span>AI藥師建議</span></div>
+  <p class="page-desc">描述你的症狀，根據林藥師的知識庫<br>給你初步分析與個人化建議</p>
+
+  <div id="input-area">
+    <div style="font-size:13px;font-weight:700;color:var(--brown);letter-spacing:1px;margin-bottom:10px;">常見症狀（可多選）</div>
+    <div class="sym-tags">
+      <span class="sym-tag" onclick="toggleSym(this)">💓 心跳加速</span>
+      <span class="sym-tag" onclick="toggleSym(this)">😴 怎麼睡都累</span>
+      <span class="sym-tag" onclick="toggleSym(this)">😰 焦慮緊繃</span>
+      <span class="sym-tag" onclick="toggleSym(this)">🥶 手腳冰冷</span>
+      <span class="sym-tag" onclick="toggleSym(this)">🫁 腸胃不適</span>
+      <span class="sym-tag" onclick="toggleSym(this)">😵 頭痛頭暈</span>
+      <span class="sym-tag" onclick="toggleSym(this)">🧠 記憶力差</span>
+      <span class="sym-tag" onclick="toggleSym(this)">🌙 失眠</span>
+      <span class="sym-tag" onclick="toggleSym(this)">💨 胸悶</span>
+      <span class="sym-tag" onclick="toggleSym(this)">😤 情緒起伏大</span>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:var(--brown);letter-spacing:1px;margin-bottom:8px;">補充說明（選填）</div>
+    <textarea id="symptom-input" placeholder="例：最近工作壓力很大，心跳常常莫名加速，睡眠也很差，去看醫生都說正常..."></textarea>
+    <button class="btn-submit" onclick="analyzeSymptoms()">AI 分析我的症狀</button>
+    <p class="disclaimer">⚠️ 本工具提供初步參考，不代替醫療診斷。如有嚴重症狀請就醫。</p>
+  </div>
+
+  <div id="result-area" style="display:none;">
+    <div class="chat-wrap">
+      <div class="chat-header">
+        <div class="chat-avatar">💊</div>
+        <div><div class="chat-name">林威宏 藥師</div><div style="font-size:11px;color:rgba(255,255,255,0.65);">潔西卡大藥局・AI分析系統</div></div>
+      </div>
+      <div class="chat-body" id="chat-content">
+        <div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      </div>
+    </div>
+    <a href="https://lin.ee/rpc44QB" target="_blank" class="btn-line">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+      直接LINE林藥師詳細諮詢
+    </a>
+    <button style="width:100%;background:transparent;color:var(--text-mid);border:1.5px solid rgba(61,32,16,0.15);border-radius:6px;padding:14px;font-size:14px;cursor:pointer;margin-top:10px;font-family:'Noto Sans TC',sans-serif;" onclick="resetAnalysis()">重新輸入症狀</button>
+  </div>
+</div>
+
+<script>
+const selectedSyms = new Set();
+function toggleSym(el) {
+  const sym = el.textContent.trim();
+  if (selectedSyms.has(sym)) { selectedSyms.delete(sym); el.classList.remove('sel'); }
+  else { selectedSyms.add(sym); el.classList.add('sel'); }
+}
+
+const knowledgeBase = {
+  '💓 心跳加速': { cat: 'cardiac', risk: 2, tip: '交感神經過度活躍的典型症狀。心跳加速同時伴隨焦慮和疲勞，幾乎可以確定是自律神經問題，而非心臟器質性病變。' },
+  '😴 怎麼睡都累': { cat: 'energy', risk: 2, tip: '副交感神經在睡眠中無法有效啟動，身體無法真正進行修復。這是自律神經失調最常見的主訴之一。' },
+  '😰 焦慮緊繃': { cat: 'mental', risk: 2, tip: '持續的焦慮感代表交感神經處於長期警戒狀態，找不到「關掉」的方法。' },
+  '🥶 手腳冰冷': { cat: 'circulation', risk: 1, tip: '末梢循環不佳，交感神經將血液集中在核心器官，手腳自然變冷。' },
+  '🫁 腸胃不適': { cat: 'digestive', risk: 1, tip: '腸胃是「第二個大腦」，自律神經失調時，消化功能最先受影響。腸躁症大多與自律神經有關。' },
+  '😵 頭痛頭暈': { cat: 'neurological', risk: 2, tip: '站起來頭暈是姿態性低血壓的表現，自律神經無法快速調節血壓變化。' },
+  '🧠 記憶力差': { cat: 'cognitive', risk: 1, tip: '長期交感神經過載會影響海馬迴功能，導致注意力和記憶力下降。' },
+  '🌙 失眠': { cat: 'sleep', risk: 2, tip: '副交感神經無法啟動→無法放鬆→無法入睡。這是惡性循環的起點，也是最需要立即處理的症狀。' },
+  '💨 胸悶': { cat: 'cardiac', risk: 2, tip: '如已排除心臟器質性問題，胸悶多半是交感神經緊繃造成的肌肉張力問題。' },
+  '😤 情緒起伏大': { cat: 'mental', risk: 1, tip: '自律神經失調直接影響情緒調節，容易因小事大起伏，是身體在告訴你神經系統已超載。' }
+};
+
+function analyzeSymptoms() {
+  const syms = Array.from(selectedSyms);
+  const text = document.getElementById('symptom-input').value.trim();
+  if (syms.length === 0 && !text) { alert('請至少選擇一個症狀或輸入說明'); return; }
+
+  document.getElementById('input-area').style.display = 'none';
+  document.getElementById('result-area').style.display = 'block';
+
+  // 計算風險
+  let totalRisk = 0;
+  syms.forEach(s => { if (knowledgeBase[s]) totalRisk += knowledgeBase[s].risk; });
+
+  setTimeout(() => {
+    const level = totalRisk >= 8 ? '高度' : totalRisk >= 4 ? '中度' : '輕度';
+    const levelColor = totalRisk >= 8 ? '#991b1b' : totalRisk >= 4 ? '#92400e' : '#166534';
+    const symsText = syms.length > 0 ? syms.join('、') : text.substring(0, 30);
+
+    let tipsHtml = '';
+    if (syms.length > 0) {
+      tipsHtml = '<ul>' + syms.slice(0, 3).map(s =>
+        knowledgeBase[s] ? `<li><strong>${s}</strong>：${knowledgeBase[s].tip}</li>` : ''
+      ).join('') + '</ul>';
+    }
+
+    const avoidNote = syms.some(s => ['💓 心跳加速','😴 怎麼睡都累','😰 焦慮緊繃'].includes(s))
+      ? '<br>⚠️ <strong>特別提醒</strong>：你目前的症狀組合，請先停止服用人參、瑪卡、刺五加等補氣類保健品，這類補品會讓症狀加重。' : '';
+
+    document.getElementById('chat-content').innerHTML = `
+      <div class="chat-bubble">
+        <h4>根據你描述的症狀分析：</h4>
+        <div style="display:inline-block;background:${levelColor};color:#fff;padding:3px 12px;border-radius:100px;font-size:12px;font-weight:700;margin-bottom:10px;">${level}失調跡象</div>
+        <p>你提到的症狀：<strong>${symsText}</strong>${syms.length > 3 ? ' 等' : ''}</p>
+        ${tipsHtml}
+        ${avoidNote}
+        <br>林藥師建議：<strong>先做一次HRV+APG雙重檢測</strong>，用數據確認你的自律神經功能狀態，才能給你最精準的建議。
+      </div>
+      <div class="chat-cta">
+        💊 免費HRV健測・市值NT$3,500・因為答應了媽祖，所以完全免費。<br>
+        3分鐘・兩份報告・林藥師親自解說
+      </div>`;
+  }, 1800);
+}
+
+function resetAnalysis() {
+  selectedSyms.clear();
+  document.querySelectorAll('.sym-tag').forEach(t => t.classList.remove('sel'));
+  document.getElementById('symptom-input').value = '';
+  document.getElementById('result-area').style.display = 'none';
+  document.getElementById('input-area').style.display = 'block';
+}
+</script>
+</body>
+</html>

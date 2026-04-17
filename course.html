@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自律神經健康講座｜潔西卡大藥局 林威宏藥師</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--cream:#faf6f0;--cream2:#f5ede0;--orange:#e8631a;--orange-light:#f0885a;
+      --orange-pale:#fde8d8;--brown:#3d2010;--brown-mid:#7a4825;--brown-light:#b07850;
+      --text:#2e1a08;--text-mid:#6b3d20;--text-light:#a06840;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden;}
+section{padding:70px 24px;}
+.container{max-width:720px;margin:0 auto;}
+.tag{display:inline-block;font-size:11px;letter-spacing:4px;color:var(--orange);
+     border-bottom:1.5px solid var(--orange);padding-bottom:3px;margin-bottom:20px;text-transform:uppercase;}
+h2{font-family:'Noto Serif TC',serif;font-size:clamp(24px,4.5vw,38px);font-weight:900;color:var(--brown);line-height:1.4;margin-bottom:12px;}
+h2 .em{color:var(--orange);}
+.sub{font-size:15px;color:var(--text-mid);line-height:1.9;margin-bottom:36px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(250,246,240,0.97);backdrop-filter:blur(10px);border-bottom:1px solid rgba(232,99,26,0.15);padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(61,32,16,0.06);}
+.nav-logo{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:900;color:var(--brown);text-decoration:none;letter-spacing:1px;}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{padding:7px 11px;font-size:12px;color:var(--text-mid);text-decoration:none;border-radius:4px;}
+.nav-links a.active{color:var(--orange);font-weight:700;background:var(--orange-pale);}
+.nav-links a:hover:not(.active){background:var(--cream2);}
+.nav-line{margin-left:6px;padding:8px 14px;background:#06C755;color:#fff;font-size:12px;font-weight:700;text-decoration:none;border-radius:4px;letter-spacing:1px;}
+.page-hero{background:var(--brown);padding:120px 24px 60px;text-align:center;}
+.page-hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(232,99,26,0.2);border:1px solid rgba(232,99,26,0.3);color:var(--orange-light);font-size:12px;letter-spacing:3px;padding:7px 20px;margin-bottom:28px;border-radius:100px;}
+.page-hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(32px,6vw,56px);font-weight:900;color:#fff;line-height:1.3;margin-bottom:16px;}
+.page-hero h1 .em{color:var(--orange-light);}
+.page-hero p{font-size:15px;color:rgba(255,255,255,0.75);line-height:1.9;max-width:540px;margin:0 auto 36px;}
+/* COURSE TYPES */
+.course-card{background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 2px 16px rgba(61,32,16,0.08);margin-bottom:20px;}
+.course-head{padding:24px 28px;border-left:4px solid var(--orange);}
+.course-type{font-size:11px;letter-spacing:3px;color:var(--orange);margin-bottom:8px;font-weight:700;}
+.course-name{font-family:'Noto Serif TC',serif;font-size:22px;font-weight:900;color:var(--brown);margin-bottom:6px;}
+.course-desc{font-size:14px;color:var(--text-mid);line-height:1.8;}
+.course-body{padding:20px 28px;background:var(--cream);border-top:1px solid rgba(61,32,16,0.06);}
+.course-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.meta-item{background:#fff;border-radius:4px;padding:12px 14px;}
+.meta-label{font-size:11px;color:var(--text-light);letter-spacing:1px;margin-bottom:3px;}
+.meta-val{font-size:14px;font-weight:700;color:var(--brown);}
+.course-topics{margin-bottom:16px;}
+.topic-title{font-size:13px;font-weight:700;color:var(--brown);margin-bottom:8px;letter-spacing:1px;}
+.topic-list{display:flex;flex-direction:column;gap:6px;}
+.topic-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text-mid);line-height:1.6;}
+.topic-dot{width:6px;height:6px;background:var(--orange);border-radius:50%;flex-shrink:0;margin-top:5px;}
+/* CURRICULUM */
+.curriculum{background:var(--cream2);}
+.module{background:#fff;border-radius:4px;margin-bottom:12px;overflow:hidden;}
+.module-head{background:var(--orange);padding:14px 20px;display:flex;align-items:center;gap:12px;}
+.module-num{width:28px;height:28px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
+.module-title{font-size:15px;font-weight:700;color:#fff;}
+.module-time{margin-left:auto;font-size:12px;color:rgba(255,255,255,0.75);}
+.module-body{padding:16px 20px;}
+.module-points{list-style:none;display:flex;flex-direction:column;gap:6px;}
+.module-points li{font-size:13px;color:var(--text-mid);padding-left:14px;position:relative;line-height:1.6;}
+.module-points li::before{content:'·';position:absolute;left:0;color:var(--orange);font-weight:700;}
+/* PAST EVENTS */
+.event-list{display:flex;flex-direction:column;gap:14px;}
+.event-item{background:#fff;border-radius:4px;padding:18px 20px;display:flex;gap:16px;align-items:flex-start;border-left:3px solid var(--orange);}
+.event-date{font-family:'Noto Serif TC',serif;font-size:13px;font-weight:700;color:var(--orange);flex-shrink:0;min-width:80px;}
+.event-name{font-size:15px;font-weight:700;color:var(--brown);margin-bottom:3px;}
+.event-loc{font-size:12px;color:var(--text-light);}
+/* STICKY */
+.sticky{position:fixed;bottom:0;left:0;right:0;background:rgba(250,246,240,0.97);border-top:1px solid rgba(232,99,26,0.2);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;z-index:999;backdrop-filter:blur(10px);box-shadow:0 -2px 16px rgba(61,32,16,0.08);}
+.sticky-info{font-size:13px;color:var(--text-mid);}
+.sticky-info strong{color:var(--brown);font-size:16px;display:block;}
+.btn-line{background:#06C755;color:#fff;font-size:13px;font-weight:700;letter-spacing:2px;padding:11px 22px;border-radius:2px;text-decoration:none;box-shadow:0 2px 10px rgba(6,199,85,0.3);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">潔西卡大藥局</a>
+  <div class="nav-links">
+    <a href="index.html">首頁</a>
+    <a href="products.html">保健品</a>
+    <a href="course.html" class="active">課程</a>
+    <a href="story.html">故事</a>
+    <a href="knowledge.html">知識庫</a>
+    <a href="https://lin.ee/rpc44QB" target="_blank" class="nav-line">LINE</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-badge">✦ WORKSHOP · LECTURE</div>
+  <h1>自律神經<br><span class="em">健康講座</span></h1>
+  <p>林威宏藥師親授・用自身確診康復的真實經驗<br>讓你在1-2小時內真正搞懂自律神經</p>
+</div>
+
+<!-- 課程類型 -->
+<section style="background:#fff;">
+  <div class="container">
+    <div class="tag">COURSE TYPES</div>
+    <h2>三種<span class="em">課程形式</span></h2>
+    <p class="sub">依你的需求選擇最適合的方式，從個人到企業都有方案</p>
+
+    <!-- 企業講座 -->
+    <div class="course-card">
+      <div class="course-head">
+        <div class="course-type">CORPORATE · 企業到府</div>
+        <div class="course-name">🏢 企業健康講座</div>
+        <div class="course-desc">林藥師到你公司，讓員工在工作場域就能學到自律神經保健知識。適合員工健康日、ESG活動、主管培訓。</div>
+      </div>
+      <div class="course-body">
+        <div class="course-meta">
+          <div class="meta-item"><div class="meta-label">時長</div><div class="meta-val">60～90 分鐘</div></div>
+          <div class="meta-item"><div class="meta-label">人數</div><div class="meta-val">10人以上</div></div>
+          <div class="meta-item"><div class="meta-label">地點</div><div class="meta-val">貴公司場地</div></div>
+          <div class="meta-item"><div class="meta-label">費用</div><div class="meta-val">LINE 洽詢</div></div>
+        </div>
+        <div class="course-topics">
+          <div class="topic-title">INCLUDES</div>
+          <div class="topic-list">
+            <div class="topic-item"><div class="topic-dot"></div>自律神經失調認識與症狀辨別</div>
+            <div class="topic-item"><div class="topic-dot"></div>職場壓力與自律神經的關係</div>
+            <div class="topic-item"><div class="topic-dot"></div>3個立即可用的放鬆技巧</div>
+            <div class="topic-item"><div class="topic-dot"></div>Q&A 互動時間</div>
+            <div class="topic-item"><div class="topic-dot"></div>可加購現場HRV團體檢測（另計費）</div>
+          </div>
+        </div>
+        <a href="https://lin.ee/rpc44QB" target="_blank"
+          style="display:block;background:var(--orange);color:#fff;padding:13px;border-radius:4px;
+                 font-size:14px;font-weight:700;letter-spacing:2px;text-decoration:none;text-align:center;
+                 box-shadow:0 3px 12px rgba(232,99,26,0.3);">LINE 洽詢企業講座</a>
+      </div>
+    </div>
+
+    <!-- 社區講座 -->
+    <div class="course-card">
+      <div class="course-head">
+        <div class="course-type">COMMUNITY · 社區公益</div>
+        <div class="course-name">🏘 社區健康講座</div>
+        <div class="course-desc">里民中心、社區活動中心、醫療機構。林藥師願意走進社區，讓更多人認識自律神經。</div>
+      </div>
+      <div class="course-body">
+        <div class="course-meta">
+          <div class="meta-item"><div class="meta-label">時長</div><div class="meta-val">60 分鐘</div></div>
+          <div class="meta-item"><div class="meta-label">人數</div><div class="meta-val">10人以上</div></div>
+          <div class="meta-item"><div class="meta-label">地點</div><div class="meta-val">社區場地</div></div>
+          <div class="meta-item"><div class="meta-label">費用</div><div class="meta-val">LINE 洽詢</div></div>
+        </div>
+        <div class="course-topics">
+          <div class="topic-title">INCLUDES</div>
+          <div class="topic-list">
+            <div class="topic-item"><div class="topic-dot"></div>長者自律神經保健重點</div>
+            <div class="topic-item"><div class="topic-dot"></div>心血管風險自我評估</div>
+            <div class="topic-item"><div class="topic-dot"></div>居家簡易自測方法教學</div>
+            <div class="topic-item"><div class="topic-dot"></div>飲食與保健品正確觀念</div>
+          </div>
+        </div>
+        <a href="https://lin.ee/rpc44QB" target="_blank"
+          style="display:block;background:var(--brown);color:#fff;padding:13px;border-radius:4px;
+                 font-size:14px;font-weight:700;letter-spacing:2px;text-decoration:none;text-align:center;">LINE 洽詢社區講座</a>
+      </div>
+    </div>
+
+    <!-- 潔西卡門市小班 -->
+    <div class="course-card">
+      <div class="course-head">
+        <div class="course-type">IN-STORE · 門市小班</div>
+        <div class="course-name">💊 潔西卡大藥局小班課</div>
+        <div class="course-desc">在潔西卡大藥局舉辦的小班制深度課程，人數限制在10人以內，互動更充足，課後可直接預約HRV檢測。</div>
+      </div>
+      <div class="course-body">
+        <div class="course-meta">
+          <div class="meta-item"><div class="meta-label">時長</div><div class="meta-val">90 分鐘</div></div>
+          <div class="meta-item"><div class="meta-label">人數</div><div class="meta-val">上限 10 人</div></div>
+          <div class="meta-item"><div class="meta-label">地點</div><div class="meta-val">潔西卡大藥局</div></div>
+          <div class="meta-item"><div class="meta-label">費用</div><div class="meta-val">LINE 確認場次</div></div>
+        </div>
+        <div style="background:var(--orange-pale);border-radius:4px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--text-mid);">
+          📅 不定期開班，加LINE即時掌握最新場次資訊
+        </div>
+        <a href="https://lin.ee/rpc44QB" target="_blank"
+          style="display:block;background:#06C755;color:#fff;padding:13px;border-radius:4px;
+                 font-size:14px;font-weight:700;letter-spacing:2px;text-decoration:none;text-align:center;
+                 box-shadow:0 3px 12px rgba(6,199,85,0.3);">LINE 登記下一場</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 課程大綱 -->
+<section class="curriculum">
+  <div class="container">
+    <div class="tag">CURRICULUM</div>
+    <h2>標準課程<span class="em">大綱</span></h2>
+    <p class="sub">以下為90分鐘完整版大綱，可依需求客製化調整</p>
+
+    <div class="module">
+      <div class="module-head">
+        <div class="module-num">1</div>
+        <div class="module-title">認識你的自律神經系統</div>
+        <div class="module-time">20 min</div>
+      </div>
+      <div class="module-body">
+        <ul class="module-points">
+          <li>交感神經 vs 副交感神經：你身體裡的油門和煞車</li>
+          <li>失調 = 油門卡死 + 煞車失靈，同時發生</li>
+          <li>台灣超過200萬人失調卻不自知的原因</li>
+          <li>為什麼去醫院都說「正常」？</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-head">
+        <div class="module-num">2</div>
+        <div class="module-title">症狀識別：你中了幾個？</div>
+        <div class="module-time">20 min</div>
+      </div>
+      <div class="module-body">
+        <ul class="module-points">
+          <li>心悸、失眠、腸躁症、手腳冰冷的神經根源</li>
+          <li>現場快速自測：呼吸心跳測試</li>
+          <li>HRV數值解讀：什麼是健康的心律變異？</li>
+          <li>林藥師親身案例分享</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-head">
+        <div class="module-num">3</div>
+        <div class="module-title">破解常見迷思</div>
+        <div class="module-time">20 min</div>
+      </div>
+      <div class="module-body">
+        <ul class="module-points">
+          <li>為什麼越補越累？（人參、瑪卡的真相）</li>
+          <li>早餐一定要吃嗎？失調者的飲食原則</li>
+          <li>糙米真的比白米好？粗纖維的陷阱</li>
+          <li>哪些「養生」觀念反而讓你更糟？</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-head">
+        <div class="module-num">4</div>
+        <div class="module-title">實作：3個立即啟動副交感的方法</div>
+        <div class="module-time">20 min</div>
+      </div>
+      <div class="module-body">
+        <ul class="module-points">
+          <li>4秒吐氣法：物理性放慢心跳</li>
+          <li>咀嚼效應：隨時可用的神經開關</li>
+          <li>睡前環境設定：乾冷空氣的重要性</li>
+          <li>水分補充的正確方法</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="module">
+      <div class="module-head">
+        <div class="module-num">5</div>
+        <div class="module-title">Q&A 互動</div>
+        <div class="module-time">10 min</div>
+      </div>
+      <div class="module-body">
+        <ul class="module-points">
+          <li>開放提問，林藥師現場解答</li>
+          <li>個人案例討論（如時間允許）</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 過往紀錄 -->
+<section style="background:#fff;">
+  <div class="container">
+    <div class="tag">PAST EVENTS</div>
+    <h2>曾舉辦的<span class="em">講座紀錄</span></h2>
+    <p class="sub">100+場義診・服務超過萬人・始終零負評</p>
+    <div class="event-list">
+      <div class="event-item">
+        <div class="event-date">企業健康日</div>
+        <div><div class="event-name">科技業員工自律神經保健講座</div><div class="event-loc">台中科學園區・80人</div></div>
+      </div>
+      <div class="event-item">
+        <div class="event-date">社區活動</div>
+        <div><div class="event-name">北屯社區長者心血管健康講座</div><div class="event-loc">台中北屯里民活動中心・40人</div></div>
+      </div>
+      <div class="event-item">
+        <div class="event-date">醫療機構</div>
+        <div><div class="event-name">診所員工自律神經知識培訓</div><div class="event-loc">台中地區診所・20人</div></div>
+      </div>
+      <div class="event-item">
+        <div class="event-date">聯名活動</div>
+        <div><div class="event-name">艾芬波斯館・波斯之約健康講座</div><div class="event-loc">新光三越台中店・現場100+人</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:var(--orange);text-align:center;padding:70px 24px;">
+  <div class="container">
+    <h2 style="color:#fff;margin-bottom:12px;">想邀請林藥師<br>到你的公司或社區？</h2>
+    <p style="color:rgba(255,255,255,0.85);font-size:15px;margin-bottom:32px;">
+      加 LINE 說明你的需求和人數，林藥師親自回覆
+    </p>
+    <a href="https://lin.ee/rpc44QB" target="_blank"
+      style="display:inline-block;background:#fff;color:var(--orange);padding:16px 40px;
+             border-radius:2px;font-size:16px;font-weight:900;text-decoration:none;
+             letter-spacing:2px;box-shadow:0 4px 16px rgba(0,0,0,0.15);">LINE 洽詢講座</a>
+  </div>
+</section>
+<div style="height:70px;"></div>
+
+<div class="sticky">
+  <div class="sticky-info"><strong>自律神經健康講座</strong>10人以上即可申請</div>
+  <a href="https://lin.ee/rpc44QB" target="_blank" class="btn-line">LINE 洽詢</a>
+</div>
+</body>
+</html>
