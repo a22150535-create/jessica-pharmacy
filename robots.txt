@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://a22150535-create.github.io/jessica-pharmacy/sitemap.xml
