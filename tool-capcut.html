@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>剪映自動剪片助理｜潔西卡大藥局</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--cream:#faf6f0;--cream2:#f5ede0;--orange:#e8631a;--orange-light:#f0885a;--orange-pale:#fde8d8;
+      --brown:#3d2010;--brown-mid:#7a4825;--text:#2e1a08;--text-mid:#6b3d20;--text-light:#a06840;--green:#16a34a;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--cream);color:var(--brown);overflow-x:hidden;padding-bottom:80px;}
+nav{position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(250,246,240,0.97);
+    backdrop-filter:blur(10px);border-bottom:1px solid rgba(232,99,26,0.15);
+    padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between;}
+.nav-back{font-size:14px;color:var(--text-mid);text-decoration:none;}
+.nav-title{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:700;color:var(--brown);}
+.wrap{padding:80px 24px 24px;max-width:720px;margin:0 auto;}
+.page-icon{font-size:56px;text-align:center;padding:20px 0 12px;}
+.page-title{font-family:'Noto Serif TC',serif;font-size:clamp(24px,5vw,34px);font-weight:900;color:var(--brown);text-align:center;line-height:1.4;margin-bottom:8px;}
+.page-title span{color:var(--orange);}
+.page-desc{font-size:14px;color:var(--text-mid);text-align:center;line-height:1.9;margin-bottom:24px;}
+.notice{background:#fff7ed;border:1px solid rgba(232,99,26,0.24);border-radius:10px;padding:14px 16px;color:var(--text-mid);font-size:13px;line-height:1.8;margin-bottom:20px;}
+.card{background:#fff;border:1px solid rgba(61,32,16,0.08);border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:0 4px 18px rgba(61,32,16,0.04);}
+.lbl{font-size:13px;font-weight:700;color:var(--brown);letter-spacing:1px;margin-bottom:8px;display:block;}
+.inp,.txt,select{width:100%;border:1.5px solid rgba(61,32,16,0.12);border-radius:8px;padding:12px 14px;font-size:15px;font-family:'Noto Sans TC',sans-serif;color:var(--brown);background:#fff;outline:none;transition:border-color 0.2s;margin-bottom:12px;}
+.txt{min-height:92px;resize:vertical;line-height:1.7;}
+.inp:focus,.txt:focus,select:focus{border-color:var(--orange);}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.chip{padding:8px 12px;border-radius:100px;border:1.5px solid rgba(61,32,16,0.15);background:#fff;font-size:13px;color:var(--text-mid);cursor:pointer;transition:all 0.15s;}
+.chip:hover,.chip.sel{border-color:var(--orange);background:var(--orange-pale);color:var(--orange);font-weight:700;}
+.gen-btn{width:100%;background:var(--brown);color:#fff;border:none;border-radius:8px;padding:16px;font-size:15px;font-weight:700;letter-spacing:2px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;box-shadow:0 3px 12px rgba(61,32,16,0.2);transition:all 0.2s;}
+.gen-btn:hover{background:#5a2e15;transform:translateY(-1px);}
+.result-box{background:#fff;border-radius:10px;border:1px solid rgba(61,32,16,0.08);overflow:hidden;margin-bottom:14px;}
+.result-head{background:var(--brown);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.result-head-title{color:#fff;font-size:13px;font-weight:700;letter-spacing:1px;}
+.copy-btn{background:var(--orange);color:#fff;border:none;border-radius:5px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans TC',sans-serif;white-space:nowrap;}
+.result-content{padding:16px 18px;font-size:14px;color:var(--text-mid);line-height:1.9;white-space:pre-wrap;}
+.scene-list{display:grid;gap:10px;padding:14px;}
+.scene-card{border:1px solid rgba(61,32,16,0.1);border-radius:10px;padding:14px;background:linear-gradient(180deg,#fff,#fffaf5);}
+.scene-time{display:inline-block;background:var(--orange-pale);color:var(--orange);font-size:12px;font-weight:700;padding:3px 9px;border-radius:100px;margin-bottom:8px;}
+.scene-title{font-weight:900;color:var(--brown);margin-bottom:6px;}
+.scene-copy{font-size:13px;color:var(--text-mid);line-height:1.8;}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;}
+.secondary{width:100%;background:transparent;color:var(--text-mid);border:1.5px solid rgba(61,32,16,0.15);border-radius:8px;padding:14px;font-size:14px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;}
+@media(max-width:560px){.grid,.actions{grid-template-columns:1fr;}.wrap{padding-left:18px;padding-right:18px;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="tools.html" class="nav-back">‹ 工具</a>
+  <div class="nav-title">剪映自動剪片助理</div>
+</nav>
+
+<div class="wrap">
+  <div class="page-icon">✂️</div>
+  <div class="page-title">剪映操作<span>自動化清單</span></div>
+  <p class="page-desc">輸入素材與腳本，產生可直接照做的<br>剪映分鏡、字幕、轉場、音效與匯出流程</p>
+  <div class="notice">提醒：網頁無法直接控制剪映桌面端或手機 App。這個工具會把剪片流程整理成「可複製、可分工、可逐步執行」的操作清單，適合搭配剪映範本、批次素材與小編 SOP 使用。</div>
+
+  <div id="input-area" class="card">
+    <span class="lbl">影片主題</span>
+    <input class="inp" id="topic" type="text" value="自律神經失調如何改善睡眠" placeholder="例：HRV健測費用可折抵介紹">
+
+    <span class="lbl">快速套用主題</span>
+    <div class="chips">
+      <span class="chip sel" onclick="setPreset(this,'自律神經失調如何改善睡眠','失眠、心悸、白天疲倦的人，先用 HRV 檢測看交感/副交感狀態。','知識科普')">睡眠改善</span>
+      <span class="chip" onclick="setPreset(this,'HRV健測費用可折抵介紹','3分鐘完成檢測，帶走兩份完整報告，費用可折抵。','預約導流')">HRV 預約</span>
+      <span class="chip" onclick="setPreset(this,'補品越吃越累的原因','人參、瑪卡不是每個人都適合，交感過載時可能更亢奮。','警示提醒')">補品陷阱</span>
+      <span class="chip" onclick="setPreset(this,'4秒吐氣法教學','跟著畫面吐氣 4 秒，讓副交感神經慢慢接手。','教學步驟')">吐氣教學</span>
+    </div>
+
+    <span class="lbl">核心腳本 / 口播重點</span>
+    <textarea class="txt" id="script" placeholder="貼上腳本，或輸入想說的重點"></textarea>
+
+    <div class="grid">
+      <div>
+        <span class="lbl">影片長度</span>
+        <select id="duration">
+          <option value="30">30秒短影音</option>
+          <option value="45">45秒深度版</option>
+          <option value="60">60秒完整教學</option>
+        </select>
+      </div>
+      <div>
+        <span class="lbl">影片節奏</span>
+        <select id="pace">
+          <option value="快節奏">快節奏：每 2-3 秒一個變化</option>
+          <option value="溫和專業">溫和專業：資訊清楚、少花俏</option>
+          <option value="情緒共鳴">情緒共鳴：痛點強、留白多</option>
+        </select>
+      </div>
+      <div>
+        <span class="lbl">素材型態</span>
+        <select id="asset">
+          <option value="藥師對鏡口播 + B-roll">藥師口播 + B-roll</option>
+          <option value="純圖文卡點">純圖文卡點</option>
+          <option value="螢幕錄製教學">螢幕錄製教學</option>
+          <option value="門市環境 + 產品特寫">門市環境 + 產品特寫</option>
+        </select>
+      </div>
+      <div>
+        <span class="lbl">匯出平台</span>
+        <select id="platform">
+          <option value="IG Reels / Facebook Reels">IG / FB Reels</option>
+          <option value="YouTube Shorts">YouTube Shorts</option>
+          <option value="TikTok">TikTok</option>
+          <option value="LINE VOOM">LINE VOOM</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="gen-btn" onclick="generatePlan()">✂️ 生成剪映操作清單</button>
+  </div>
+
+  <div id="result-area" style="display:none;">
+    <div class="result-box">
+      <div class="result-head">
+        <div class="result-head-title">剪映分鏡時間軸</div>
+        <button class="copy-btn" onclick="copyText('timeline-output', this)">複製</button>
+      </div>
+      <div class="scene-list" id="scene-output"></div>
+      <div class="result-content" id="timeline-output" style="display:none;"></div>
+    </div>
+
+    <div class="result-box">
+      <div class="result-head">
+        <div class="result-head-title">字幕與畫面指令</div>
+        <button class="copy-btn" onclick="copyText('subtitle-output', this)">複製</button>
+      </div>
+      <div class="result-content" id="subtitle-output"></div>
+    </div>
+
+    <div class="result-box">
+      <div class="result-head">
+        <div class="result-head-title">剪映操作 SOP</div>
+        <button class="copy-btn" onclick="copyText('sop-output', this)">複製</button>
+      </div>
+      <div class="result-content" id="sop-output"></div>
+    </div>
+
+    <div class="result-box">
+      <div class="result-head">
+        <div class="result-head-title">匯出前檢查</div>
+        <button class="copy-btn" onclick="copyText('check-output', this)">複製</button>
+      </div>
+      <div class="result-content" id="check-output"></div>
+    </div>
+
+    <div class="actions">
+      <button class="secondary" onclick="copyAll()">複製全部</button>
+      <button class="secondary" onclick="resetGen()">重新設定</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const defaultScripts = {
+  '自律神經失調如何改善睡眠': '失眠不是只有睡前滑手機，很多時候是交感神經一直煞不住。先做 HRV 檢測，看交感與副交感的平衡，再搭配呼吸、作息和營養調整。',
+  'HRV健測費用可折抵介紹': '來潔西卡大藥局，3分鐘完成 HRV 自律神經檢測，帶走兩份完整報告。林藥師會協助你看懂數據，費用可折抵，適合失眠、心悸、容易疲倦的人。',
+  '補品越吃越累的原因': '不是所有疲勞都適合補。交感神經過載時，補氣品可能像提著汽油去救火，讓你更亢奮、更睡不好。先確認身體狀態，再決定怎麼補。',
+  '4秒吐氣法教學': '現在跟我做：慢慢吐氣 4 秒，把注意力放在吐出去的氣。吐氣變長時，副交感神經比較容易接手，心跳也會慢慢穩下來。'
+};
+
+document.getElementById('script').value = defaultScripts['自律神經失調如何改善睡眠'];
+
+function setPreset(el, topic, script, style) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('topic').value = topic;
+  document.getElementById('script').value = script;
+  if (style === '教學步驟') document.getElementById('asset').value = '螢幕錄製教學';
+  if (style === '預約導流') document.getElementById('asset').value = '門市環境 + 產品特寫';
+}
+
+function splitScript(text) {
+  const cleaned = text.replace(/\s+/g, ' ').trim();
+  const parts = cleaned.split(/[。！？!?.]/).map(s => s.trim()).filter(Boolean);
+  if (parts.length >= 4) return parts.slice(0, 4);
+  const fallback = [
+    '先用一句痛點抓住注意力',
+    '說明問題背後的原因',
+    '給一個能立刻執行的方法',
+    '引導到門市預約或留言詢問'
+  ];
+  return [...parts, ...fallback].slice(0, 4);
+}
+
+function buildScenes(duration, topic, scriptParts, asset, pace) {
+  const d = Number(duration);
+  const segments = d === 30 ? [[0,3],[3,10],[10,22],[22,30]] : d === 45 ? [[0,5],[5,16],[16,34],[34,45]] : [[0,5],[5,22],[22,48],[48,60]];
+  const labels = ['HOOK 開場鉤子','問題放大','解法 / 證據','CTA 行動呼籲'];
+  const visuals = [
+    `${asset}，第一秒加大字標題「${topic}」`,
+    '穿插症狀關鍵字、門市或生活 B-roll，2-3 秒切一次畫面',
+    pace === '溫和專業' ? '使用乾淨資訊卡、箭頭與重點圈選，避免過多轉場' : '用放大、推近、音效點出重點，保留節奏變化',
+    '收在藥師鏡頭、門市招牌或預約畫面，放上 LINE / 個人主頁提示'
+  ];
+  return segments.map((seg, i) => ({
+    time: `${seg[0]}-${seg[1]}秒`,
+    title: labels[i],
+    copy: scriptParts[i],
+    visual: visuals[i]
+  }));
+}
+
+function escapeHTML(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function generatePlan() {
+  const topic = document.getElementById('topic').value.trim();
+  const script = document.getElementById('script').value.trim();
+  if (!topic || !script) { alert('請輸入影片主題與核心腳本'); return; }
+
+  const duration = document.getElementById('duration').value;
+  const pace = document.getElementById('pace').value;
+  const asset = document.getElementById('asset').value;
+  const platform = document.getElementById('platform').value;
+  const parts = splitScript(script);
+  const scenes = buildScenes(duration, topic, parts, asset, pace);
+
+  document.getElementById('scene-output').innerHTML = scenes.map(scene => `
+    <div class="scene-card">
+      <span class="scene-time">${escapeHTML(scene.time)}</span>
+      <div class="scene-title">${escapeHTML(scene.title)}</div>
+      <div class="scene-copy">口播：${escapeHTML(scene.copy)}<br>畫面：${escapeHTML(scene.visual)}</div>
+    </div>
+  `).join('');
+
+  const timeline = scenes.map(scene => `【${scene.time}】${scene.title}\n口播：${scene.copy}\n畫面：${scene.visual}`).join('\n\n');
+  const subtitles = `字幕樣式\n- 字體：思源黑體 / Noto Sans TC，白字黑描邊，重點詞改橘色。\n- 每行最多 12-14 個中文字，斷句跟著呼吸，不要整段塞滿。\n- 關鍵字：${topic}、HRV、自律神經、費用可折抵、林藥師。\n\n畫面指令\n1. 開場 1 秒內出大字標：${topic}\n2. 痛點詞用震動或放大：失眠 / 心悸 / 疲倦 / 焦慮。\n3. 解法段落加資訊卡：先檢測 → 看懂報告 → 調整作息與營養。\n4. CTA 加固定片尾：潔西卡大藥局｜林威宏藥師｜個人主頁預約。`;
+  const sop = `剪映操作 SOP\n1. 新建 9:16 專案，匯入素材，先把最有精神的口播片段放到主軌。\n2. 依時間軸切成 ${scenes.length} 段：${scenes.map(s => s.time).join('、')}。\n3. 開啟「識別字幕」，校正專有名詞：HRV、自律神經、潔西卡大藥局、林威宏藥師。\n4. 每段補 B-roll 或圖文卡，${pace}，避免同一畫面停留太久。\n5. 加入輕快但不搶聲音的背景音樂，人聲音量保持最清楚。\n6. 轉場只用 2 種：快速切、輕微推近；健康專業內容不要過度花俏。\n7. 片尾 2-3 秒放預約 CTA，確認文字不被 ${platform} 介面遮住。`;
+  const check = `匯出前檢查\n□ 前 3 秒是否看得懂主題與痛點？\n□ 字幕是否沒有錯字，HRV / 自律神經 / 藥師姓名是否正確？\n□ 人聲是否比背景音樂大，手機外放也聽得清楚？\n□ CTA 是否明確：留言、私訊、LINE 或個人主頁預約？\n□ 匯出設定：1080x1920、30fps、H.264 / MP4，檔名包含日期與主題。\n□ 發佈文案補上：費用可折抵、台中北屯、潔西卡大藥局、林威宏藥師。`;
+
+  document.getElementById('timeline-output').textContent = timeline;
+  document.getElementById('subtitle-output').textContent = subtitles;
+  document.getElementById('sop-output').textContent = sop;
+  document.getElementById('check-output').textContent = check;
+  document.getElementById('input-area').style.display = 'none';
+  document.getElementById('result-area').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function copyText(id, btn) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const old = btn.textContent;
+    btn.textContent = '已複製！';
+    setTimeout(() => { btn.textContent = old; }, 1600);
+  });
+}
+
+function copyAll() {
+  const text = [
+    document.getElementById('timeline-output').textContent,
+    document.getElementById('subtitle-output').textContent,
+    document.getElementById('sop-output').textContent,
+    document.getElementById('check-output').textContent
+  ].join('\n\n---\n\n');
+  navigator.clipboard.writeText(text).then(() => alert('已複製完整剪片清單'));
+}
+
+function resetGen() {
+  document.getElementById('result-area').style.display = 'none';
+  document.getElementById('input-area').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
